@@ -14,11 +14,12 @@
 	} from './types/chessboard';
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import drawArrows, { type ArrowData } from './drawArrows';
-	import DrawArrows from './DrawArrows.svelte';
+	import Arrows from './Arrows.svelte';
 	import { boardThemesStyles } from './boardThemes/boardThemes';
 	import { browser } from '$app/environment';
 	import { tick } from 'svelte';
 	import PromotionModal from './PromotionModal.svelte';
+	import type { ChessPiece } from './types/chess';
 
 	export let config: ChessboardConfig;
 
@@ -268,7 +269,7 @@
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
-	export const createPiece = (square: string, piece: string): void => {
+	export const createPiece = (square: string, piece: ChessPiece): void => {
 		chessboard.setPiece(square, piece);
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
@@ -277,8 +278,8 @@
 		let piece = chessboard.getPieceFromSquare(square)?.name;
 		if (!piece) return;
 		if (color !== undefined)
-			chessboard.setPiece(square, `${color === Color.WHITE ? 'w' : 'b'}${piece[1]}`);
-		else chessboard.setPiece(square, `${piece[0] === 'w' ? 'b' : 'w'}${piece[1]}`);
+			chessboard.setPiece(square, `${color === Color.WHITE ? 'w' : 'b'}${piece[1]}` as ChessPiece);
+		else chessboard.setPiece(square, `${piece[0] === 'w' ? 'b' : 'w'}${piece[1]}` as ChessPiece);
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
@@ -554,10 +555,11 @@
 	};
 
 	const handlePromotion = (e: CustomEvent): void => {
-		let piece = chessboard.getPieceFromSquare(promotionLastMove.substring(2, 4));
+		const piece = chessboard.getPieceFromSquare(promotionLastMove.substring(2, 4));
 		if (!piece) return;
-		let newPiece = piece.name[0] + (<string>e.detail).toUpperCase();
-		let newMove = promotionLastMove + <string>e.detail;
+
+		const newPiece = (piece.name[0] + (<string>e.detail).toUpperCase()) as ChessPiece;
+		const newMove = promotionLastMove + <string>e.detail;
 
 		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(newMove);
 
@@ -727,7 +729,7 @@
 		</div>
 	{/if}
 	{#if chessboard.state.drawTools.enabled}
-		<DrawArrows
+		<Arrows
 			flipped={chessboard.state.board.flipped}
 			bind:svg={arrowsSvg}
 			{computerArrows}

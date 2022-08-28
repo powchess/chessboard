@@ -5,11 +5,13 @@
 	import { drag } from './draggable';
 	import type { EasingFuncs } from './types/chessboard';
 	import { Color } from './types/chessboard';
+	import type { ChessPiece } from './types/chess';
+	import { getChessPieceImage } from './chessPieceSVGs';
 
 	const dispatch = createEventDispatcher();
 
 	export let square: string;
-	export let name: string;
+	export let name: ChessPiece;
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
 	export let whiteToMove: boolean = false;
@@ -92,7 +94,7 @@
 	class="noselect {ghostPiece ? 'opacity-40' : 'z-10'} {canMove(movable, whiteToMove)
 		? 'cursor-pointer'
 		: ''}"
-	src="/images/pieces/{name}.svg"
+	src={getChessPieceImage(name)}
 	alt={name}
 />
 

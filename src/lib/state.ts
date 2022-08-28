@@ -1,5 +1,6 @@
 import type { BoardThemes } from './boardThemes/boardThemes';
 import type { PiecesThemes } from './piecesThemes/piecesThemes';
+import type { ChessPiece } from './types/chess';
 import {
 	Color,
 	type ChessboardConfig,
@@ -16,7 +17,7 @@ export type ArrowData = {
 	opacity: number;
 };
 
-export type piece = { square: string; name: string };
+export type piece = { square: string; name: ChessPiece };
 export type square = { square: string; color: SquareColor };
 
 export class State {

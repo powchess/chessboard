@@ -1,5 +1,5 @@
 import { State, type square, type piece } from './state';
-import type { ChessBoard, ChessFile } from './types/chess';
+import type { ChessBoard, ChessFile, ChessPiece } from './types/chess';
 import { SquareColor, type ChessboardConfig } from './types/chessboard';
 import { getShortFenFromBoard } from './utils';
 
@@ -143,7 +143,7 @@ export default class Chessboard {
 			});
 	};
 
-	public setPiece = (square: string, name: string) => {
+	public setPiece = (square: string, name: ChessPiece) => {
 		if (this.notValidThing({ square, piece: name })) return;
 		const piece = this.state.pieces.find((piece) => piece.square === square);
 		if (piece) piece.name = name;
@@ -201,7 +201,7 @@ export default class Chessboard {
 				piece.square = endSQ;
 				moveSuccessful = true;
 
-				if (promPiece) piece.name = piece.name[0] + promPiece.toUpperCase();
+				if (promPiece) piece.name = (piece.name[0] + promPiece.toUpperCase()) as ChessPiece;
 				return;
 			}
 		});
@@ -217,10 +217,8 @@ export default class Chessboard {
 	};
 
 	public updatePiecesWithFen = (fen: string): void => {
-		if (!fen) return;
-
-		let board: string[][] = [...Array(8)].map((_: string[]) => Array(8).fill('1'));
-		let numbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
+		const board = [...Array(8)].map((_: string[]) => Array(8).fill(null)) as ChessBoard;
+		const numbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
 		let j = 0;
 		let m = 0;
 		for (let i = 0; i < (fen.includes(' ') ? fen.indexOf(' ') : fen.length); i++) {
@@ -229,14 +227,14 @@ export default class Chessboard {
 				m = 0;
 			} else if (!numbers.includes(fen[i])) {
 				if (fen[i] == fen[i].toUpperCase()) {
-					board[j][m] = 'w' + fen[i];
+					board[j][m] = ('w' + fen[i]) as ChessPiece;
 				} else {
-					board[j][m] = 'b' + fen[i].toUpperCase();
+					board[j][m] = ('b' + fen[i].toUpperCase()) as ChessPiece;
 				}
 				m++;
 			} else {
 				for (var k = 0; k < parseInt(fen[i]); k++) {
-					board[j][m] = '';
+					board[j][m] = null;
 					m++;
 				}
 			}
@@ -273,7 +271,7 @@ export default class Chessboard {
 				if (!piecesAdded[j] || !piecesDeleted[i]) continue;
 				if (piecesAdded[j].name === piecesDeleted[i].name) {
 					piecesDeleted[i].square = piecesAdded[j].square;
-					piecesAdded[j].name = '';
+					//TODO: ??? piecesAdded[j].name = null;
 					piecesDeleted.splice(i, 1);
 					i--;
 					piecesAdded.splice(j, 1);
@@ -319,21 +317,9 @@ export default class Chessboard {
 	}): boolean => {
 		const { square, piece, move } = payload;
 
-		if (square && square.length !== 2) {
-			console.log(`${square} is not a valid square`);
-			return true;
-		}
-
-		if (piece && piece.length !== 2) {
-			console.log(`${piece} is not a valid piece`);
-			return true;
-		}
-
-		if (move && move.length !== 4 && move.length !== 5) {
-			console.log(`${move} is not a valid move`);
-			return true;
-		}
-
+		if (square && square.length !== 2) return true;
+		if (piece && piece.length !== 2) return true;
+		if (move && move.length !== 4 && move.length !== 5) return true;
 		return false;
 	};
 
