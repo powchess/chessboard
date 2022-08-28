@@ -1,15 +1,15 @@
-import wP from '../assets/wP.svg';
-import wR from '../assets/wR.svg';
-import wN from '../assets/wN.svg';
-import wB from '../assets/wB.svg';
-import wQ from '../assets/wQ.svg';
-import wK from '../assets/wK.svg';
-import bP from '../assets/bP.svg';
-import bR from '../assets/bR.svg';
-import bN from '../assets/bN.svg';
-import bB from '../assets/bB.svg';
-import bQ from '../assets/bQ.svg';
-import bK from '../assets/bK.svg';
+import wP from '../assets/images/wP.svg';
+import wR from '../assets/images/wR.svg';
+import wN from '../assets/images/wN.svg';
+import wB from '../assets/images/wB.svg';
+import wQ from '../assets/images/wQ.svg';
+import wK from '../assets/images/wK.svg';
+import bP from '../assets/images/bP.svg';
+import bR from '../assets/images/bR.svg';
+import bN from '../assets/images/bN.svg';
+import bB from '../assets/images/bB.svg';
+import bQ from '../assets/images/bQ.svg';
+import bK from '../assets/images/bK.svg';
 import type { ChessPiece } from './types/chess';
 
 export const getChessPieceImage = (piece: ChessPiece) => {

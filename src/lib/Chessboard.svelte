@@ -20,6 +20,7 @@
 	import { tick } from 'svelte';
 	import PromotionModal from './PromotionModal.svelte';
 	import type { ChessPiece } from './types/chess';
+	import Sounds from './Sounds.svelte';
 
 	export let config: ChessboardConfig;
 
@@ -28,6 +29,7 @@
 
 	let boardDiv: HTMLDivElement;
 	let arrowsSvg: SVGGElement;
+	let sounds: Sounds;
 
 	let promotionModal: PromotionModal;
 	let promotionLastMove = '';
@@ -53,60 +55,6 @@
 
 	let computerArrows: ArrowData[] = [];
 	let kingLocations: KingLocations = { [Color.WHITE]: '', [Color.BLACK]: '' };
-
-	const sounds: {
-		move?: HTMLAudioElement;
-		capture?: HTMLAudioElement;
-		castle?: HTMLAudioElement;
-		undo?: HTMLAudioElement;
-	} = {
-		move: undefined,
-		capture: undefined,
-		castle: undefined,
-		undo: undefined
-	};
-
-	const resetSounds = (): void => {
-		if (sounds.castle) {
-			sounds.castle.pause();
-			sounds.castle.currentTime = 0;
-		}
-		if (sounds.move) {
-			sounds.move.pause();
-			sounds.move.currentTime = 0;
-		}
-		if (sounds.capture) {
-			sounds.capture.pause();
-			sounds.capture.currentTime = 0;
-		}
-		if (sounds.undo) {
-			sounds.undo.pause();
-			sounds.undo.currentTime = 0;
-		}
-	};
-
-	const playMoveSound = (moveType: MoveTypeSound): void => {
-		resetSounds();
-		switch (moveType) {
-			case MoveTypeSound.MOVE:
-				if (sounds.move && allowPlaySound('move')) sounds.move.play();
-				break;
-			case MoveTypeSound.CAPTURE:
-				if (sounds.capture && allowPlaySound('capture')) sounds.capture.play();
-				break;
-			case MoveTypeSound.CASTLING:
-				if (sounds.castle && allowPlaySound('castle')) sounds.castle.play();
-				break;
-			case MoveTypeSound.UNDO:
-				if (sounds.undo && allowPlaySound('undo')) {
-					sounds.undo.volume = 0.3;
-					sounds.undo.play();
-				}
-				break;
-			default:
-				break;
-		}
-	};
 
 	const setCheckSquare = (clr: Color.WHITE | Color.BLACK | undefined) => {
 		clearAllSquares(SquareColor.CHECK);
@@ -174,17 +122,17 @@
 			chessboard.state.legal.settings.allowCastling
 		) {
 			movePiece(rookMove, false);
-			playMoveSound(MoveTypeSound.CASTLING);
+			sounds.playMoveSound(MoveTypeSound.CASTLING);
 		} else if (
 			capturedPawnSquare &&
 			chessboard.state.legal.enabled &&
 			chessboard.state.legal.settings.allowEnPassant
 		) {
 			removePiece(capturedPawnSquare);
-			playMoveSound(MoveTypeSound.CAPTURE);
+			sounds.playMoveSound(MoveTypeSound.CAPTURE);
 		} else if (chessboard.isCapture(move)) {
-			playMoveSound(MoveTypeSound.CAPTURE);
-		} else playMoveSound(MoveTypeSound.MOVE);
+			sounds.playMoveSound(MoveTypeSound.CAPTURE);
+		} else sounds.playMoveSound(MoveTypeSound.MOVE);
 
 		chessboard.removeGhostPiece();
 		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
@@ -440,12 +388,12 @@
 		if (chessboard.state.callbacks.getLastMove) {
 			let lastMove = chessboard.state.callbacks.getLastMove();
 
-			if (sound !== MoveTypeSound.MOVE) playMoveSound(sound);
-			else if (chessboard.isCastling(lastMove)) playMoveSound(MoveTypeSound.CASTLING);
-			else playMoveSound(sound);
+			if (sound !== MoveTypeSound.MOVE) sounds.playMoveSound(sound);
+			else if (chessboard.isCastling(lastMove)) sounds.playMoveSound(MoveTypeSound.CASTLING);
+			else sounds.playMoveSound(sound);
 
 			highlightMove(lastMove);
-		} else playMoveSound(sound);
+		} else sounds.playMoveSound(sound);
 
 		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
 		chessboard.state.pieces = chessboard.state.pieces;
@@ -565,7 +513,7 @@
 
 		chessboard.setPiece(piece.square, newPiece);
 		chessboard.state.pieces = chessboard.state.pieces;
-		playMoveSound(MoveTypeSound.MOVE);
+		sounds.playMoveSound(MoveTypeSound.MOVE);
 
 		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(newMove);
 		updateLegalStateIfNeeded();
@@ -597,10 +545,6 @@
 	const allowDrawHighlightSquares = (color?: 'legal' | 'move' | 'select' | 'check' | 'preMove') =>
 		chessboard.state.highlight.enabled &&
 		(color === undefined || chessboard.state.highlight.settings[color]);
-
-	const allowPlaySound = (sound?: 'castle' | 'move' | 'undo' | 'capture') =>
-		chessboard.state.sounds.enabled &&
-		(sound === undefined || chessboard.state.sounds.settings[sound]);
 
 	const allowDragPiece = (color: string) => {
 		if (!chessboard.state.movable.enabled) return false;
@@ -742,30 +686,7 @@
 </div>
 
 {#if chessboard.state.sounds.enabled}
-	{#if chessboard.state.sounds.settings.move}
-		<audio bind:this={sounds.move} preload="auto">
-			<track kind="captions" />
-			<source src="/sounds/move.wav" />
-		</audio>
-	{/if}
-	{#if chessboard.state.sounds.settings.capture}
-		<audio bind:this={sounds.capture} preload="auto">
-			<track kind="captions" />
-			<source src="/sounds/capture.wav" />
-		</audio>
-	{/if}
-	{#if chessboard.state.sounds.settings.castle}
-		<audio bind:this={sounds.castle} preload="auto">
-			<track kind="captions" />
-			<source src="/sounds/castle.wav" />
-		</audio>
-	{/if}
-	{#if chessboard.state.sounds.settings.undo}
-		<audio bind:this={sounds.undo} preload="auto">
-			<track kind="captions" />
-			<source src="/sounds/Undo.mp3" />
-		</audio>
-	{/if}
+	<Sounds bind:this={sounds} settings={chessboard.state.sounds.settings} />
 {/if}
 
 <style>

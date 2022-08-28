@@ -8,7 +8,6 @@ declare namespace App {
 
 declare namespace svelte.JSX {
 	interface HTMLProps<T> {
-		onmovemade?: (e: CustomEvent) => void;
 		onstartMoving?: (e: CustomEvent) => void;
 		onmoving?: (e: CustomEvent) => void;
 		onanimationEnded?: (e: CustomEvent) => void;
