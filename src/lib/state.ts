@@ -1,4 +1,3 @@
-import { get } from 'svelte/store';
 import type { BoardThemes } from './boardThemes/boardThemes';
 import type { PiecesThemes } from './piecesThemes/piecesThemes';
 import {
@@ -127,7 +126,15 @@ export class State {
 	};
 
 	constructor(cfg?: ChessboardConfig) {
-		const cbSettings = get(chessboardSettings);
+		// TODO: Replace default values with config values
+		const cbSettings = {
+			allowPremoves: true,
+			moveSounds: true,
+			showCheckSqaure: true,
+			showLastMove: true,
+			showLegalMoves: true,
+			showNotation: true
+		};
 
 		this.pieces = [];
 		(this.markedSquares = new Set()),
