@@ -1,4 +1,5 @@
 <script lang="ts">
+	import './board.css';
 	import Chessboard from './chessboard';
 	import type { piece } from './state';
 	import Notation from './Notation.svelte';
@@ -21,6 +22,8 @@
 	import PromotionModal from './PromotionModal.svelte';
 	import type { ChessPiece } from './types/chess';
 	import Sounds from './Sounds.svelte';
+	import standardBoard from '../assets/boards/standard.svg';
+	import darkBlueBoard from '../assets/boards/darkBlue.svg';
 
 	export let config: ChessboardConfig;
 
@@ -108,10 +111,8 @@
 		if (move.substring(0, 2) === move.substring(2, 4)) return;
 		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(move);
 
-		// if (state.legal.enabled) {
 		clearAllSquares(SquareColor.LEGAL);
 		clearAllSquares(SquareColor.SELECT);
-		// }
 
 		let rookMove = chessboard.getRookMoveIfIsCastling(move);
 		let capturedPawnSquare = chessboard.getCapturedPawnSquareIfIsEnPassant(move);
@@ -592,9 +593,9 @@
 	class="noselect lg:rounded-lg board text-xs sm:text-sm {chessboard.state.movable.enabled
 		? ''
 		: 'z-0'}"
-	style="--boardTheme: url(/images/boards/{boardThemesStyles.imageName[
-		chessboard.state.board.boardTheme
-	]});"
+	style="--boardTheme: url({chessboard.state.board.boardTheme === 'standard'
+		? standardBoard
+		: darkBlueBoard});"
 >
 	<div class="noselect h-full w-full">
 		{#if chessboard.state.board.startFen}
@@ -665,7 +666,7 @@
 			on:endResizing={(e) => setSize(e.detail.size)}
 			style="width: 3.125%;
 			height: 3.125%; color: {boardThemesStyles.colors[chessboard.state.board.boardTheme].black};"
-			class="absolute bottom-0 right-0 z-30 hidden translate-x-1/2 translate-y-1/2 cursor-nwse-resize lg:inline "
+			class="absolute bottom-0 right-0 z-30 hidden translate-x-1/2 translate-y-1/2 cursor-nwse-resize lg:inline"
 		>
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
 				<path d="M 5 1 Q 6 0 6 2 L 6 4 Q 6 6 4 6 L 2 6 Q 0 6 1 5 Z" />
