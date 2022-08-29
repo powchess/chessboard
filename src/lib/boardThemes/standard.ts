@@ -4,13 +4,13 @@ import { SquareColor } from '../types/chessboard';
  * Use SquareColor enum to get value
  */
 export const squareStyles: { [key in SquareColor]: string } = {
-	[SquareColor.LEGAL]: 'legalSQ_new cursor-pointer',
-	[SquareColor.LEGALHOVER]: 'legalSQ_hover_new cursor-pointer',
+	[SquareColor.LEGAL]: 'legalSQ cursor-pointer',
+	[SquareColor.LEGALHOVER]: 'legalSQ_hover cursor-pointer',
 	[SquareColor.SELECT]: 'selectedSQ',
 	[SquareColor.MOVE]: 'highlightMove',
 	[SquareColor.NEXTMOVE]: 'nextMoveSQ',
-	[SquareColor.PREMOVE]: 'preMoveSQ_new cursor-pointer',
-	[SquareColor.PREMOVEHOVER]: 'preMoveSQ_hover_new cursor-pointer',
+	[SquareColor.PREMOVE]: 'preMoveSQ cursor-pointer',
+	[SquareColor.PREMOVEHOVER]: 'preMoveSQ_hover cursor-pointer',
 	[SquareColor.CHECK]: 'checkSQ'
 };
 

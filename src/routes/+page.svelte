@@ -1,24 +1,25 @@
 <script lang="ts">
 	import Chessboard from '$lib/Chessboard.svelte';
-	import { SquareColor, type ChessboardConfig } from '$lib/types/chessboard';
+	import { SquareColor } from '$lib/types/chessboard';
 
 	let white: string = '#f0d9b5';
 	let black: string = '#b58863';
 	let board: Chessboard;
-
-	let config: ChessboardConfig = {
-		resizible: {
-			min: 400,
-			max: 1000
-		},
-		drawTools: true
-	};
 	let active = false;
 </script>
 
 <div class="mt-10 grid grid-cols-center">
 	<div style="width: var(--boardSize, 40rem);" class="col-start-2 flex flex-col gap-10">
-		<Chessboard bind:this={board} {config} />
+		<Chessboard
+			bind:this={board}
+			config={{
+				resizible: {
+					min: 400,
+					max: 1000
+				},
+				drawTools: true
+			}}
+		/>
 
 		<div class="mx-auto flex gap-10">
 			<div class="flex gap-4">

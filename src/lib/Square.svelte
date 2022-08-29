@@ -26,3 +26,7 @@
 		theme
 	][color]}"
 />
+
+<style>
+	@import './boardThemes/themes.css';
+</style>
