@@ -1,5 +1,4 @@
 <script lang="ts">
-	import './board.css';
 	import Chessboard from './chessboard';
 	import type { piece } from './state';
 	import Notation from './Notation.svelte';
