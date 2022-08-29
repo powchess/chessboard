@@ -19,8 +19,8 @@
 	import PromotionModal from './PromotionModal.svelte';
 	import type { ChessPiece } from './types/chess';
 	import Sounds from './Sounds.svelte';
-	import standardBoard from '../assets/boards/standard.svg';
-	import darkBlueBoard from '../assets/boards/darkBlue.svg';
+	import standardBoard from './assets/boards/standard.svg';
+	import darkBlueBoard from './assets/boards/darkBlue.svg';
 	import Resizing from './Resizing.svelte';
 
 	export let config: ChessboardConfig;

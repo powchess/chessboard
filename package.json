@@ -1,7 +1,7 @@
 {
-	"name": "svelte-chessboard",
+	"name": "@powchess/chessboard",
 	"private": false,
-	"version": "1.0.0",
+	"version": "0.0.2",
 	"description": "Chessboard UI Package for PowChess.com",
 	"repository": {
 		"type": "git",
@@ -29,22 +29,27 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check .",
-		"format": "prettier --write ."
+		"format": "prettier --write .",
+		"package": "npx @sveltejs/package"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "next",
-		"@sveltejs/kit": "next",
+		"@sveltejs/adapter-auto": "1.0.0-next.69",
+		"@sveltejs/kit": "1.0.0-next.447",
+		"@sveltejs/package": "^1.0.0-next.1",
+		"autoprefixer": "^10.4.7",
+		"postcss": "^8.4.14",
+		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.6.2",
 		"prettier-plugin-svelte": "^2.7.0",
 		"svelte": "^3.44.0",
-		"svelte-check": "^2.7.1",
+		"svelte-check": "^2.9.0",
 		"svelte-preprocess": "^4.10.7",
 		"tailwindcss": "^3.1.5",
 		"tslib": "^2.3.1",
 		"typescript": "^4.7.4",
-		"vite": "^3.0.4",
-		"postcss": "^8.4.14",
-		"postcss-load-config": "^4.0.1",
-		"autoprefixer": "^10.4.7"
+		"vite": "^3.0.4"
+	},
+	"exports": {
+		".": "./Chessboard.svelte"
 	}
 }

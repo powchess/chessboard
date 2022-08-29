@@ -1,8 +1,8 @@
 <script lang="ts">
-	import moveSound from '../assets/sounds/move.wav';
-	import captureSound from '../assets/sounds/capture.wav';
-	import castleSound from '../assets/sounds/castle.wav';
-	import undoSound from '../assets/sounds/undo.mp3';
+	import moveSound from './assets/sounds/move.wav';
+	import captureSound from './assets/sounds/capture.wav';
+	import castleSound from './assets/sounds/castle.wav';
+	import undoSound from './assets/sounds/undo.mp3';
 	import { MoveTypeSound } from './types/chessboard';
 
 	export let settings: {

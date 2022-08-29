@@ -271,7 +271,6 @@ export default class Chessboard {
 				if (!piecesAdded[j] || !piecesDeleted[i]) continue;
 				if (piecesAdded[j].name === piecesDeleted[i].name) {
 					piecesDeleted[i].square = piecesAdded[j].square;
-					//TODO: ??? piecesAdded[j].name = null;
 					piecesDeleted.splice(i, 1);
 					i--;
 					piecesAdded.splice(j, 1);
@@ -292,7 +291,7 @@ export default class Chessboard {
 	public getShortFEN() {
 		if (this.state.pieces.length === 0) return emptyFEN;
 
-		const board = <ChessBoard>[...Array(8)].map((_: string[]) => Array(8).fill(null));
+		const board = [...Array(8)].map((_: string[]) => Array(8).fill(null)) as ChessBoard;
 
 		this.state.pieces.forEach((piece) => {
 			//@ts-ignore
