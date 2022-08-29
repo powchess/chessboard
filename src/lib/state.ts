@@ -111,10 +111,10 @@ export class State {
 	public sounds: {
 		enabled: boolean;
 		settings: {
-			move: boolean;
-			capture: boolean;
-			castle: boolean;
-			undo: boolean;
+			MOVE: boolean;
+			CAPTURE: boolean;
+			CASTLE: boolean;
+			UNDO: boolean;
 		};
 	};
 
@@ -216,10 +216,10 @@ export class State {
 		this.sounds = {
 			enabled: cbSettings.moveSounds,
 			settings: {
-				move: true,
-				capture: true,
-				castle: true,
-				undo: true
+				MOVE: true,
+				CAPTURE: true,
+				CASTLE: true,
+				UNDO: true
 			}
 		};
 
@@ -359,10 +359,10 @@ export class State {
 			else if (cfg.sounds === false) this.sounds.enabled = false;
 			else {
 				this.sounds.enabled = true;
-				if (cfg.sounds.capture !== undefined) this.sounds.settings.capture = cfg.sounds.capture;
-				if (cfg.sounds.castle !== undefined) this.sounds.settings.castle = cfg.sounds.castle;
-				if (cfg.sounds.move !== undefined) this.sounds.settings.move = cfg.sounds.move;
-				if (cfg.sounds.undo !== undefined) this.sounds.settings.undo = cfg.sounds.undo;
+				if (cfg.sounds.CAPTURE !== undefined) this.sounds.settings.CAPTURE = cfg.sounds.CAPTURE;
+				if (cfg.sounds.CASTLE !== undefined) this.sounds.settings.CASTLE = cfg.sounds.CASTLE;
+				if (cfg.sounds.MOVE !== undefined) this.sounds.settings.MOVE = cfg.sounds.MOVE;
+				if (cfg.sounds.UNDO !== undefined) this.sounds.settings.UNDO = cfg.sounds.UNDO;
 			}
 		}
 

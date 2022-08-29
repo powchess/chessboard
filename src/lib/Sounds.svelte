@@ -3,65 +3,64 @@
 	import captureSound from './assets/sounds/capture.wav';
 	import castleSound from './assets/sounds/castle.wav';
 	import undoSound from './assets/sounds/undo.mp3';
-	import { MoveTypeSound } from './types/chessboard';
+	import type { MoveTypeSound } from './types/chessboard';
 
 	export let settings: {
-		move: boolean;
-		capture: boolean;
-		castle: boolean;
-		undo: boolean;
+		MOVE: boolean;
+		CAPTURE: boolean;
+		CASTLE: boolean;
+		UNDO: boolean;
 	};
 
 	const sounds: {
-		move?: HTMLAudioElement;
-		capture?: HTMLAudioElement;
-		castle?: HTMLAudioElement;
-		undo?: HTMLAudioElement;
+		MOVE?: HTMLAudioElement;
+		CAPTURE?: HTMLAudioElement;
+		CASTLE?: HTMLAudioElement;
+		UNDO?: HTMLAudioElement;
 	} = {
-		move: undefined,
-		capture: undefined,
-		castle: undefined,
-		undo: undefined
+		MOVE: undefined,
+		CAPTURE: undefined,
+		CASTLE: undefined,
+		UNDO: undefined
 	};
 
 	const resetSounds = (): void => {
-		if (sounds.castle) {
-			sounds.castle.pause();
-			sounds.castle.currentTime = 0;
+		if (sounds.CASTLE) {
+			sounds.CASTLE.pause();
+			sounds.CASTLE.currentTime = 0;
 		}
-		if (sounds.move) {
-			sounds.move.pause();
-			sounds.move.currentTime = 0;
+		if (sounds.MOVE) {
+			sounds.MOVE.pause();
+			sounds.MOVE.currentTime = 0;
 		}
-		if (sounds.capture) {
-			sounds.capture.pause();
-			sounds.capture.currentTime = 0;
+		if (sounds.CAPTURE) {
+			sounds.CAPTURE.pause();
+			sounds.CAPTURE.currentTime = 0;
 		}
-		if (sounds.undo) {
-			sounds.undo.pause();
-			sounds.undo.currentTime = 0;
+		if (sounds.UNDO) {
+			sounds.UNDO.pause();
+			sounds.UNDO.currentTime = 0;
 		}
 	};
 
-	const allowPlaySound = (sound?: 'castle' | 'move' | 'undo' | 'capture') =>
-		sound === undefined || settings[sound];
+	const allowPlaySound = (sound?: MoveTypeSound) => sound === undefined || settings[sound];
 
 	export function playMoveSound(moveType: MoveTypeSound) {
 		resetSounds();
 		switch (moveType) {
-			case MoveTypeSound.MOVE:
-				if (sounds.move && allowPlaySound('move')) sounds.move.play();
+			case 'MOVE':
+				if (sounds.MOVE && allowPlaySound('MOVE')) sounds.MOVE.play();
 				break;
-			case MoveTypeSound.CAPTURE:
-				if (sounds.capture && allowPlaySound('capture')) sounds.capture.play();
+			case 'CAPTURE':
+				if (sounds.CAPTURE && allowPlaySound('CAPTURE')) sounds.CAPTURE.play();
 				break;
-			case MoveTypeSound.CASTLING:
-				if (sounds.castle && allowPlaySound('castle')) sounds.castle.play();
+			case 'CASTLE':
+				if (sounds.CASTLE && allowPlaySound('CASTLE')) sounds.CASTLE.play();
 				break;
-			case MoveTypeSound.UNDO:
-				if (sounds.undo && allowPlaySound('undo')) {
-					sounds.undo.volume = 0.3;
-					sounds.undo.play();
+			case 'UNDO':
+				if (sounds.UNDO && allowPlaySound('UNDO')) {
+					sounds.UNDO.volume = 0.3;
+					sounds.UNDO.play();
 				}
 				break;
 			default:
@@ -70,26 +69,26 @@
 	}
 </script>
 
-{#if settings.move}
-	<audio bind:this={sounds.move} preload="auto">
+{#if settings.MOVE}
+	<audio bind:this={sounds.MOVE} preload="auto">
 		<track kind="captions" />
 		<source src={moveSound} />
 	</audio>
 {/if}
-{#if settings.capture}
-	<audio bind:this={sounds.capture} preload="auto">
+{#if settings.CAPTURE}
+	<audio bind:this={sounds.CAPTURE} preload="auto">
 		<track kind="captions" />
 		<source src={captureSound} />
 	</audio>
 {/if}
-{#if settings.castle}
-	<audio bind:this={sounds.castle} preload="auto">
+{#if settings.CASTLE}
+	<audio bind:this={sounds.CASTLE} preload="auto">
 		<track kind="captions" />
 		<source src={castleSound} />
 	</audio>
 {/if}
-{#if settings.undo}
-	<audio bind:this={sounds.undo} preload="auto">
+{#if settings.UNDO}
+	<audio bind:this={sounds.UNDO} preload="auto">
 		<track kind="captions" />
 		<source src={undoSound} />
 	</audio>

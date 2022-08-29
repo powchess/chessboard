@@ -20,7 +20,7 @@ export default class Chessboard {
 	// Public
 	public state: State;
 
-	constructor(cfg: ChessboardConfig) {
+	constructor(cfg?: ChessboardConfig) {
 		this.state = new State(cfg);
 		if (this.state.board.startFen) this.updatePiecesWithFen(this.state.board.startFen);
 	}

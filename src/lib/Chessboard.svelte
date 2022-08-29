@@ -7,9 +7,9 @@
 	import {
 		Color,
 		SquareColor,
-		MoveTypeSound,
 		type ChessboardConfig,
-		type KingLocations
+		type KingLocations,
+		type MoveTypeSound
 	} from './types/chessboard';
 	import { createEventDispatcher, onDestroy, onMount } from 'svelte';
 	import drawArrows, { type ArrowData } from './drawArrows';
@@ -23,7 +23,7 @@
 	import darkBlueBoard from './assets/boards/darkBlue.svg';
 	import Resizing from './Resizing.svelte';
 
-	export let config: ChessboardConfig;
+	export let config: ChessboardConfig | undefined = undefined;
 
 	const chessboard = new Chessboard(config);
 	const dispatch = createEventDispatcher();
@@ -121,17 +121,17 @@
 			chessboard.state.legal.settings.allowCastling
 		) {
 			movePiece(rookMove, false);
-			sounds.playMoveSound(MoveTypeSound.CASTLING);
+			sounds.playMoveSound('CASTLE');
 		} else if (
 			capturedPawnSquare &&
 			chessboard.state.legal.enabled &&
 			chessboard.state.legal.settings.allowEnPassant
 		) {
 			removePiece(capturedPawnSquare);
-			sounds.playMoveSound(MoveTypeSound.CAPTURE);
+			sounds.playMoveSound('CAPTURE');
 		} else if (chessboard.isCapture(move)) {
-			sounds.playMoveSound(MoveTypeSound.CAPTURE);
-		} else sounds.playMoveSound(MoveTypeSound.MOVE);
+			sounds.playMoveSound('CAPTURE');
+		} else sounds.playMoveSound('MOVE');
 
 		chessboard.removeGhostPiece();
 		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
@@ -377,7 +377,7 @@
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
 	};
 
-	export const setFEN = (fen: string, sound: MoveTypeSound = MoveTypeSound.MOVE) => {
+	export const setFEN = (fen: string, sound: MoveTypeSound = 'MOVE') => {
 		chessboard.updatePiecesWithFen(fen);
 
 		clearAllSquares();
@@ -387,8 +387,8 @@
 		if (chessboard.state.callbacks.getLastMove) {
 			let lastMove = chessboard.state.callbacks.getLastMove();
 
-			if (sound !== MoveTypeSound.MOVE) sounds.playMoveSound(sound);
-			else if (chessboard.isCastling(lastMove)) sounds.playMoveSound(MoveTypeSound.CASTLING);
+			if (sound !== 'MOVE') sounds.playMoveSound(sound);
+			else if (chessboard.isCastling(lastMove)) sounds.playMoveSound('CASTLE');
 			else sounds.playMoveSound(sound);
 
 			highlightMove(lastMove);
@@ -512,7 +512,7 @@
 
 		chessboard.setPiece(piece.square, newPiece);
 		chessboard.state.pieces = chessboard.state.pieces;
-		sounds.playMoveSound(MoveTypeSound.MOVE);
+		sounds.playMoveSound('MOVE');
 
 		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(newMove);
 		updateLegalStateIfNeeded();

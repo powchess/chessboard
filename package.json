@@ -1,11 +1,11 @@
 {
 	"name": "@powchess/chessboard",
 	"private": false,
-	"version": "0.0.3",
+	"version": "0.0.7",
 	"description": "Chessboard UI Package for PowChess.com",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/powchess/main"
+		"url": "https://github.com/powchess/chessboard"
 	},
 	"bugs": {
 		"url": "https://github.com/powchess/chessboard/issues"
@@ -44,6 +44,7 @@
 		"svelte": "^3.44.0",
 		"svelte-check": "^2.9.0",
 		"svelte-preprocess": "^4.10.7",
+		"svelte2tsx": "^0.5.15",
 		"tailwindcss": "^3.1.5",
 		"tslib": "^2.3.1",
 		"typescript": "^4.7.4",
@@ -51,5 +52,7 @@
 	},
 	"exports": {
 		".": "./Chessboard.svelte"
-	}
+	},
+	"main": "./Chessboard.svelte",
+	"types": "./Chessboard.svelte.d.ts"
 }

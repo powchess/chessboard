@@ -1,6 +1,5 @@
 import type { BoardThemes } from '../boardThemes/boardThemes';
 import type { PiecesThemes } from '../piecesThemes/piecesThemes';
-import type { ChessPiece } from './chess';
 
 export enum Color {
 	WHITE,
@@ -20,15 +19,7 @@ export enum SquareColor {
 	SELECT
 }
 
-export enum MoveTypeSound {
-	MOVE,
-	CAPTURE,
-	CASTLING,
-	UNDO
-}
-
-export type EditingTool = ChessPiece | null | 'move';
-
+export type MoveTypeSound = 'MOVE' | 'CAPTURE' | 'CASTLE' | 'UNDO';
 // prettier-ignore
 export type EasingTuple = ['backIn','backInOut','backOut','bounceIn','bounceInOut','bounceOut','circIn','circInOut','circOut','cubicIn','cubicInOut','cubicOut','elasticIn','elasticInOut','elasticOut','expoIn','expoInOut','expoOut','linear','quadIn','quadInOut','quadOut','quartIn','quartInOut','quartOut','quintIn','quintInOut','quintOut','sineIn','sineInOut','sineOut'];
 
@@ -114,10 +105,10 @@ export type ChessboardConfig = {
 	sounds?:
 		| boolean
 		| {
-				move?: boolean;
-				capture?: boolean;
-				castle?: boolean;
-				undo?: boolean;
+				MOVE?: boolean;
+				CAPTURE?: boolean;
+				CASTLE?: boolean;
+				UNDO?: boolean;
 		  };
 
 	resizible?:
