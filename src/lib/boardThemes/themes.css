@@ -18,6 +18,15 @@
 	box-shadow: inset 0px 0px 6.5vmin 0px rgba(15, 56, 103, 0.4);
 }
 
+.legalSQ,
+.legalSQ_hover,
+.preMoveSQ,
+.preMoveSQ_hover {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
 .legalSQ::before {
 	content: '';
 	position: absolute;

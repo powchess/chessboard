@@ -22,11 +22,16 @@
 
 <div
 	style="left: {x * 12.5}%; bottom: {y * 12.5}%;"
-	class="noselect absolute aspect-square w-[12.5%] max-w-[12.5vw] {boardThemesStyles.squareStyles[
-		theme
-	][color]}"
+	class="select-none {boardThemesStyles.squareStyles[theme][color]}"
 />
 
 <style>
 	@import './boardThemes/themes.css';
+	div {
+		position: absolute;
+		width: 12.5%;
+		height: 12.5%;
+		max-width: 12.5vw;
+		max-height: 12.5vw;
+	}
 </style>

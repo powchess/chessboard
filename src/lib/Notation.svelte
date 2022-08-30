@@ -16,7 +16,10 @@
 </div>
 <div class="ranks noselect">
 	{#each files as _, i}
-		<span style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};" class="{flipped?'':'text-right'}">
+		<span
+			style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};"
+			class={flipped ? '' : 'text-right'}
+		>
 			{flipped ? i + 1 : Math.abs(i - 8)}
 		</span>
 	{/each}
