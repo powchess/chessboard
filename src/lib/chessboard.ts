@@ -20,7 +20,7 @@ export default class Chessboard {
 	// Public
 	public state: State;
 
-	constructor(cfg?: ChessboardConfig) {
+	constructor(cfg?: ChessboardConfig | undefined) {
 		this.state = new State(cfg);
 		if (this.state.board.startFen) this.updatePiecesWithFen(this.state.board.startFen);
 	}
@@ -424,4 +424,8 @@ export default class Chessboard {
 		if (flipped !== undefined) this.state.board.flipped = flipped;
 		else this.state.board.flipped = !this.state.board.flipped;
 	};
+
+	public setConfigSettings = (cfg: ChessboardConfig) => {
+		this.state.setConfigSettings(cfg);
+	}
 }
