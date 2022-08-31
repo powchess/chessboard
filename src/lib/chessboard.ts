@@ -1,7 +1,8 @@
+import { SquareColor } from './enums';
+import type { ChessBoard, ChessFile, ChessPiece } from './chessTypes';
 import { State, type square, type piece } from './state';
-import type { ChessBoard, ChessFile, ChessPiece } from './types/chess';
-import { SquareColor, type ChessboardConfig } from './types/chessboard';
 import { getShortFenFromBoard } from './utils';
+import type { ChessboardConfig } from './boardConfig';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
 
@@ -30,8 +31,7 @@ export default class Chessboard {
 
 		this.state.pieces.forEach((piece: piece) => {
 			if (piece.square === newSquare.square)
-				newSquare.color =
-					newSquare.color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
+				newSquare.color = newSquare.color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
 		});
 	};
 
@@ -42,11 +42,7 @@ export default class Chessboard {
 		};
 
 		this.state.markedSquares.forEach((element: square) => {
-			if (
-				element.square === square &&
-				element.color !== SquareColor.MOVE &&
-				element.color !== SquareColor.CHECK
-			)
+			if (element.square === square && element.color !== SquareColor.MOVE && element.color !== SquareColor.CHECK)
 				this.state.markedSquares.delete(element);
 		});
 
@@ -56,8 +52,7 @@ export default class Chessboard {
 
 	public legalHover = (sqr: string) => {
 		this.state.markedSquares.forEach((square) => {
-			if (square.square === sqr && square.color === SquareColor.LEGAL)
-				square.color = SquareColor.LEGALHOVER;
+			if (square.square === sqr && square.color === SquareColor.LEGAL) square.color = SquareColor.LEGALHOVER;
 			else if (square.square !== sqr && square.color === SquareColor.LEGALHOVER) {
 				let pieceExist: boolean = false;
 				this.state.pieces.forEach((piece) => {
@@ -75,8 +70,7 @@ export default class Chessboard {
 
 	public preMoveHover = (sqr: string) => {
 		this.state.markedSquares.forEach((square) => {
-			if (square.square === sqr && square.color === SquareColor.PREMOVE)
-				square.color = SquareColor.PREMOVEHOVER;
+			if (square.square === sqr && square.color === SquareColor.PREMOVE) square.color = SquareColor.PREMOVEHOVER;
 			else if (square.square !== sqr && square.color === SquareColor.PREMOVEHOVER) {
 				let pieceExist: boolean = false;
 				this.state.pieces.forEach((piece) => {
@@ -130,8 +124,7 @@ export default class Chessboard {
 		}
 
 		this.state.markedSquares.forEach((element) => {
-			if (element.square === square && (element.color === mode || mode === undefined))
-				this.state.markedSquares.delete(element);
+			if (element.square === square && (element.color === mode || mode === undefined)) this.state.markedSquares.delete(element);
 		});
 	};
 
@@ -309,11 +302,7 @@ export default class Chessboard {
 		return piece;
 	}
 
-	private notValidThing = (payload: {
-		square?: string;
-		piece?: string;
-		move?: string;
-	}): boolean => {
+	private notValidThing = (payload: { square?: string; piece?: string; move?: string }): boolean => {
 		const { square, piece, move } = payload;
 
 		if (square && square.length !== 2) return true;
@@ -346,9 +335,7 @@ export default class Chessboard {
 	 * Returns rook move if the parameter is a castling move
 	 * @param move
 	 */
-	public getRookMoveIfIsCastling = (
-		move: string
-	): 'h1f1' | 'a1d1' | 'h8f8' | 'a8d8' | undefined => {
+	public getRookMoveIfIsCastling = (move: string): 'h1f1' | 'a1d1' | 'h8f8' | 'a8d8' | undefined => {
 		switch (move) {
 			case 'e1g1':
 				return 'h1f1';
@@ -381,9 +368,7 @@ export default class Chessboard {
 		let pawn = this.getPieceFromSquare(move.substring(0, 2));
 		if (pawn == undefined || (pawn.name !== 'wP' && pawn.name !== 'bP')) return undefined;
 
-		let capturedPawn = this.getPieceFromSquare(
-			move[2] + `${parseInt(move[3]) + (pawn.name === 'wP' ? -1 : 1)}`
-		);
+		let capturedPawn = this.getPieceFromSquare(move[2] + `${parseInt(move[3]) + (pawn.name === 'wP' ? -1 : 1)}`);
 		return capturedPawn?.square;
 	};
 
@@ -395,12 +380,7 @@ export default class Chessboard {
 	public isPromotion = (move: string): boolean => {
 		if ((move[1] != '7' || move[3] != '8') && (move[1] != '2' || move[3] != '1')) return false;
 		let piece = this.getPieceFromSquare(move.substring(0, 2));
-		if (
-			piece &&
-			(piece.name[1] !== 'P' ||
-				(piece.name[0] === 'w' && move[3] === '1') ||
-				(piece.name[0] === 'b' && move[3] === '8'))
-		)
+		if (piece && (piece.name[1] !== 'P' || (piece.name[0] === 'w' && move[3] === '1') || (piece.name[0] === 'b' && move[3] === '8')))
 			return false;
 		return true;
 	};

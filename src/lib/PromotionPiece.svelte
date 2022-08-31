@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { getChessPieceImage } from './chessPieceSVGs';
-	import type { ChessPiece } from './types/chess';
+	import type { ChessPiece } from './chessTypes';
 
 	export let piece: string;
 	export let isWhite: boolean;

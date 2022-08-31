@@ -1,6 +1,8 @@
 <script lang="ts">
-	import { boardThemesStyles, type BoardThemes } from './boardThemes/boardThemes';
-	import type { SquareColor } from './types/chessboard';
+	import type { BoardThemes } from './boardConfig';
+
+	import { boardThemesStyles } from './boardThemes/boardThemes';
+	import type { SquareColor } from './enums';
 
 	export let square: string;
 	export let color: SquareColor;
@@ -20,10 +22,7 @@
 	$: reRenderSquares(flipped);
 </script>
 
-<div
-	style="left: {x * 12.5}%; bottom: {y * 12.5}%;"
-	class="select-none {boardThemesStyles.squareStyles[theme][color]}"
-/>
+<div style="left: {x * 12.5}%; bottom: {y * 12.5}%;" class="select-none {boardThemesStyles.squareStyles[theme][color]}" />
 
 <style>
 	@import './boardThemes/themes.css';

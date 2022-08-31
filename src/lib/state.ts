@@ -1,13 +1,6 @@
-import type { BoardThemes } from './boardThemes/boardThemes';
-import type { PiecesThemes } from './piecesThemes/piecesThemes';
-import type { ChessPiece } from './types/chess';
-import {
-	Color,
-	type ChessboardConfig,
-	type EasingFuncs,
-	type KingLocations,
-	type SquareColor
-} from './types/chessboard';
+import { Color, type SquareColor } from './enums';
+import type { ChessPiece } from './chessTypes';
+import type { BoardThemes, ChessboardConfig, EasingFuncs, KingLocations, PiecesThemes } from './boardConfig';
 
 const defaultFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -35,7 +28,7 @@ export class State {
 
 	public movable: {
 		enabled: boolean;
-		color: 'both' | Color.WHITE | Color.BLACK;
+		color: Color.WHITE | Color.BLACK | Color.BOTH;
 	};
 
 	public draggable: {
@@ -150,7 +143,7 @@ export class State {
 
 		this.movable = {
 			enabled: true,
-			color: 'both'
+			color: Color.BOTH
 		};
 
 		this.draggable = {
@@ -246,7 +239,7 @@ export class State {
 		switch (cfg.movable) {
 			case true:
 				this.movable.enabled = true;
-				this.movable.color = 'both';
+				this.movable.color = Color.BOTH;
 				break;
 			case false:
 				this.movable.enabled = false;
@@ -269,17 +262,14 @@ export class State {
 			else if (cfg.draggable === false) this.draggable.enabled = false;
 			else {
 				this.draggable.enabled = true;
-				if (cfg.draggable?.ghostPiece !== undefined)
-					this.draggable.ghostPiece.enabled = cfg.draggable.ghostPiece;
+				if (cfg.draggable?.ghostPiece !== undefined) this.draggable.ghostPiece.enabled = cfg.draggable.ghostPiece;
 				if (cfg.draggable.transition !== undefined) {
 					if (cfg.draggable?.transition === true) this.draggable.transition.enabled = true;
 					else if (cfg.draggable?.transition === false) this.draggable.transition.enabled = false;
 					else {
 						this.draggable.transition.enabled = true;
-						if (cfg.draggable?.transition?.duration)
-							this.draggable.transition.settings.duration = cfg.draggable?.transition?.duration;
-						if (cfg.draggable?.transition?.easing)
-							this.draggable.transition.settings.easing = cfg.draggable?.transition?.easing;
+						if (cfg.draggable?.transition?.duration) this.draggable.transition.settings.duration = cfg.draggable?.transition?.duration;
+						if (cfg.draggable?.transition?.easing) this.draggable.transition.settings.easing = cfg.draggable?.transition?.easing;
 					}
 				}
 			}
@@ -295,12 +285,9 @@ export class State {
 			else {
 				this.legal.enabled = true;
 				if (cfg.legal.settings) {
-					if (cfg.legal.settings.allowCastling !== undefined)
-						this.legal.settings.allowCastling = cfg.legal.settings.allowCastling;
-					if (cfg.legal.settings.allowEnPassant !== undefined)
-						this.legal.settings.allowEnPassant = cfg.legal.settings.allowEnPassant;
-					if (cfg.legal.settings.allowPromotion !== undefined)
-						this.legal.settings.allowPromotion = cfg.legal.settings.allowPromotion;
+					if (cfg.legal.settings.allowCastling !== undefined) this.legal.settings.allowCastling = cfg.legal.settings.allowCastling;
+					if (cfg.legal.settings.allowEnPassant !== undefined) this.legal.settings.allowEnPassant = cfg.legal.settings.allowEnPassant;
+					if (cfg.legal.settings.allowPromotion !== undefined) this.legal.settings.allowPromotion = cfg.legal.settings.allowPromotion;
 				}
 				if (cfg.legal.preMoves !== undefined) this.legal.preMoves.enabled = cfg.legal.preMoves;
 			}
@@ -313,13 +300,10 @@ export class State {
 			if (cfg.callbacks.beforeMove) this.callbacks.beforeMove = cfg.callbacks.beforeMove;
 			if (cfg.callbacks.afterMove) this.callbacks.afterMove = cfg.callbacks.afterMove;
 			if (cfg.callbacks.getLastMove) this.callbacks.getLastMove = cfg.callbacks.getLastMove;
-			if (cfg.callbacks.getLastMoveSAN)
-				this.callbacks.getLastMoveSAN = cfg.callbacks.getLastMoveSAN;
-			if (cfg.callbacks.getKingLocations)
-				this.callbacks.getKingLocations = cfg.callbacks.getKingLocations;
+			if (cfg.callbacks.getLastMoveSAN) this.callbacks.getLastMoveSAN = cfg.callbacks.getLastMoveSAN;
+			if (cfg.callbacks.getKingLocations) this.callbacks.getKingLocations = cfg.callbacks.getKingLocations;
 			if (cfg.callbacks.getInCheck) this.callbacks.getInCheck = cfg.callbacks.getInCheck;
-			if (cfg.callbacks.getWhiteToMove)
-				this.callbacks.getWhiteToMove = cfg.callbacks.getWhiteToMove;
+			if (cfg.callbacks.getWhiteToMove) this.callbacks.getWhiteToMove = cfg.callbacks.getWhiteToMove;
 		}
 
 		//highlight
@@ -331,12 +315,9 @@ export class State {
 				if (cfg.highlight.check !== undefined) this.highlight.settings.check = cfg.highlight.check;
 				if (cfg.highlight.legal !== undefined) this.highlight.settings.legal = cfg.highlight.legal;
 				if (cfg.highlight.move !== undefined) this.highlight.settings.move = cfg.highlight.move;
-				if (cfg.highlight.nextMove !== undefined)
-					this.highlight.settings.nextMove = cfg.highlight.nextMove;
-				if (cfg.highlight.preMove !== undefined)
-					this.highlight.settings.preMove = cfg.highlight.preMove;
-				if (cfg.highlight.select !== undefined)
-					this.highlight.settings.select = cfg.highlight.select;
+				if (cfg.highlight.nextMove !== undefined) this.highlight.settings.nextMove = cfg.highlight.nextMove;
+				if (cfg.highlight.preMove !== undefined) this.highlight.settings.preMove = cfg.highlight.preMove;
+				if (cfg.highlight.select !== undefined) this.highlight.settings.select = cfg.highlight.select;
 			}
 		}
 
@@ -346,10 +327,8 @@ export class State {
 			else if (cfg.drawTools === false) this.drawTools.enabled = false;
 			else {
 				this.drawTools.enabled = true;
-				if (cfg.drawTools.LshapeKnightMove !== undefined)
-					this.drawTools.settings.LshapeKnightMove = cfg.drawTools.LshapeKnightMove;
-				if (cfg.drawTools.onlyChessMove !== undefined)
-					this.drawTools.settings.onlyChessMove = cfg.drawTools.onlyChessMove;
+				if (cfg.drawTools.LshapeKnightMove !== undefined) this.drawTools.settings.LshapeKnightMove = cfg.drawTools.LshapeKnightMove;
+				if (cfg.drawTools.onlyChessMove !== undefined) this.drawTools.settings.onlyChessMove = cfg.drawTools.onlyChessMove;
 			}
 		}
 

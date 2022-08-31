@@ -13,7 +13,6 @@
 		"allowUnusedLabels": false,
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitOverride": true,
-		"noUnusedLocals": true,
-		"declaration": true
+		"noUnusedLocals": true
 	}
 }

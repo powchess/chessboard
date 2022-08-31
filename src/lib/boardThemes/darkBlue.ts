@@ -1,9 +1,6 @@
-import { SquareColor } from '../types/chessboard';
+import { SquareColor } from '$lib/enums';
 
-/**
- * Use SquareColor enum to get value
- */
-export const squareStyles: { [key in SquareColor]: string } = {
+export const squareStyles: Record<SquareColor, string> = {
 	[SquareColor.LEGAL]: 'legalSQ cursor-pointer',
 	[SquareColor.LEGALHOVER]: 'legalSQ_hover cursor-pointer',
 	[SquareColor.SELECT]: 'selectedSQ-darkBlue',
@@ -15,5 +12,4 @@ export const squareStyles: { [key in SquareColor]: string } = {
 };
 
 export const colors = { white: '#94A3B8', black: '#475569' };
-
 export const imageName = 'darkBlue.svg';

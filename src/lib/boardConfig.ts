@@ -1,30 +1,13 @@
-import type { BoardThemes } from '../boardThemes/boardThemes';
-import type { PiecesThemes } from '../piecesThemes/piecesThemes';
+import type { Color } from './enums';
 
-export enum Color {
-	WHITE,
-	BLACK,
-	SPECTATOR,
-	SERVER
-}
-
-export enum SquareColor {
-	LEGAL,
-	LEGALHOVER,
-	CHECK,
-	MOVE,
-	NEXTMOVE,
-	PREMOVE,
-	PREMOVEHOVER,
-	SELECT
-}
-
+type TupleToUnion<T extends any[]> = T[number];
+export type BoardThemes = 'standard' | 'darkBlue';
+export type PiecesThemes = 'standard';
 export type MoveTypeSound = 'MOVE' | 'CAPTURE' | 'CASTLE' | 'UNDO';
 // prettier-ignore
-export type EasingTuple = ['backIn','backInOut','backOut','bounceIn','bounceInOut','bounceOut','circIn','circInOut','circOut','cubicIn','cubicInOut','cubicOut','elasticIn','elasticInOut','elasticOut','expoIn','expoInOut','expoOut','linear','quadIn','quadInOut','quadOut','quartIn','quartInOut','quartOut','quintIn','quintInOut','quintOut','sineIn','sineInOut','sineOut'];
+type EasingTuple = ['backIn','backInOut','backOut','bounceIn','bounceInOut','bounceOut','circIn','circInOut','circOut','cubicIn','cubicInOut','cubicOut','elasticIn','elasticInOut','elasticOut','expoIn','expoInOut','expoOut','linear','quadIn','quadInOut','quadOut','quartIn','quartInOut','quartOut','quintIn','quintInOut','quintOut','sineIn','sineInOut','sineOut'];
 
 export type EasingFuncs = TupleToUnion<EasingTuple>;
-
 export type KingLocations = { [Color.WHITE]: string; [Color.BLACK]: string };
 
 export type ChessboardConfig = {
@@ -45,7 +28,7 @@ export type ChessboardConfig = {
 	 * @value Color.BLACK - allowed to move only black
 	 * @value false - moving is not allowed
 	 */
-	movable?: boolean | Color.WHITE | Color.BLACK | 'both';
+	movable?: boolean | Color.WHITE | Color.BLACK | Color.BOTH;
 
 	draggable?:
 		| boolean

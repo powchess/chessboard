@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { SquareColor } from '$lib/enums';
+
 	import Chessboard from '$lib/Chessboard.svelte';
-	import { SquareColor } from '$lib/types/chessboard';
 
 	let white: string = '#f0d9b5';
 	let black: string = '#b58863';

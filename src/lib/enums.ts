@@ -1,0 +1,18 @@
+export enum Color {
+	WHITE,
+	BLACK,
+	BOTH,
+	SPECTATOR,
+	SERVER
+}
+
+export enum SquareColor {
+	LEGAL,
+	LEGALHOVER,
+	CHECK,
+	MOVE,
+	NEXTMOVE,
+	PREMOVE,
+	PREMOVEHOVER,
+	SELECT
+}

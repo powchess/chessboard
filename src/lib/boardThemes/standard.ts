@@ -1,9 +1,6 @@
-import { SquareColor } from '../types/chessboard';
+import { SquareColor } from '$lib/enums';
 
-/**
- * Use SquareColor enum to get value
- */
-export const squareStyles: { [key in SquareColor]: string } = {
+export const squareStyles: Record<SquareColor, string> = {
 	[SquareColor.LEGAL]: 'legalSQ cursor-pointer',
 	[SquareColor.LEGALHOVER]: 'legalSQ_hover cursor-pointer',
 	[SquareColor.SELECT]: 'selectedSQ',

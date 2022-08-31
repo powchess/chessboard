@@ -10,7 +10,7 @@ import bN from './assets/images/bN.svg';
 import bB from './assets/images/bB.svg';
 import bQ from './assets/images/bQ.svg';
 import bK from './assets/images/bK.svg';
-import type { ChessPiece } from './types/chess';
+import type { ChessPiece } from './chessTypes';
 
 export const getChessPieceImage = (piece: ChessPiece) => {
 	switch (piece) {

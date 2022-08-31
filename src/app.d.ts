@@ -26,6 +26,4 @@ declare namespace svelte.JSX {
 }
 
 type TupleToUnion<T extends any[]> = T[number];
-type IndicesTo<T extends number, I extends number[] = []> = I['length'] extends T
-	? I
-	: IndicesTo<T, [...I, I['length']]>;
+type IndicesTo<T extends number, I extends number[] = []> = I['length'] extends T ? I : IndicesTo<T, [...I, I['length']]>;
