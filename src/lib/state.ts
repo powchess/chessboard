@@ -22,6 +22,7 @@ export class State {
 		piecesTheme: PiecesThemes;
 		flipped: boolean;
 		notation: boolean;
+		shadow: boolean;
 		startFen: string;
 		size: number;
 	};
@@ -131,15 +132,17 @@ export class State {
 		};
 
 		this.pieces = [];
-		(this.markedSquares = new Set()),
-			(this.board = {
-				boardTheme: 'standard',
-				piecesTheme: 'standard',
-				flipped: false,
-				notation: cbSettings.showNotation,
-				startFen: defaultFEN,
-				size: 0
-			});
+		this.markedSquares = new Set();
+		
+		this.board = {
+			boardTheme: 'standard',
+			piecesTheme: 'standard',
+			flipped: false,
+			notation: cbSettings.showNotation,
+			shadow: false,
+			startFen: defaultFEN,
+			size: 0
+		};
 
 		this.movable = {
 			enabled: true,
@@ -232,6 +235,7 @@ export class State {
 		if (cfg.board?.boardTheme !== undefined) this.board.boardTheme = cfg.board.boardTheme;
 		if (cfg.board?.piecesTheme !== undefined) this.board.piecesTheme = cfg.board.piecesTheme;
 		if (cfg.board?.notation !== undefined) this.board.notation = cfg.board.notation;
+		if (cfg.board?.shadow !== undefined) this.board.shadow = cfg.board.shadow;
 		if (cfg.board?.flipped !== undefined) this.board.flipped = cfg.board.flipped;
 		if (cfg.board?.startFen !== undefined) this.board.startFen = cfg.board.startFen;
 

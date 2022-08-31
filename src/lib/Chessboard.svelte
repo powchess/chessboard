@@ -24,7 +24,7 @@
 
 	export let config: ChessboardConfig | undefined = undefined;
 
-	const chessboard = new Chessboard(config);
+	const chessboard = new Chessboard();
 	const dispatch = createEventDispatcher();
 
 	let boardDiv: HTMLDivElement;
@@ -35,8 +35,9 @@
 	let promotionLastMove = '';
 
 	$: setSize(chessboard.state.board.size - (chessboard.state.board.size % 8));
+	$: setConfigSettings(config);
 
-	onMount(() => {
+	$: onMount(() => {
 		updateLegalStateIfNeeded();
 		if (chessboard.state.callbacks.getLastMove) highlightMove(chessboard.state.callbacks.getLastMove());
 		if (chessboard.state.resizible) setSize(chessboard.state.board.size - (chessboard.state.board.size % 8));
@@ -394,6 +395,12 @@
 		}
 	};
 
+	export const setConfigSettings = (cfg?: ChessboardConfig | undefined) => {
+		if (cfg === undefined) return;
+		chessboard.setConfigSettings(cfg);
+		chessboard.state = chessboard.state;
+	};
+
 	const updateLegalStateIfNeeded = () => {
 		if (!chessboard.state.legal.enabled) return;
 
@@ -509,7 +516,10 @@
 	on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 	bind:this={boardDiv}
 	bind:clientWidth={chessboard.state.board.size}
-	class="noselect lg:rounded-lg board text-xs sm:text-sm {chessboard.state.movable.enabled ? '' : 'z-0'}"
+	class="noselect lg:rounded board text-xs{chessboard.state.board.shadow ? ' shadow-lg' : ''} sm:text-sm {chessboard
+		.state.movable.enabled
+		? ''
+		: 'z-0'}"
 	style="--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 >
 	<div class="noselect h-full w-full">
@@ -520,6 +530,7 @@
 					name={piece.name}
 					easing={chessboard.state.draggable.transition.settings.easing}
 					whiteToMove={chessboard.state.legal.whiteToMove}
+					legal={chessboard.state.legal.enabled}
 					movable={chessboard.state.movable}
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 					flipped={chessboard.state.board.flipped}

@@ -1,76 +1,53 @@
 <script lang="ts">
-	import { SquareColor } from '$lib/enums';
-
+	import type { ChessboardConfig } from '$lib/boardConfig';
 	import Chessboard from '$lib/Chessboard.svelte';
 
-	let white: string = '#f0d9b5';
-	let black: string = '#b58863';
-	let board: Chessboard;
-	let active = false;
+	const config: ChessboardConfig = {
+		board: {
+			notation: true,
+			shadow: true
+		},
+		resizible: {
+			min: 400,
+			max: 1000
+		},
+		drawTools: true
+	};
 </script>
 
 <div class="mt-10 grid grid-cols-center">
-	<div style="width: var(--boardSize, 40rem);" class="col-start-2 flex flex-col gap-10">
-		<Chessboard
-			bind:this={board}
-			config={{
-				resizible: {
-					min: 400,
-					max: 1000
-				},
-				drawTools: true
-			}}
-		/>
+	<div class="col-start-2 gap-10 grid grid-cols-[1fr-auto]">
+		<div class="col-start-1 flex flex-col gap-2 w-60 bg-slate-800/30 rounded shadow-lg text-gray-300 text-sm p-4">
+			<button
+				on:click={() => {
+					if (config?.board?.notation !== undefined) config.board.notation = !config.board.notation;
+					else if (config?.board !== undefined) config.board.notation = false;
+					else config.board = { notation: false };
+				}}
+			>
+				<button
+					on:click={() => {
+						if (config?.board?.flipped !== undefined) config.board.flipped = !config.board.flipped;
+						else if (config?.board !== undefined) config.board.flipped = true;
+						else config.board = { flipped: true };
+					}}
+				>
+					flip
+				</button>
 
-		<div class="mx-auto flex gap-10">
-			<div class="flex gap-4">
-				<input type="color" bind:value={white} class="h-10 w-10" />
-			</div>
-			<div class="flex gap-4">
-				<input type="color" bind:value={black} class="h-10 w-10" />
-			</div>
-			<button
-				class="rounded-md bg-slate-600/40 px-4 py-2 text-gray-200 shadow"
-				on:click={() => {
-					board.flipBoard();
-				}}>flip</button
-			>
-			<button
-				class="rounded-md bg-slate-600/40 px-4 py-2 text-gray-200 shadow"
-				on:click={() => {
-					board.setFEN('rnbqkbnr/p1p1p1pp/8/3p1p2/1pP1PP2/3B4/PP1P2PP/RNBQK1NR w KQkq - 0 1');
-				}}>change fen</button
-			>
-			<button
-				class="rounded-md bg-slate-600/40 px-4 py-2 text-gray-200 shadow"
-				on:click={() => {
-					board.setFEN('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
-				}}>start fen</button
-			>
-			<button
-				class="rounded-md bg-slate-600/40 px-4 py-2 text-gray-200 shadow"
-				on:click={() => {
-					board.setFEN('8/8/8/8/8/8/8/8 w - - 0 1');
-				}}>empty fen</button
-			>
-			<button
-				class="rounded-md bg-slate-600/40 px-4 py-2 text-gray-200 shadow"
-				on:click={() => {
-					board.makeMove('e1f5');
-				}}>move e1f5</button
-			>
-			<button
-				class="rounded-md bg-slate-600/40 px-4 py-2 text-gray-200 shadow"
-				on:click={() => {
-					board.highlightSquare('e1f5', SquareColor.MOVE);
-				}}>last e1f5</button
-			>
-			<button
-				class="rounded-md bg-slate-600/40 px-4 py-2 text-gray-200 shadow"
-				on:click={() => {
-					active = !active;
-				}}>arrows {active}</button
-			>
+				<button
+					on:click={() => {
+						if (config?.board?.shadow !== undefined) config.board.shadow = !config.board.shadow;
+						else if (config?.board !== undefined) config.board.shadow = true;
+						else config.board = { shadow: true };
+					}}
+				>
+					shadow
+				</button>
+			</button>
+		</div>
+		<div class="col-start-2 w-[var(--boardSize,40rem)]">
+			<Chessboard {config} />
 		</div>
 	</div>
 </div>

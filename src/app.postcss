@@ -3,6 +3,17 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+	font-family: 'Exo', sans-serif;
+	word-spacing: 1px;
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	box-sizing: border-box;
+	scroll-behavior: smooth;
+}
+
 *,
 *::before,
 *::after {
@@ -20,4 +31,71 @@
 		scroll-behavior: auto !important;
 		transition-delay: 0 !important;
 	}
+}
+
+.noselect {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+}
+
+body {
+	@apply bg-gray-600;
+	background-attachment: fixed;
+	background-image: radial-gradient(ellipse at center, rgba(12, 74, 110, 0.75) -30%, rgba(31, 41, 55, 0.7) 50%);
+	min-height: 100vh;
+}
+
+button {
+	@apply focus:outline-none;
+}
+
+input {
+	@apply focus:outline-none;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+	display: none;
+}
+
+td {
+	padding: 0.2vmin 2.5vmin;
+}
+
+fieldset > legend {
+	display: table;
+	float: none;
+	margin: 0 auto;
+}
+
+/* width */
+::-webkit-scrollbar {
+	width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	box-shadow: inset 0 0 3px #0284c7;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #64748b;
+	border: 0.5px solid #1e293b;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: #6b7280;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }

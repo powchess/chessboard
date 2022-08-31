@@ -28,8 +28,8 @@ export default function resizing(node: HTMLElement, params: { minWidth: number; 
 			new CustomEvent('resizing', {
 				detail: {
 					size: Math.max(
-						Math.max(minWidth, Math.min(maxWidth, initialWidth + (e.pageX - initialX) * 2)),
-						Math.max(minWidth, Math.min(maxWidth, initialHeight + (e.pageY - initialY) * 2))
+						Math.max(minWidth, Math.min(maxWidth, initialWidth + (e.pageX - initialX))),
+						Math.max(minWidth, Math.min(maxWidth, initialHeight + (e.pageY - initialY)))
 					) 
 				},
 			})

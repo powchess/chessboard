@@ -15,6 +15,7 @@
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
 	export let whiteToMove: boolean = false;
+	export let legal: boolean = false;
 	export let movable:
 		| {
 				enabled: boolean;
@@ -84,7 +85,7 @@
 	on:animationEnded
 	on:moving={(e) => dispatch('moving', e.detail)}
 	style="left:{$coords.x * 12.5}%;bottom:{$coords.y * 12.5}%;"
-	class="noselect {ghostPiece ? 'opacity-40' : 'z-10'} {canMove(movable, whiteToMove) ? 'cursor-pointer' : ''}"
+	class="select-none {ghostPiece ? 'opacity-40' : 'z-10'} {canMove(movable, whiteToMove) ? 'cursor-pointer' : ''}"
 	src={getChessPieceImage(name)}
 	alt={name}
 />

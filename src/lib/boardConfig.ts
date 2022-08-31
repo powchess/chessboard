@@ -16,6 +16,7 @@ export type ChessboardConfig = {
 		piecesTheme?: PiecesThemes;
 		flipped?: boolean;
 		notation?: boolean;
+		shadow?: boolean;
 		startFen?: string;
 		startSize?: number;
 	};
