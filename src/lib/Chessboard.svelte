@@ -24,7 +24,7 @@
 
 	export let config: ChessboardConfig | undefined = undefined;
 
-	const chessboard = new Chessboard();
+	const chessboard = new Chessboard(config);
 	const dispatch = createEventDispatcher();
 
 	let boardDiv: HTMLDivElement;
@@ -516,10 +516,7 @@
 	on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 	bind:this={boardDiv}
 	bind:clientWidth={chessboard.state.board.size}
-	class="noselect lg:rounded board text-xs{chessboard.state.board.shadow ? ' shadow-lg' : ''} sm:text-sm {chessboard
-		.state.movable.enabled
-		? ''
-		: 'z-0'}"
+	class="noselect lg:rounded board text-xs{chessboard.state.board.shadow ? ' shadow-lg' : ''} sm:text-sm"
 	style="--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 >
 	<div class="noselect h-full w-full">
@@ -530,7 +527,6 @@
 					name={piece.name}
 					easing={chessboard.state.draggable.transition.settings.easing}
 					whiteToMove={chessboard.state.legal.whiteToMove}
-					legal={chessboard.state.legal.enabled}
 					movable={chessboard.state.movable}
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 					flipped={chessboard.state.board.flipped}
@@ -601,6 +597,7 @@
 {/if}
 
 <style>
+	@import './boardThemes/themes.css';
 	.board {
 		position: relative;
 		aspect-ratio: 1;

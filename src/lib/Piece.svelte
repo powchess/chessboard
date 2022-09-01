@@ -15,7 +15,6 @@
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
 	export let whiteToMove: boolean = false;
-	export let legal: boolean = false;
 	export let movable:
 		| {
 				enabled: boolean;
@@ -53,6 +52,7 @@
 	};
 
 	$: reRenderPieces(square, flipped);
+	$: pieceZIndex = typeof movable === 'boolean' ? (movable ? 1 : 0) : movable.enabled ? 1 : 0;
 
 	const dropped = (e: CustomEvent) => {
 		curDuration = 0;
@@ -84,8 +84,8 @@
 	on:startMoving
 	on:animationEnded
 	on:moving={(e) => dispatch('moving', e.detail)}
-	style="left:{$coords.x * 12.5}%;bottom:{$coords.y * 12.5}%;"
-	class="select-none {ghostPiece ? 'opacity-40' : 'z-10'} {canMove(movable, whiteToMove) ? 'cursor-pointer' : ''}"
+	style="left:{$coords.x * 12.5}%;bottom:{$coords.y * 12.5}%; z-Index: {pieceZIndex}; opacity: {ghostPiece ? 0.3 : 1};"
+	class="noselect {canMove(movable, whiteToMove) ? 'cursor-pointer' : ''}"
 	src={getChessPieceImage(name)}
 	alt={name}
 />

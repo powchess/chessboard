@@ -133,7 +133,7 @@ export class State {
 
 		this.pieces = [];
 		this.markedSquares = new Set();
-		
+
 		this.board = {
 			boardTheme: 'standard',
 			piecesTheme: 'standard',

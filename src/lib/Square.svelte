@@ -22,10 +22,9 @@
 	$: reRenderSquares(flipped);
 </script>
 
-<div style="left: {x * 12.5}%; bottom: {y * 12.5}%;" class="select-none {boardThemesStyles.squareStyles[theme][color]}" />
+<div style="left: {x * 12.5}%; bottom: {y * 12.5}%;" class="noselect {boardThemesStyles.squareStyles[theme][color]}" />
 
 <style>
-	@import './boardThemes/themes.css';
 	div {
 		position: absolute;
 		width: 12.5%;
