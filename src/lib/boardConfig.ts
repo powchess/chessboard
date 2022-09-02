@@ -1,7 +1,8 @@
 import type { Color } from './enums';
 
 type TupleToUnion<T extends any[]> = T[number];
-export type BoardThemes = 'standard' | 'darkBlue';
+export const BoardThemes = ['standard', 'darkBlue'] as const;
+export type BoardTheme = 'standard' | 'darkBlue';
 export type PiecesThemes = 'standard';
 export type MoveTypeSound = 'MOVE' | 'CAPTURE' | 'CASTLE' | 'UNDO';
 // prettier-ignore
@@ -12,7 +13,7 @@ export type KingLocations = { [Color.WHITE]: string; [Color.BLACK]: string };
 
 export type ChessboardConfig = {
 	board?: {
-		boardTheme?: BoardThemes;
+		boardTheme?: BoardTheme;
 		piecesTheme?: PiecesThemes;
 		flipped?: boolean;
 		notation?: boolean;

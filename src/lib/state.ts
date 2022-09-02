@@ -1,6 +1,6 @@
 import { Color, type SquareColor } from './enums';
 import type { ChessPiece } from './chessTypes';
-import type { BoardThemes, ChessboardConfig, EasingFuncs, KingLocations, PiecesThemes } from './boardConfig';
+import type { BoardTheme, ChessboardConfig, EasingFuncs, KingLocations, PiecesThemes } from './boardConfig';
 
 const defaultFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -18,7 +18,7 @@ export class State {
 	public markedSquares: Set<square>;
 
 	public board: {
-		boardTheme: BoardThemes;
+		boardTheme: BoardTheme;
 		piecesTheme: PiecesThemes;
 		flipped: boolean;
 		notation: boolean;
