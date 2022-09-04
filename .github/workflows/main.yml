@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: CI/CD
 
 on:
   push:
@@ -12,9 +12,22 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
-      - run: npm ci
-      - run: npm run check
-      - run: npm run build
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run svelte check
+        run: npm run check
+
+      - name: Build site
+        run: npm run build
+
+      - name: Upload build and .svelte-kit folder
+        uses: actions/upload-artifact@v2
+        with:
+          name: test
+          if-no-files-found: error
+          path: build
 
   deploy:
     needs: [test]
