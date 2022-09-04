@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { BoardThemes } from './boardConfig';
+	import type { BoardTheme } from './boardConfig';
 
 	import { boardThemesStyles } from './boardThemes/boardThemes';
 	import type { SquareColor } from './enums';
@@ -8,7 +8,7 @@
 	export let color: SquareColor;
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
-	export let theme: BoardThemes;
+	export let theme: BoardTheme;
 
 	let x: number, y: number;
 

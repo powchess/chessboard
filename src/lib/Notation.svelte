@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { BoardThemes } from './boardConfig';
+	import type { BoardTheme } from './boardConfig';
 	import { boardThemesStyles } from './boardThemes/boardThemes';
 
-	export let theme: BoardThemes;
+	export let theme: BoardTheme;
 	export let flipped: boolean;
 
 	const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];

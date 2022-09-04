@@ -1,6 +1,14 @@
 <script lang="ts">
-	import { BoardThemes, type ChessboardConfig } from '$lib/boardConfig';
+	import {
+		BoardThemes,
+		type BoardTheme,
+		type ChessboardConfig,
+		type EasingFuncs,
+		type KingLocations,
+		type PiecesThemes
+	} from '$lib/boardConfig';
 	import Chessboard from '$lib/Chessboard.svelte';
+	import { Color } from '$lib/enums';
 	import { State } from '$lib/state';
 	import Prism from 'svelte-prism';
 
@@ -8,11 +16,118 @@
 
 	let defaultState = new State();
 
-	const config: ChessboardConfig = {
+	type CBConfig = {
 		board: {
+			boardTheme: BoardTheme;
+			piecesTheme: PiecesThemes;
+			flipped: boolean;
+			notation: boolean;
+			shadow: boolean;
+			startFen: string;
+			startSize: number;
+		};
+
+		movable: boolean | Color.WHITE | Color.BLACK | Color.BOTH;
+
+		draggable:
+			| boolean
+			| {
+					ghostPiece: boolean;
+					transition:
+						| boolean
+						| {
+								duration: number;
+								easing: EasingFuncs;
+						  };
+			  };
+
+		selectable: boolean;
+
+		legal:
+			| boolean
+			| {
+					settings: {
+						allowPromotion: boolean;
+						allowEnPassant: boolean;
+						allowCastling: boolean;
+					};
+					preMoves: boolean;
+			  };
+
+		callbacks: {
+			getLegalMoves?: () => string[];
+			getPreMoves?: () => string[];
+			beforeMove?: (move: string) => void;
+			afterMove?: (move: string) => void;
+			getLastMove?: () => string;
+			getLastMoveSAN?: () => string;
+			getKingLocations?: () => KingLocations;
+			getInCheck?: () => Color.WHITE | Color.BLACK | undefined;
+			getWhiteToMove?: () => boolean;
+		};
+
+		highlight:
+			| boolean
+			| {
+					select: boolean;
+					legal: boolean;
+					move: boolean;
+					preMove: boolean;
+					nextMove: boolean;
+					check: boolean;
+			  };
+
+		drawTools:
+			| boolean
+			| {
+					LshapeKnightMove: boolean;
+					onlyChessMove: boolean;
+			  };
+
+		sounds:
+			| boolean
+			| {
+					MOVE: boolean;
+					CAPTURE: boolean;
+					CASTLE: boolean;
+					UNDO: boolean;
+			  };
+
+		resizible:
+			| boolean
+			| {
+					min: number;
+					max: number;
+			  };
+	};
+
+	const config: CBConfig = {
+		board: {
+			boardTheme: 'standard',
+			piecesTheme: 'standard',
+			flipped: false,
+			notation: true,
 			shadow: true,
-			notation: true
+			startFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+			startSize: 500
 		},
+
+		movable: Color.BOTH,
+
+		draggable: true,
+
+		selectable: true,
+
+		legal: false,
+
+		callbacks: {},
+
+		highlight: true,
+
+		drawTools: true,
+
+		sounds: true,
+
 		resizible: true
 	};
 
