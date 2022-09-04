@@ -12,9 +12,7 @@
 	import { State } from '$lib/state';
 	import Prism from 'svelte-prism';
 
-	// let language = 'typescript';
-
-	let defaultState = new State();
+	const defaultState = new State();
 
 	type CBConfig = {
 		board: {
@@ -132,7 +130,7 @@
 	};
 
 	const getConfigString = (cfg: ChessboardConfig) => {
-		let config = <ChessboardConfig>JSON.parse(JSON.stringify(cfg));
+		const config = <ChessboardConfig>JSON.parse(JSON.stringify(cfg));
 		if (config.board !== undefined) {
 			if (config.board.boardTheme !== undefined && config.board.boardTheme === defaultState.board.boardTheme)
 				delete config.board.boardTheme;
@@ -146,13 +144,14 @@
 			if (Object.keys(config.board).length === 0) delete config.board;
 		}
 
-		return ('let config: ChessboardConfig = ' + JSON.stringify(config, null, 4)).replace(/"([^"]+)":/g, '$1:');
+		return ('const config: ChessboardConfig = ' + JSON.stringify(config, null, 4)).replace(/"([^"]+)":/g, '$1:');
 	};
 
 	$: code = getConfigString(config);
 </script>
 
 <svelte:head>
+	<title>Chessboard • PowChess.com</title>
 	<link rel="stylesheet" href="prism-one-dark.css" />
 </svelte:head>
 
