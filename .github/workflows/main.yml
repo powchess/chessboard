@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  test_master_push:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,3 +15,18 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
+
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          cname: board.powchess.com
