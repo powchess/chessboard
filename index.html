@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="./favicon.ico" />
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv="content-security-policy" content=""><title>Chessboard • PowChess.com</title><link rel="stylesheet" href="prism-one-dark.css" data-svelte="svelte-tebjht">
+	<link href="./_app/immutable/assets/_layout-ab630dda.css" rel="stylesheet">
+	<link href="./_app/immutable/assets/_page-ae27a222.css" rel="stylesheet">
+	<link rel="modulepreload" href="./_app/immutable/start-8bbe3ea0.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/index-6e002427.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-5a383ffd.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/index-be90f349.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-24277b24.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-f374ba56.js">
+	</head>
+	<body>
+		<div>
+
+
+
+
+<div class="mt-10 grid grid-cols-center"><div class="col-start-2 gap-10 grid grid-cols-[1fr-auto]"><div class="col-start-1 row-span-2 flex flex-col gap-2 w-60 text-gray-300 text-sm"><div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">board
+				<div class="p-2 pl-4"><div><label for="boardTheme" class="select-none">notation</label>
+						<select><option value="standard">standard</option><option value="darkBlue">darkBlue</option></select></div>
+
+					<div><input id="notation" type="checkbox" checked>
+						<label for="notation" class="select-none">notation</label></div>
+
+					<div><input id="flipped" type="checkbox">
+						<label for="flipped" class="select-none">flipped</label></div>
+
+					<div><input id="shadow" type="checkbox" checked>
+						<label for="shadow" class="select-none">shadow</label></div></div></div></div>
+		<div class="col-start-2 w-[var(--boardSize,40rem)]"><div class="noselect lg:rounded board text-xs shadow-lg sm:text-sm svelte-wzcws1" style="--boardTheme: url(/_app/immutable/assets/standard-97995bf9.svg);"><div class="noselect h-full w-full"><img style="left:0%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left:12.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left:25%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left:37.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bQ-c7b9a43e.svg" alt="bQ"><img style="left:50%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bK-3500a2e6.svg" alt="bK"><img style="left:62.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left:75%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left:87.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left:0%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:12.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:25%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:37.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:50%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:62.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:75%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:87.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:0%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:12.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:25%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:37.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:50%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:62.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:75%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:87.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:0%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"><img style="left:12.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left:25%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left:37.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wQ-8568b485.svg" alt="wQ"><img style="left:50%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wK-4cdf6dc9.svg" alt="wK"><img style="left:62.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left:75%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left:87.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"></div>
+	
+	
+	<div class="files noselect svelte-t3eav4"><span style="color: #f0d9b5;" class="svelte-t3eav4">a
+		</span><span style="color: #b58863;" class="svelte-t3eav4">b
+		</span><span style="color: #f0d9b5;" class="svelte-t3eav4">c
+		</span><span style="color: #b58863;" class="svelte-t3eav4">d
+		</span><span style="color: #f0d9b5;" class="svelte-t3eav4">e
+		</span><span style="color: #b58863;" class="svelte-t3eav4">f
+		</span><span style="color: #f0d9b5;" class="svelte-t3eav4">g
+		</span><span style="color: #b58863;" class="svelte-t3eav4">h
+		</span></div>
+<div class="ranks noselect svelte-t3eav4"><span style="color: #f0d9b5;" class="text-right svelte-t3eav4">8
+		</span><span style="color: #b58863;" class="text-right svelte-t3eav4">7
+		</span><span style="color: #f0d9b5;" class="text-right svelte-t3eav4">6
+		</span><span style="color: #b58863;" class="text-right svelte-t3eav4">5
+		</span><span style="color: #f0d9b5;" class="text-right svelte-t3eav4">4
+		</span><span style="color: #b58863;" class="text-right svelte-t3eav4">3
+		</span><span style="color: #f0d9b5;" class="text-right svelte-t3eav4">2
+		</span><span style="color: #b58863;" class="text-right svelte-t3eav4">1
+		</span>
+</div>
+	<div style="color: #b58863;" class="hidden lg:inline svelte-bwuzxv"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M 5 1 Q 6 0 6 2 L 6 4 Q 6 6 4 6 L 2 6 Q 0 6 1 5 Z"></path></svg>
+</div>
+	<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg)" class="rounded svelte-1ez37sv" viewBox="0 0 8 8"><defs><marker id="start-g" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="green" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
+			<marker id="end-g" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="green" d="M 0 4 L 10 10 L 0 16 Z"></path></marker><marker id="start-r" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="red" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
+			<marker id="end-r" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="red" d="M 0 4 L 10 10 L 0 16 Z"></path></marker><marker id="start-b" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="blue" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
+			<marker id="end-b" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="blue" d="M 0 4 L 10 10 L 0 16 Z"></path></marker><marker id="start-o" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="orange" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
+			<marker id="end-o" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="orange" d="M 0 4 L 10 10 L 0 16 Z"></path></marker></defs><g></g></svg>
+	</div>
+
+<audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/move-e4d827fe.wav"></audio>
+<audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/capture-3dff493a.wav"></audio>
+<audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/castle-dcf4b2c5.wav"></audio>
+<audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/undo-b4184324.mp3"></audio></div>
+		<div class="col-start-2 row-start-2 shadow-lg rounded"><code style="display:none"></code>
+
+<pre class="language-javascript" command-line data-output="2-17"><code class="language-javascript"><!-- HTML_TAG_START --><span class="token keyword">const</span> <span class="token literal-property property">config</span><span class="token operator">:</span> ChessboardConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token literal-property property">board</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token literal-property property">shadow</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">startSize</span><span class="token operator">:</span> <span class="token number">500</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">movable</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">draggable</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">selectable</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">legal</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">callbacks</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">highlight</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">drawTools</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">sounds</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token literal-property property">resizible</span><span class="token operator">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">}</span><!-- HTML_TAG_END --></code></pre></div></div></div>
+
+
+		<script type="module" data-sveltekit-hydrate="ujc697">
+		import { start } from "./_app/immutable/start-8bbe3ea0.js";
+
+		start({
+			env: {},
+			hydrate: {
+				status: 200,
+				error: null,
+				node_ids: [0, 2],
+				params: {},
+				routeId: "",
+				data: (function(a,b){return [{type:"data",data:b,uses:{dependencies:a,params:a,parent:a,url:a}},b]}(void 0,null)),
+				errors: null
+			},
+			paths: {"base":"","assets":""},
+			target: document.querySelector('[data-sveltekit-hydrate="ujc697"]').parentNode,
+			trailing_slash: "never"
+		});
+	</script>
+	</div>
+	</body>
+</html>

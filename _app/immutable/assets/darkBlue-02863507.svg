@@ -1,0 +1,19 @@
+<svg id="test" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8" shape-rendering="crispEdges" class="rounded">
+	<g id="four">
+		<g id="two">
+			<g id="one">
+				<g id="one1/2">
+					<g id="one1/4">
+						<rect width="1" height="1" fill="#94A3B8" />
+						<rect x="1" width="1" height="1" fill="#475569" />
+					</g>
+					<use x="2" href="#one1/4" />
+				</g>
+				<use x="4" href="#one1/2" />
+			</g>
+			<use y="1" href="#one" transform="translate(8,0) scale(-1,1)" />
+		</g>
+		<use y="2" href="#two" />
+	</g>
+	<use y="4" href="#four" />
+</svg>
