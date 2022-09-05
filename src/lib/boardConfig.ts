@@ -1,6 +1,6 @@
 import type { Color } from './enums';
 
-type TupleToUnion<T extends any[]> = T[number];
+type TupleToUnion<T extends unknown[]> = T[number];
 export const BoardThemes = ['standard', 'darkBlue'] as const;
 export type BoardTheme = 'standard' | 'darkBlue';
 export type PiecesThemes = 'standard';

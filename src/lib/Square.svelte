@@ -12,14 +12,14 @@
 
 	let x: number, y: number;
 
-	const reRenderSquares = (_flipped?: boolean) => {
+	const reRenderSquares = () => {
 		const newCoords = getGridCoordsFromSquare(square);
 
 		x = newCoords.x;
 		y = newCoords.y;
 	};
 
-	$: reRenderSquares(flipped);
+	$: flipped, reRenderSquares();
 </script>
 
 <div style="left: {x * 12.5}%; bottom: {y * 12.5}%;" class="noselect {boardThemesStyles.squareStyles[theme][color]}" />

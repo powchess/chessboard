@@ -4,7 +4,7 @@ module.exports = {
 	theme: {
 		extend: {
 			gridTemplateColumns: {
-				center: '1fr auto 1fr',
+				center: '1fr auto 1fr'
 			}
 		}
 	},

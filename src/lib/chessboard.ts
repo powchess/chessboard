@@ -1,7 +1,7 @@
 import { SquareColor } from './enums';
 import type { ChessBoard, ChessFile, ChessPiece } from './chessTypes';
 import { State, type square, type piece } from './state';
-import { getShortFenFromBoard } from './utils';
+import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils';
 import type { ChessboardConfig } from './boardConfig';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
@@ -54,7 +54,7 @@ export default class Chessboard {
 		this.state.markedSquares.forEach((square) => {
 			if (square.square === sqr && square.color === SquareColor.LEGAL) square.color = SquareColor.LEGALHOVER;
 			else if (square.square !== sqr && square.color === SquareColor.LEGALHOVER) {
-				let pieceExist: boolean = false;
+				let pieceExist = false;
 				this.state.pieces.forEach((piece) => {
 					if (piece.square === square.square) {
 						pieceExist = true;
@@ -72,7 +72,7 @@ export default class Chessboard {
 		this.state.markedSquares.forEach((square) => {
 			if (square.square === sqr && square.color === SquareColor.PREMOVE) square.color = SquareColor.PREMOVEHOVER;
 			else if (square.square !== sqr && square.color === SquareColor.PREMOVEHOVER) {
-				let pieceExist: boolean = false;
+				let pieceExist = false;
 				this.state.pieces.forEach((piece) => {
 					if (piece.square === square.square) {
 						pieceExist = true;
@@ -210,7 +210,7 @@ export default class Chessboard {
 	};
 
 	public updatePiecesWithFen = (fen: string): void => {
-		const board = [...Array(8)].map((_: string[]) => Array(8).fill(null)) as ChessBoard;
+		const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
 		const numbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
 		let j = 0;
 		let m = 0;
@@ -226,7 +226,7 @@ export default class Chessboard {
 				}
 				m++;
 			} else {
-				for (var k = 0; k < parseInt(fen[i]); k++) {
+				for (let k = 0; k < parseInt(fen[i]); k++) {
 					board[j][m] = null;
 					m++;
 				}
@@ -284,10 +284,9 @@ export default class Chessboard {
 	public getShortFEN() {
 		if (this.state.pieces.length === 0) return emptyFEN;
 
-		const board = [...Array(8)].map((_: string[]) => Array(8).fill(null)) as ChessBoard;
+		const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
 
 		this.state.pieces.forEach((piece) => {
-			//@ts-ignore
 			board[rankToIndex(piece.square[1])][fileToIndex(piece.square[0])] = piece.name;
 		});
 
@@ -353,7 +352,7 @@ export default class Chessboard {
 	public isEnPassant = (move: string): boolean => {
 		if (move[0] === move[2]) return false;
 		if (this.getPieceFromSquare(move.substring(2, 4))) return false;
-		let pawn = this.getPieceFromSquare(move.substring(0, 2));
+		const pawn = this.getPieceFromSquare(move.substring(0, 2));
 		if (pawn == undefined || (pawn.name !== 'wP' && pawn.name !== 'bP')) return false;
 		return true;
 	};
@@ -365,10 +364,10 @@ export default class Chessboard {
 	public getCapturedPawnSquareIfIsEnPassant = (move: string): string | undefined => {
 		if (move[0] === move[2]) return undefined;
 		if (this.getPieceFromSquare(move.substring(2, 4))) return undefined;
-		let pawn = this.getPieceFromSquare(move.substring(0, 2));
+		const pawn = this.getPieceFromSquare(move.substring(0, 2));
 		if (pawn == undefined || (pawn.name !== 'wP' && pawn.name !== 'bP')) return undefined;
 
-		let capturedPawn = this.getPieceFromSquare(move[2] + `${parseInt(move[3]) + (pawn.name === 'wP' ? -1 : 1)}`);
+		const capturedPawn = this.getPieceFromSquare(move[2] + `${parseInt(move[3]) + (pawn.name === 'wP' ? -1 : 1)}`);
 		return capturedPawn?.square;
 	};
 
@@ -379,7 +378,7 @@ export default class Chessboard {
 
 	public isPromotion = (move: string): boolean => {
 		if ((move[1] != '7' || move[3] != '8') && (move[1] != '2' || move[3] != '1')) return false;
-		let piece = this.getPieceFromSquare(move.substring(0, 2));
+		const piece = this.getPieceFromSquare(move.substring(0, 2));
 		if (piece && (piece.name[1] !== 'P' || (piece.name[0] === 'w' && move[3] === '1') || (piece.name[0] === 'b' && move[3] === '8')))
 			return false;
 		return true;
@@ -407,5 +406,5 @@ export default class Chessboard {
 
 	public setConfigSettings = (cfg: ChessboardConfig) => {
 		this.state.setConfigSettings(cfg);
-	}
+	};
 }

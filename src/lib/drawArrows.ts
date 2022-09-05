@@ -51,7 +51,7 @@ export default function drawArrows(node: HTMLDivElement, params: props) {
 			removeUserArrows(svg);
 			window.addEventListener('mouseup', handleMouseup);
 		} else if (e.button == 2 && !leftButtonPressed) {
-			let square = getSVGCoords(e.clientX, e.clientY);
+			const square = getSVGCoords(e.clientX, e.clientY);
 			startSquare = square;
 
 			createCircle(square);
@@ -59,17 +59,12 @@ export default function drawArrows(node: HTMLDivElement, params: props) {
 
 			toBeRemoved = undefined;
 
-			svg
-				.querySelectorAll(`circle[cx="${square.x + 0.5}"][cy="${square.y + 0.5}"]`)
-				.forEach((element) => {
-					toBeRemoved = element;
-					if (
-						drawingSVG != undefined &&
-						element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')
-					) {
-						drawingSVG.setAttribute('remove', '');
-					}
-				});
+			svg.querySelectorAll(`circle[cx="${square.x + 0.5}"][cy="${square.y + 0.5}"]`).forEach((element) => {
+				toBeRemoved = element;
+				if (drawingSVG != undefined && element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')) {
+					drawingSVG.setAttribute('remove', '');
+				}
+			});
 
 			if (drawingSVG) svg.appendChild(drawingSVG);
 
@@ -83,7 +78,7 @@ export default function drawArrows(node: HTMLDivElement, params: props) {
 
 	function handleMousemove(e: MouseEvent) {
 		if (drawingSVG == undefined || (startSquare.x === -1 && startSquare.y === -1)) return;
-		let endSquare = getSVGCoords(e.clientX, e.clientY);
+		const endSquare = getSVGCoords(e.clientX, e.clientY);
 
 		if (settings.onlyChessMove && !isChessMove(startSquare, endSquare)) return;
 
@@ -101,37 +96,25 @@ export default function drawArrows(node: HTMLDivElement, params: props) {
 			changeColor(svg, drawingSVG, startSquare, e.shiftKey, e.ctrlKey, e.altKey);
 			svg.appendChild(drawingSVG);
 
-			svg
-				.querySelectorAll(`circle[cx="${startSquare.x + 0.5}"][cy="${startSquare.y + 0.5}"]`)
-				.forEach((element) => {
-					if (element == drawingSVG) return;
-					toBeRemoved = element;
-					if (
-						drawingSVG != undefined &&
-						element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')
-					) {
-						drawingSVG.setAttribute('remove', '');
-					}
-				});
+			svg.querySelectorAll(`circle[cx="${startSquare.x + 0.5}"][cy="${startSquare.y + 0.5}"]`).forEach((element) => {
+				if (element == drawingSVG) return;
+				toBeRemoved = element;
+				if (drawingSVG != undefined && element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')) {
+					drawingSVG.setAttribute('remove', '');
+				}
+			});
 		} else {
 			if (drawingSVG instanceof SVGCircleElement) drawingSVG.remove();
 
 			toBeRemoved = undefined;
 
-			svg
-				.querySelectorAll(`polyline[data-sqID="${getChessMove(startSquare, endSquare)}"]`)
-				.forEach((element) => {
-					if (
-						drawingSVG == undefined ||
-						(startSquare.x === -1 && startSquare.y === -1) ||
-						element == drawingSVG
-					)
-						return;
-					toBeRemoved = element;
-					if (element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')) {
-						drawingSVG.setAttribute('remove', '');
-					}
-				});
+			svg.querySelectorAll(`polyline[data-sqID="${getChessMove(startSquare, endSquare)}"]`).forEach((element) => {
+				if (drawingSVG == undefined || (startSquare.x === -1 && startSquare.y === -1) || element == drawingSVG) return;
+				toBeRemoved = element;
+				if (element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')) {
+					drawingSVG.setAttribute('remove', '');
+				}
+			});
 			if (drawingSVG instanceof SVGCircleElement) {
 				drawingSVG = createArrow(startSquare, endSquare, settings.LshapeKnightMove);
 				changeColor(svg, drawingSVG, startSquare, e.shiftKey, e.ctrlKey, e.altKey);
@@ -195,8 +178,7 @@ export default function drawArrows(node: HTMLDivElement, params: props) {
 
 	function isChessMove(startSquare: sqXY, endSquare: sqXY) {
 		if (isKnightMove(startSquare, endSquare)) return true;
-		if (Math.abs(startSquare.x - endSquare.x) === Math.abs(startSquare.y - endSquare.y))
-			return true;
+		if (Math.abs(startSquare.x - endSquare.x) === Math.abs(startSquare.y - endSquare.y)) return true;
 		if ((startSquare.x === endSquare.x) !== (startSquare.y === endSquare.y)) return true;
 		return false;
 	}
@@ -223,8 +205,7 @@ export default function drawArrows(node: HTMLDivElement, params: props) {
 			}
 			settings = newParams.settings;
 			flipped = newParams.flipped;
-		},
-		destroy() {}
+		}
 	};
 }
 
@@ -256,45 +237,33 @@ function changeColor(
 		else if (altKey) drawingSVG.setAttribute('stroke', 'blue');
 		else drawingSVG.setAttribute('stroke', 'green');
 
-		svg
-			.querySelectorAll(`сircle[cx="${startSquare.x + 0.5}"][cy="${startSquare.y + 0.5}"]`)
-			.forEach((element) => {
-				if (drawingSVG != undefined && element != drawingSVG) {
-					if (element.getAttribute('stroke') == drawingSVG.getAttribute('stroke'))
-						drawingSVG.setAttribute('remove', '');
-					else if (drawingSVG.hasAttribute('remove')) drawingSVG.removeAttribute('remove');
-				}
-			});
+		svg.querySelectorAll(`сircle[cx="${startSquare.x + 0.5}"][cy="${startSquare.y + 0.5}"]`).forEach((element) => {
+			if (drawingSVG != undefined && element != drawingSVG) {
+				if (element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')) drawingSVG.setAttribute('remove', '');
+				else if (drawingSVG.hasAttribute('remove')) drawingSVG.removeAttribute('remove');
+			}
+		});
 	} else if (drawingSVG.tagName == 'polyline') {
-		let color = shiftKey ? 'red' : ctrlKey ? 'orange' : altKey ? 'blue' : 'green';
+		const color = shiftKey ? 'red' : ctrlKey ? 'orange' : altKey ? 'blue' : 'green';
 		drawingSVG.setAttribute('stroke', `${color}`);
 		drawingSVG.setAttribute('marker-start', `url(#start-${color[0]})`);
 		drawingSVG.setAttribute('marker-end', `url(#end-${color[0]})`);
 
-		svg
-			.querySelectorAll(`polyline[data-sqID="${drawingSVG.getAttribute('data-sqID')}"]`)
-			.forEach((element) => {
-				if (!(drawingSVG instanceof SVGPolylineElement)) return;
-				if (element != drawingSVG) {
-					if (element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')) {
-						drawingSVG.setAttribute('remove', '');
-					} else if (drawingSVG.hasAttribute('remove')) {
-						drawingSVG.removeAttribute('remove');
-					}
+		svg.querySelectorAll(`polyline[data-sqID="${drawingSVG.getAttribute('data-sqID')}"]`).forEach((element) => {
+			if (!(drawingSVG instanceof SVGPolylineElement)) return;
+			if (element != drawingSVG) {
+				if (element.getAttribute('stroke') == drawingSVG.getAttribute('stroke')) {
+					drawingSVG.setAttribute('remove', '');
+				} else if (drawingSVG.hasAttribute('remove')) {
+					drawingSVG.removeAttribute('remove');
 				}
-			});
+			}
+		});
 	}
 }
 
-function createArrow(
-	startSquare: sqXY,
-	endSquare: sqXY,
-	LshapeKnightMove?: boolean,
-	color?: string,
-	opacity?: number
-) {
-	let drawingSVG = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-
+function createArrow(startSquare: sqXY, endSquare: sqXY, LshapeKnightMove?: boolean, color?: string, opacity?: number) {
+	const drawingSVG = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
 	changeExistArrow(drawingSVG, startSquare, endSquare, LshapeKnightMove, color, opacity);
 
 	drawingSVG.setAttribute('fill', 'none');
@@ -316,23 +285,20 @@ function changeExistArrow(
 	opacity?: number
 ) {
 	let midPoint: sqXY = { x: -1, y: -1 };
-	let start: sqXY;
 	let end: sqXY;
 	let angle;
 	if (isKnightMove(startSquare, endSquare) && LshapeKnightMove) {
 		if (Math.abs(endSquare.x - startSquare.x) == 2) midPoint = { x: endSquare.x, y: startSquare.y };
 		else midPoint = { x: startSquare.x, y: endSquare.y };
 
-		if (midPoint.y - startSquare.y < 0)
-			angle = Math.PI + Math.atan((midPoint.x - startSquare.x) / (midPoint.y - startSquare.y));
+		if (midPoint.y - startSquare.y < 0) angle = Math.PI + Math.atan((midPoint.x - startSquare.x) / (midPoint.y - startSquare.y));
 		else angle = Math.atan((midPoint.x - startSquare.x) / Math.abs(midPoint.y - startSquare.y));
 		end = {
 			x: endSquare.x - Math.sign(endSquare.x - midPoint.x) * (midPoint.x != endSquare.x ? 0.4 : 0),
 			y: endSquare.y - Math.sign(endSquare.y - midPoint.y) * (midPoint.y != endSquare.y ? 0.4 : 0)
 		};
 	} else {
-		if (endSquare.y - startSquare.y < 0)
-			angle = Math.PI + Math.atan((endSquare.x - startSquare.x) / (endSquare.y - startSquare.y));
+		if (endSquare.y - startSquare.y < 0) angle = Math.PI + Math.atan((endSquare.x - startSquare.x) / (endSquare.y - startSquare.y));
 		else angle = Math.atan((endSquare.x - startSquare.x) / Math.abs(endSquare.y - startSquare.y));
 		end = {
 			x: endSquare.x - Math.sin(angle) * 0.4,
@@ -340,7 +306,7 @@ function changeExistArrow(
 		};
 	}
 
-	start = {
+	const start = {
 		x: startSquare.x + Math.sin(angle) * 0.4,
 		y: startSquare.y + Math.cos(angle) * 0.4
 	};
@@ -348,9 +314,7 @@ function changeExistArrow(
 	arrow.setAttribute(
 		'points',
 		`${start.x + 0.5},${start.y + 0.5} ${
-			midPoint.x != -1 && midPoint.y != -1 && LshapeKnightMove
-				? `${midPoint.x + 0.5},${midPoint.y + 0.5} `
-				: ''
+			midPoint.x != -1 && midPoint.y != -1 && LshapeKnightMove ? `${midPoint.x + 0.5},${midPoint.y + 0.5} ` : ''
 		}${end.x + 0.5},${end.y + 0.5}`
 	);
 	arrow.setAttribute('data-sqID', `${getChessMove(startSquare, endSquare)}`);
@@ -366,11 +330,7 @@ export function removeComupterArrows(svg: SVGGElement): void {
 	svg.querySelectorAll('[sf]').forEach((element) => element.remove());
 }
 
-export function drawComputerArrows(
-	svg: SVGGElement,
-	data: ArrowData[],
-	LshapeKnightMove?: boolean
-): void {
+export function drawComputerArrows(svg: SVGGElement, data: ArrowData[], LshapeKnightMove?: boolean): void {
 	data.forEach((element) => {
 		const arrow = createArrow(
 			squareToSQXY(element.move.substring(0, 2)),

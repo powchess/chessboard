@@ -10,36 +10,26 @@ function getEndSquare(
 ): string | null | undefined {
 	if (directionX == 0 && directionY == 0) return startSquare;
 
-	const files = boardFlipped
-		? ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].reverse()
-		: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-	const ranks = boardFlipped
-		? ['8', '7', '6', '5', '4', '3', '2', '1'].reverse()
-		: ['8', '7', '6', '5', '4', '3', '2', '1'];
+	const files = boardFlipped ? ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].reverse() : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+	const ranks = boardFlipped ? ['8', '7', '6', '5', '4', '3', '2', '1'].reverse() : ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-	let newFile = files[files.indexOf(startSquare[0]) + directionX];
-	let newRank = ranks[ranks.indexOf(startSquare[1]) + directionY];
+	const newFile = files[files.indexOf(startSquare[0]) + directionX];
+	const newRank = ranks[ranks.indexOf(startSquare[1]) + directionY];
 
 	if (!newFile || !newRank) return undefined;
 
 	return newFile + newRank;
 }
 
-function createTouchCircle(
-	node: HTMLElement,
-	scale: number,
-	boardFlipped: boolean | undefined
-): SVGElement {
+function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boolean | undefined): SVGElement {
 	scale *= 1.15;
-	let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	let circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+	const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
 	svg.setAttribute('width', (node.offsetWidth * scale).toString());
 	svg.setAttribute('height', (node.offsetHeight * scale).toString());
 	svg.style.position = 'absolute';
 	svg.style.zIndex = '100';
-	svg.style.transform = `translate(${boardFlipped ? '' : '-'}${(25 * scale) / 2}%, -${
-		(25 * scale) / 2
-	}%)`;
+	svg.style.transform = `translate(${boardFlipped ? '' : '-'}${(25 * scale) / 2}%, -${(25 * scale) / 2}%)`;
 	svg.style.opacity = '0.2';
 	circle.setAttribute('r', ((node.offsetWidth * scale) / 2).toString());
 	circle.setAttribute('cx', ((node.offsetWidth * scale) / 2).toString());
@@ -62,8 +52,9 @@ type dragParams = {
 };
 
 export function drag(node: HTMLImageElement, params: dragParams) {
-	let waitingArgs: any;
-	function throttle(callback: Function, delay = 1000) {
+	let waitingArgs: unknown[] | null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function throttle(callback: (...args: any[]) => unknown, delay = 1000) {
 		let shouldWait = false;
 
 		const timeoutFunction = () => {
@@ -75,7 +66,7 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 			}
 		};
 
-		return (...args: any) => {
+		return (...args: unknown[]) => {
 			if (shouldWait) {
 				waitingArgs = args;
 				return;
@@ -89,20 +80,14 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 
 	const movingFunc = throttle(mousemove, 10);
 
-	let x: number,
-		y: number,
-		offsetX: number,
-		offsetY: number,
-		globalDX: number,
-		globalDY: number,
-		scrollX: number,
-		scrollY: number;
+	let x: number, y: number, offsetX: number, offsetY: number, globalDX: number, globalDY: number, scrollX: number, scrollY: number;
 	let nodeCentered = false;
 	let timeout: number;
 	const boardDiv = <HTMLDivElement>node.parentNode;
 	let currentSquare: string;
 
-	let { startSquare, boardFlipped, onlyShow, coords } = params;
+	let { startSquare, boardFlipped, onlyShow } = params;
+	const { coords } = params;
 
 	let startX = get(coords).x;
 	let startY = get(coords).y;
@@ -130,7 +115,7 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 		startY = boardFlipped ? 8 - parseInt(startSquare[1]) : parseInt(startSquare[1]) - 1;
 
 		currentSquare = startSquare;
-		let bcr = (<HTMLElement>e.target).getBoundingClientRect();
+		const bcr = (<HTMLElement>e.target).getBoundingClientRect();
 
 		if (!(e instanceof MouseEvent) && e.touches[0] && e.targetTouches[0]) {
 			x = e.touches[0].clientX;
@@ -183,16 +168,11 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 				coords.update(
 					(coord) => {
 						return {
-							x:
-								coord.x +
-								(x - node.offsetWidth / 2 - node.getBoundingClientRect().x) / node.clientWidth,
+							x: coord.x + (x - node.offsetWidth / 2 - node.getBoundingClientRect().x) / node.clientWidth,
 							y:
 								e instanceof MouseEvent
-									? coord.y -
-									  (y - node.offsetHeight / 2 - node.getBoundingClientRect().y) / node.clientWidth
-									: coord.y -
-									  (y - node.offsetHeight * 1.5 - node.getBoundingClientRect().y) /
-											node.clientWidth,
+									? coord.y - (y - node.offsetHeight / 2 - node.getBoundingClientRect().y) / node.clientWidth
+									: coord.y - (y - node.offsetHeight * 1.5 - node.getBoundingClientRect().y) / node.clientWidth,
 							scale: e instanceof MouseEvent ? 1 : touchScale
 						};
 					},
@@ -209,10 +189,9 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 		if (!nodeCentered) return;
 
 		if (!(e instanceof MouseEvent)) {
-			let diffX = Math.floor((globalDX + offsetX) / node.offsetWidth);
-			let diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
-
-			let targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
+			const diffX = Math.floor((globalDX + offsetX) / node.offsetWidth);
+			const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
+			const targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
 
 			if (targetSquare) {
 				if (targetSquare !== currentSquare) {
@@ -259,10 +238,9 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 
 		waitingArgs = null;
 
-		let diffX = Math.floor((globalDX + offsetX) / node.offsetWidth);
-		let diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
-
-		let targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
+		const diffX = Math.floor((globalDX + offsetX) / node.offsetWidth);
+		const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
+		const targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
 
 		if (targetSquare && targetSquare != startSquare) {
 			node.dispatchEvent(
@@ -302,8 +280,8 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 	}
 
 	function scrolling(): void {
-		let dx = window.scrollX - scrollX;
-		let dy = window.scrollY - scrollY;
+		const dx = window.scrollX - scrollX;
+		const dy = window.scrollY - scrollY;
 
 		scrollX = window.scrollX;
 		scrollY = window.scrollY;
@@ -342,8 +320,7 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 				}
 			}
 
-			if (boardFlipped !== newParams.boardFlipped)
-				circle = createTouchCircle(node, touchScale, newParams.boardFlipped);
+			if (boardFlipped !== newParams.boardFlipped) circle = createTouchCircle(node, touchScale, newParams.boardFlipped);
 
 			boardFlipped = newParams.boardFlipped;
 		}

@@ -4,6 +4,7 @@
 [![npm](https://img.shields.io/npm/v/@powchess/chessboard)](https://www.npmjs.com/package/@powchess/chessboard)
 
 # Svelte Chessboard
+
 This is the Chessboard UI Package which is used on [PowChess](https://powchess.com).
 
 ## Installation
@@ -16,8 +17,8 @@ npm install --save-dev @powchess/chessboard
 
 ```html
 <script lang="ts">
-  import Chessboard, {type ChessboardConfig} from '@powchess/chessboard';
-  const config: ChessboardConfig = {};
+	import Chessboard, { type ChessboardConfig } from '@powchess/chessboard';
+	const config: ChessboardConfig = {};
 </script>
 
 <Chessboard {config} />

@@ -150,7 +150,7 @@
 		dispatch('nextMove', { move });
 	};
 
-	export const movePiece = (move: string, highlight: boolean = true) => {
+	export const movePiece = (move: string, highlight = true) => {
 		chessboard.makeMove(move);
 		if (highlight) {
 			clearAllSquares(SquareColor.MOVE);

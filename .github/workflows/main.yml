@@ -16,6 +16,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Run Prettier & Eslint
+        run: npm run lint
+
       - name: Run svelte check
         run: npm run check
 

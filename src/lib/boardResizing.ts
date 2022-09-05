@@ -1,5 +1,5 @@
 export default function resizing(node: HTMLElement, params: { minWidth: number; maxWidth: number; curWidth: number }) {
-	let { minWidth, maxWidth, curWidth } = params;
+	const { minWidth, maxWidth, curWidth } = params;
 	let Width: number = curWidth;
 
 	let initialX: number;
@@ -30,8 +30,8 @@ export default function resizing(node: HTMLElement, params: { minWidth: number; 
 					size: Math.max(
 						Math.max(minWidth, Math.min(maxWidth, initialWidth + (e.pageX - initialX))),
 						Math.max(minWidth, Math.min(maxWidth, initialHeight + (e.pageY - initialY)))
-					) 
-				},
+					)
+				}
 			})
 		);
 	}
@@ -44,8 +44,8 @@ export default function resizing(node: HTMLElement, params: { minWidth: number; 
 					size: Math.max(
 						Math.max(minWidth, Math.min(maxWidth, initialWidth + Math.floor((e.pageX - initialX) / 8) * 8)),
 						Math.max(minWidth, Math.min(maxWidth, initialHeight + Math.floor((e.pageY - initialY) / 8) * 8))
-					),
-				},
+					)
+				}
 			})
 		);
 		window.removeEventListener('mousemove', handleMousemove);
@@ -58,6 +58,6 @@ export default function resizing(node: HTMLElement, params: { minWidth: number; 
 		},
 		destroy() {
 			node.removeEventListener('mousedown', handleMousedown);
-		},
+		}
 	};
 }

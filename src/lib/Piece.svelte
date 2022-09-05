@@ -14,14 +14,14 @@
 	export let name: ChessPiece;
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
-	export let whiteToMove: boolean = false;
+	export let whiteToMove = false;
 	export let movable:
 		| {
 				enabled: boolean;
 				color: Color.WHITE | Color.BLACK | Color.BOTH;
 		  }
 		| boolean;
-	export let ghostPiece: boolean = false;
+	export let ghostPiece = false;
 	export let easing: EasingFuncs = 'cubicInOut';
 
 	export let duration = 120;
@@ -35,7 +35,7 @@
 		return name[0] === 'w' ? Color.WHITE : Color.BLACK;
 	};
 
-	const reRenderPieces = (sq: string, _flipped?: boolean) => {
+	const reRenderPieces = (sq: string) => {
 		const newCoords = getGridCoordsFromSquare(sq);
 
 		coords.update(
@@ -51,7 +51,7 @@
 		curDuration = duration;
 	};
 
-	$: reRenderPieces(square, flipped);
+	$: flipped, reRenderPieces(square);
 	$: pieceZIndex = typeof movable === 'boolean' ? (movable ? 1 : 0) : movable.enabled ? 1 : 0;
 
 	const dropped = (e: CustomEvent) => {

@@ -7,6 +7,7 @@ declare namespace App {
 }
 
 declare namespace svelte.JSX {
+	// eslint-disable-next-line
 	interface HTMLProps<T> {
 		onstartMoving?: (e: CustomEvent) => void;
 		onmoving?: (e: CustomEvent) => void;
@@ -25,5 +26,5 @@ declare namespace svelte.JSX {
 	}
 }
 
-type TupleToUnion<T extends any[]> = T[number];
+type TupleToUnion<T extends unknown[]> = T[number];
 type IndicesTo<T extends number, I extends number[] = []> = I['length'] extends T ? I : IndicesTo<T, [...I, I['length']]>;

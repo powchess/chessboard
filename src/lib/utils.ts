@@ -8,8 +8,12 @@ export function squareToSQXY(square: string) {
 }
 
 export function fileToIndex(file: string) {
-	let aAsciiCode = 97;
+	const aAsciiCode = 97;
 	return (file.charCodeAt(0) - aAsciiCode) as ChessIndex;
+}
+
+export function rankToIndex(rank: string) {
+	return (8 - parseInt(rank)) as ChessIndex;
 }
 
 export const getShortFenFromBoard = (board: ChessBoard): string => {
