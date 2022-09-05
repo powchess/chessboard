@@ -1,4 +1,8 @@
-<script lang="ts">
+<script context="module" lang="ts">
+	import Prism from 'svelte-prism';
+	import Chessboard from '$lib/Chessboard.svelte';
+	import { Color } from '$lib/enums';
+	import { State } from '$lib/state';
 	import {
 		BoardThemes,
 		type BoardTheme,
@@ -7,11 +11,9 @@
 		type KingLocations,
 		type PiecesThemes
 	} from '$lib/boardConfig';
-	import Chessboard from '$lib/Chessboard.svelte';
-	import { Color } from '$lib/enums';
-	import { State } from '$lib/state';
-	import Prism from 'svelte-prism';
+</script>
 
+<script lang="ts">
 	const defaultState = new State();
 
 	type CBConfig = {
@@ -130,21 +132,19 @@
 	};
 
 	const getConfigString = (cfg: ChessboardConfig) => {
-		const config = <ChessboardConfig>JSON.parse(JSON.stringify(cfg));
-		if (config.board !== undefined) {
-			if (config.board.boardTheme !== undefined && config.board.boardTheme === defaultState.board.boardTheme)
-				delete config.board.boardTheme;
-			if (config.board.piecesTheme !== undefined && config.board.piecesTheme === defaultState.board.piecesTheme)
-				delete config.board.piecesTheme;
-			if (config.board.flipped !== undefined && config.board.flipped === defaultState.board.flipped) delete config.board.flipped;
-			if (config.board.notation !== undefined && config.board.notation === defaultState.board.notation) delete config.board.notation;
-			if (config.board.shadow !== undefined && config.board.shadow === defaultState.board.shadow) delete config.board.shadow;
-			if (config.board.startFen !== undefined && config.board.startFen === defaultState.board.startFen) delete config.board.startFen;
+		const conf = <ChessboardConfig>JSON.parse(JSON.stringify(cfg));
+		if (conf.board !== undefined) {
+			if (conf.board.boardTheme !== undefined && conf.board.boardTheme === defaultState.board.boardTheme) delete conf.board.boardTheme;
+			if (conf.board.piecesTheme !== undefined && conf.board.piecesTheme === defaultState.board.piecesTheme) delete conf.board.piecesTheme;
+			if (conf.board.flipped !== undefined && conf.board.flipped === defaultState.board.flipped) delete conf.board.flipped;
+			if (conf.board.notation !== undefined && conf.board.notation === defaultState.board.notation) delete conf.board.notation;
+			if (conf.board.shadow !== undefined && conf.board.shadow === defaultState.board.shadow) delete conf.board.shadow;
+			if (conf.board.startFen !== undefined && conf.board.startFen === defaultState.board.startFen) delete conf.board.startFen;
 
-			if (Object.keys(config.board).length === 0) delete config.board;
+			if (Object.keys(conf.board).length === 0) delete conf.board;
 		}
 
-		return ('const config: ChessboardConfig = ' + JSON.stringify(config, null, 4)).replace(/"([^"]+)":/g, '$1:');
+		return `const config: ChessboardConfig = ${JSON.stringify(conf, null, 4)}`.replace(/"([^"]+)":/g, '$1:');
 	};
 
 	$: code = getConfigString(config);

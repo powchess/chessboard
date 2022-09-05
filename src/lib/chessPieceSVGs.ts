@@ -12,7 +12,7 @@ import bQ from './assets/images/bQ.svg';
 import bK from './assets/images/bK.svg';
 import type { ChessPiece } from './chessTypes';
 
-export const getChessPieceImage = (piece: ChessPiece) => {
+export default function getChessPieceImage(piece: ChessPiece) {
 	switch (piece) {
 		case 'wP':
 			return wP;
@@ -41,4 +41,4 @@ export const getChessPieceImage = (piece: ChessPiece) => {
 		default:
 			return wP;
 	}
-};
+}

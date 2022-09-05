@@ -7,21 +7,6 @@ export default function resizing(node: HTMLElement, params: { minWidth: number; 
 	let initialWidth: number;
 	let initialHeight: number;
 
-	node.addEventListener('mousedown', handleMousedown);
-
-	function handleMousedown(e: MouseEvent) {
-		e.stopPropagation();
-		if (e.button != 0) return;
-
-		initialX = e.pageX;
-		initialWidth = Width;
-		initialY = e.pageY;
-		initialHeight = Width;
-
-		window.addEventListener('mousemove', handleMousemove);
-		window.addEventListener('mouseup', handleMouseup);
-	}
-
 	function handleMousemove(e: MouseEvent) {
 		e.stopPropagation();
 		node.dispatchEvent(
@@ -51,6 +36,21 @@ export default function resizing(node: HTMLElement, params: { minWidth: number; 
 		window.removeEventListener('mousemove', handleMousemove);
 		window.removeEventListener('mouseup', handleMouseup);
 	}
+
+	function handleMousedown(e: MouseEvent) {
+		e.stopPropagation();
+		if (e.button !== 0) return;
+
+		initialX = e.pageX;
+		initialWidth = Width;
+		initialY = e.pageY;
+		initialHeight = Width;
+
+		window.addEventListener('mousemove', handleMousemove);
+		window.addEventListener('mouseup', handleMouseup);
+	}
+
+	node.addEventListener('mousedown', handleMousedown);
 
 	return {
 		update(newParams: { minWidth: number; maxWidth: number; curWidth: number }) {

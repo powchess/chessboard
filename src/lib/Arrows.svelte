@@ -9,18 +9,18 @@
 
 	let mounted = false;
 
+	function redrawComputerArrows(data: ArrowData[]) {
+		if (!mounted) return;
+		removeComupterArrows(svg);
+		drawComputerArrows(svg, data, LshapeKnightMove);
+	}
+
 	$: redrawComputerArrows(computerArrows);
 
 	onMount(() => {
 		mounted = true;
 		redrawComputerArrows(computerArrows);
 	});
-
-	function redrawComputerArrows(data: ArrowData[]) {
-		if (!mounted) return;
-		removeComupterArrows(svg);
-		drawComputerArrows(svg, data, LshapeKnightMove);
-	}
 
 	const ArrowColors = ['green', 'red', 'blue', 'orange'] as const;
 </script>

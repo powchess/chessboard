@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { BoardTheme } from './boardConfig';
-	import { boardThemesStyles } from './boardThemes/boardThemes';
+	import boardThemesStyles from './boardThemes/boardThemes';
 
 	export let theme: BoardTheme;
 	export let flipped: boolean;

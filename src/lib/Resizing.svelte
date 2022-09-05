@@ -1,6 +1,6 @@
 <script lang="ts">
 	import resizing from './boardResizing';
-	import { boardThemesStyles } from './boardThemes/boardThemes';
+	import boardThemesStyles from './boardThemes/boardThemes';
 	import type Chessboard from './chessboard';
 
 	export let chessboard: Chessboard;

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { getChessPieceImage } from './chessPieceSVGs';
+	import getChessPieceImage from './chessPieceSVGs';
 	import type { ChessPiece } from './chessTypes';
 
 	export let piece: string;

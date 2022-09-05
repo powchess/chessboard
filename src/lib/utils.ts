@@ -13,28 +13,28 @@ export function fileToIndex(file: string) {
 }
 
 export function rankToIndex(rank: string) {
-	return (8 - parseInt(rank)) as ChessIndex;
+	return (8 - parseInt(rank, 10)) as ChessIndex;
 }
 
 export const getShortFenFromBoard = (board: ChessBoard): string => {
 	let fen = '';
 	let x = 0;
 	for (let i = 0; i < board.length; i++) {
-		if (i != 0) {
+		if (i !== 0) {
 			fen += '/';
 		}
 		for (let j = 0; j < board[i].length; j++) {
 			const square = board[i][j];
-			if (square != null && x == 0) {
-				if (square[0] == 'w') {
+			if (square != null && x === 0) {
+				if (square[0] === 'w') {
 					fen += square[1];
 				} else {
 					fen += square[1].toLowerCase();
 				}
-			} else if (square != null && x != 0) {
+			} else if (square != null && x !== 0) {
 				fen += x.toString();
 				x = 0;
-				if (square[0] == 'w') {
+				if (square[0] === 'w') {
 					fen += square[1];
 				} else {
 					fen += square[1].toLowerCase();
@@ -43,7 +43,7 @@ export const getShortFenFromBoard = (board: ChessBoard): string => {
 				x++;
 			}
 		}
-		if (x != 0) {
+		if (x !== 0) {
 			fen += x.toString();
 			x = 0;
 		}

@@ -1,7 +1,7 @@
 import { squareStyles as standardSquareStyles, colors as standardColors, imageName as standardImageName } from './standard';
 import { squareStyles as darkBlueSquareStyles, colors as darkBlueColors, imageName as darkBlueImageName } from './darkBlue';
 
-export const boardThemesStyles = {
+const boardThemesStyles = {
 	squareStyles: {
 		standard: standardSquareStyles,
 		darkBlue: darkBlueSquareStyles
@@ -15,3 +15,5 @@ export const boardThemesStyles = {
 		darkBlue: darkBlueImageName
 	}
 } as const;
+
+export default boardThemesStyles;

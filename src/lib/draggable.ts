@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import type { Tweened } from 'svelte/motion';
 import { get } from 'svelte/store';
 import { fileToIndex, squareToSQXY } from './utils';
@@ -8,7 +9,7 @@ function getEndSquare(
 	directionY: number,
 	boardFlipped: boolean | undefined
 ): string | null | undefined {
-	if (directionX == 0 && directionY == 0) return startSquare;
+	if (directionX === 0 && directionY === 0) return startSquare;
 
 	const files = boardFlipped ? ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].reverse() : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 	const ranks = boardFlipped ? ['8', '7', '6', '5', '4', '3', '2', '1'].reverse() : ['8', '7', '6', '5', '4', '3', '2', '1'];
@@ -22,25 +23,25 @@ function getEndSquare(
 }
 
 function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boolean | undefined): SVGElement {
-	scale *= 1.15;
+	const newScale = scale * 1.15;
 	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-	svg.setAttribute('width', (node.offsetWidth * scale).toString());
-	svg.setAttribute('height', (node.offsetHeight * scale).toString());
+	svg.setAttribute('width', (node.offsetWidth * newScale).toString());
+	svg.setAttribute('height', (node.offsetHeight * newScale).toString());
 	svg.style.position = 'absolute';
 	svg.style.zIndex = '100';
-	svg.style.transform = `translate(${boardFlipped ? '' : '-'}${(25 * scale) / 2}%, -${(25 * scale) / 2}%)`;
+	svg.style.transform = `translate(${boardFlipped ? '' : '-'}${(25 * newScale) / 2}%, -${(25 * newScale) / 2}%)`;
 	svg.style.opacity = '0.2';
-	circle.setAttribute('r', ((node.offsetWidth * scale) / 2).toString());
-	circle.setAttribute('cx', ((node.offsetWidth * scale) / 2).toString());
-	circle.setAttribute('cy', ((node.offsetHeight * scale) / 2).toString());
+	circle.setAttribute('r', ((node.offsetWidth * newScale) / 2).toString());
+	circle.setAttribute('cx', ((node.offsetWidth * newScale) / 2).toString());
+	circle.setAttribute('cy', ((node.offsetHeight * newScale) / 2).toString());
 	circle.setAttribute('fill', 'black');
 	svg.appendChild(circle);
 
 	return svg;
 }
 
-type dragParams = {
+type DragParams = {
 	startSquare: string;
 	boardFlipped: boolean;
 	onlyShow: boolean;
@@ -51,7 +52,7 @@ type dragParams = {
 	}>;
 };
 
-export function drag(node: HTMLImageElement, params: dragParams) {
+export default function drag(node: HTMLImageElement, params: DragParams) {
 	let waitingArgs: unknown[] | null;
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	function throttle(callback: (...args: any[]) => unknown, delay = 1000) {
@@ -78,9 +79,14 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 		};
 	}
 
-	const movingFunc = throttle(mousemove, 10);
-
-	let x: number, y: number, offsetX: number, offsetY: number, globalDX: number, globalDY: number, scrollX: number, scrollY: number;
+	let x: number;
+	let y: number;
+	let offsetX: number;
+	let offsetY: number;
+	let globalDX: number;
+	let globalDY: number;
+	let scrollX: number;
+	let scrollY: number;
 	let nodeCentered = false;
 	let timeout: number;
 	const boardDiv = <HTMLDivElement>node.parentNode;
@@ -95,54 +101,7 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 	const duration = 120;
 	const touchScale = 1.6;
 	let circle = createTouchCircle(node, touchScale, boardFlipped);
-
 	node.draggable = false;
-	node.addEventListener('contextmenu', contextmenu);
-	node.addEventListener('dragstart', dragstart);
-
-	if (!onlyShow) {
-		node.addEventListener('mousedown', mousedown);
-		node.addEventListener('touchstart', mousedown);
-	}
-
-	function mousedown(e: MouseEvent | TouchEvent): void {
-		e.preventDefault();
-
-		if (e instanceof MouseEvent && e.button !== 0) return;
-		if (!(e instanceof MouseEvent) && e.touches?.length > 1) return;
-
-		startX = boardFlipped ? 7 - fileToIndex(startSquare[0]) : fileToIndex(startSquare[0]);
-		startY = boardFlipped ? 8 - parseInt(startSquare[1]) : parseInt(startSquare[1]) - 1;
-
-		currentSquare = startSquare;
-		const bcr = (<HTMLElement>e.target).getBoundingClientRect();
-
-		if (!(e instanceof MouseEvent) && e.touches[0] && e.targetTouches[0]) {
-			x = e.touches[0].clientX;
-			y = e.touches[0].clientY;
-			offsetX = e.targetTouches[0].clientX - bcr.x;
-			offsetY = e.targetTouches[0].clientY - bcr.y;
-		} else if (e instanceof MouseEvent) {
-			x = e.clientX;
-			y = e.clientY;
-			offsetX = e.offsetX;
-			offsetY = e.offsetY;
-		}
-
-		globalDX = 0;
-		globalDY = 0;
-		scrollX = window.scrollX;
-		scrollY = window.scrollY;
-
-		node.dispatchEvent(new CustomEvent('clicked'));
-
-		window.addEventListener('mousemove', movingFunc);
-		window.addEventListener('mouseup', mouseup);
-		document.body.addEventListener('mouseleave', mouseup);
-		window.addEventListener('scroll', scrolling);
-		window.addEventListener('touchmove', movingFunc);
-		window.addEventListener('touchend', mouseup);
-	}
 
 	function mousemove(e: MouseEvent | TouchEvent) {
 		let dx: number;
@@ -166,16 +125,14 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 		if (!nodeCentered) {
 			if (Math.abs(globalDX) > 1 || Math.abs(globalDY) > 1) {
 				coords.update(
-					(coord) => {
-						return {
-							x: coord.x + (x - node.offsetWidth / 2 - node.getBoundingClientRect().x) / node.clientWidth,
-							y:
-								e instanceof MouseEvent
-									? coord.y - (y - node.offsetHeight / 2 - node.getBoundingClientRect().y) / node.clientWidth
-									: coord.y - (y - node.offsetHeight * 1.5 - node.getBoundingClientRect().y) / node.clientWidth,
-							scale: e instanceof MouseEvent ? 1 : touchScale
-						};
-					},
+					(coord) => ({
+						x: coord.x + (x - node.offsetWidth / 2 - node.getBoundingClientRect().x) / node.clientWidth,
+						y:
+							e instanceof MouseEvent
+								? coord.y - (y - node.offsetHeight / 2 - node.getBoundingClientRect().y) / node.clientWidth
+								: coord.y - (y - node.offsetHeight * 1.5 - node.getBoundingClientRect().y) / node.clientWidth,
+						scale: e instanceof MouseEvent ? 1 : touchScale
+					}),
 					{ duration }
 				);
 				nodeCentered = true;
@@ -208,13 +165,11 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 		}
 
 		coords.update(
-			(coord) => {
-				return {
-					x: coord.x + dx / node.clientWidth,
-					y: coord.y - dy / node.clientWidth,
-					scale: e instanceof MouseEvent ? 1 : touchScale
-				};
-			},
+			(coord) => ({
+				x: coord.x + dx / node.clientWidth,
+				y: coord.y - dy / node.clientWidth,
+				scale: e instanceof MouseEvent ? 1 : touchScale
+			}),
 			{ duration: 0 }
 		);
 		node.dispatchEvent(
@@ -224,6 +179,25 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 					y
 				}
 			})
+		);
+	}
+
+	const movingFunc = throttle(mousemove, 10);
+
+	function scrolling(): void {
+		const dx = window.scrollX - scrollX;
+		const dy = window.scrollY - scrollY;
+
+		scrollX = window.scrollX;
+		scrollY = window.scrollY;
+
+		coords.update(
+			(coord) => ({
+				x: coord.x + dx,
+				y: coord.y + dy,
+				scale: 1
+			}),
+			{ duration: 0 }
 		);
 	}
 
@@ -242,7 +216,7 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 		const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
 		const targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
 
-		if (targetSquare && targetSquare != startSquare) {
+		if (targetSquare && targetSquare !== startSquare) {
 			node.dispatchEvent(
 				new CustomEvent('dropped', {
 					detail: targetSquare
@@ -250,12 +224,7 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 			);
 		}
 		coords
-			.update(
-				() => {
-					return { x: startX, y: startY, scale: 1 };
-				},
-				{ duration }
-			)
+			.update(() => ({ x: startX, y: startY, scale: 1 }), { duration })
 			.then(() => {
 				node.dispatchEvent(new CustomEvent('animationEnded'));
 			});
@@ -267,8 +236,49 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 
 		nodeCentered = false;
 		node.style.removeProperty('cursor');
-		setTimeout(() => (node.style.zIndex = '10'), duration);
+		setTimeout(() => {
+			node.style.zIndex = '10';
+		}, duration);
 		circle.remove();
+	}
+
+	function mousedown(e: MouseEvent | TouchEvent): void {
+		e.preventDefault();
+
+		if (e instanceof MouseEvent && e.button !== 0) return;
+		if (!(e instanceof MouseEvent) && e.touches?.length > 1) return;
+
+		startX = boardFlipped ? 7 - fileToIndex(startSquare[0]) : fileToIndex(startSquare[0]);
+		startY = boardFlipped ? 8 - parseInt(startSquare[1], 10) : parseInt(startSquare[1], 10) - 1;
+
+		currentSquare = startSquare;
+		const bcr = (<HTMLElement>e.target).getBoundingClientRect();
+
+		if (!(e instanceof MouseEvent) && e.touches[0] && e.targetTouches[0]) {
+			x = e.touches[0].clientX;
+			y = e.touches[0].clientY;
+			offsetX = e.targetTouches[0].clientX - bcr.x;
+			offsetY = e.targetTouches[0].clientY - bcr.y;
+		} else if (e instanceof MouseEvent) {
+			x = e.clientX;
+			y = e.clientY;
+			offsetX = e.offsetX;
+			offsetY = e.offsetY;
+		}
+
+		globalDX = 0;
+		globalDY = 0;
+		scrollX = window.scrollX;
+		scrollY = window.scrollY;
+
+		node.dispatchEvent(new CustomEvent('clicked'));
+
+		window.addEventListener('mousemove', movingFunc);
+		window.addEventListener('mouseup', mouseup);
+		document.body.addEventListener('mouseleave', mouseup);
+		window.addEventListener('scroll', scrolling);
+		window.addEventListener('touchmove', movingFunc);
+		window.addEventListener('touchend', mouseup);
 	}
 
 	function contextmenu(e: Event): void {
@@ -279,23 +289,12 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 		e.preventDefault();
 	}
 
-	function scrolling(): void {
-		const dx = window.scrollX - scrollX;
-		const dy = window.scrollY - scrollY;
+	node.addEventListener('contextmenu', contextmenu);
+	node.addEventListener('dragstart', dragstart);
 
-		scrollX = window.scrollX;
-		scrollY = window.scrollY;
-
-		coords.update(
-			(coord) => {
-				return {
-					x: coord.x + dx,
-					y: coord.y + dy,
-					scale: 1
-				};
-			},
-			{ duration: 0 }
-		);
+	if (!onlyShow) {
+		node.addEventListener('mousedown', mousedown);
+		node.addEventListener('touchstart', mousedown);
 	}
 
 	return {
@@ -306,10 +305,10 @@ export function drag(node: HTMLImageElement, params: dragParams) {
 			node.removeEventListener('dragstart', dragstart);
 			window.clearTimeout(timeout);
 		},
-		update(newParams: dragParams) {
+		update(newParams: DragParams) {
 			startSquare = newParams.startSquare;
 
-			if (newParams.onlyShow != onlyShow) {
+			if (newParams.onlyShow !== onlyShow) {
 				onlyShow = newParams.onlyShow;
 				if (onlyShow) {
 					node.removeEventListener('mousedown', mousedown);

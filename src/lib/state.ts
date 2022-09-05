@@ -10,12 +10,13 @@ export type ArrowData = {
 	opacity: number;
 };
 
-export type piece = { square: string; name: ChessPiece };
-export type square = { square: string; color: SquareColor };
+export type Piece = { square: string; name: ChessPiece };
+export type Square = { square: string; color: SquareColor };
 
 export class State {
-	public pieces: piece[];
-	public markedSquares: Set<square>;
+	public pieces: Piece[];
+
+	public markedSquares: Set<Square>;
 
 	public board: {
 		boardTheme: BoardTheme;
@@ -36,7 +37,7 @@ export class State {
 		enabled: boolean;
 		ghostPiece: {
 			enabled: boolean;
-			piece: piece | undefined;
+			piece: Piece | undefined;
 		};
 		transition: {
 			enabled: boolean;
@@ -49,7 +50,7 @@ export class State {
 
 	public selectable: {
 		enabled: boolean;
-		selectedPiece: piece | undefined;
+		selectedPiece: Piece | undefined;
 	};
 
 	public legal: {
@@ -231,7 +232,7 @@ export class State {
 	}
 
 	public setConfigSettings(cfg: ChessboardConfig) {
-		//board
+		// board
 		if (cfg.board?.boardTheme !== undefined) this.board.boardTheme = cfg.board.boardTheme;
 		if (cfg.board?.piecesTheme !== undefined) this.board.piecesTheme = cfg.board.piecesTheme;
 		if (cfg.board?.notation !== undefined) this.board.notation = cfg.board.notation;
@@ -239,7 +240,7 @@ export class State {
 		if (cfg.board?.flipped !== undefined) this.board.flipped = cfg.board.flipped;
 		if (cfg.board?.startFen !== undefined) this.board.startFen = cfg.board.startFen;
 
-		//movable
+		// movable
 		switch (cfg.movable) {
 			case true:
 				this.movable.enabled = true;
@@ -260,7 +261,7 @@ export class State {
 				break;
 		}
 
-		//draggable
+		// draggable
 		if (cfg.draggable !== undefined) {
 			if (cfg.draggable === true) this.draggable.enabled = true;
 			else if (cfg.draggable === false) this.draggable.enabled = false;
@@ -279,10 +280,10 @@ export class State {
 			}
 		}
 
-		//selectable
+		// selectable
 		if (cfg.selectable !== undefined) this.selectable.enabled = cfg.selectable;
 
-		//legal
+		// legal
 		if (cfg.legal !== undefined) {
 			if (cfg.legal === true) this.legal.enabled = true;
 			else if (cfg.legal === false) this.legal.enabled = false;
@@ -297,7 +298,7 @@ export class State {
 			}
 		}
 
-		//callbacks
+		// callbacks
 		if (cfg.callbacks !== undefined) {
 			if (cfg.callbacks.getLegalMoves) this.callbacks.getLegalMoves = cfg.callbacks.getLegalMoves;
 			if (cfg.callbacks.getPreMoves) this.callbacks.getPreMoves = cfg.callbacks.getPreMoves;
@@ -310,7 +311,7 @@ export class State {
 			if (cfg.callbacks.getWhiteToMove) this.callbacks.getWhiteToMove = cfg.callbacks.getWhiteToMove;
 		}
 
-		//highlight
+		// highlight
 		if (cfg.highlight !== undefined) {
 			if (cfg.highlight === true) this.highlight.enabled = true;
 			else if (cfg.highlight === false) this.highlight.enabled = false;
@@ -325,7 +326,7 @@ export class State {
 			}
 		}
 
-		//drawTools
+		// drawTools
 		if (cfg.drawTools !== undefined) {
 			if (cfg.drawTools === true) this.drawTools.enabled = true;
 			else if (cfg.drawTools === false) this.drawTools.enabled = false;
@@ -336,7 +337,7 @@ export class State {
 			}
 		}
 
-		//sounds
+		// sounds
 		if (cfg.sounds !== undefined) {
 			if (cfg.sounds === true) this.sounds.enabled = true;
 			else if (cfg.sounds === false) this.sounds.enabled = false;
@@ -349,7 +350,7 @@ export class State {
 			}
 		}
 
-		//resizible
+		// resizible
 		if (cfg.resizible !== undefined) {
 			if (cfg.resizible === true) this.resizible.enabled = true;
 			else if (cfg.resizible === false) this.resizible.enabled = false;
