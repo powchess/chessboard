@@ -377,17 +377,18 @@ export const getConfigFromState = (state: State): ChessboardConfig => {
 		startFen?: string;
 	} = {};
 
-	const boardKeys = ["boardTheme", "piecesTheme", "flipped", "notation", "shadow", "startFen"] as const;
+	const boardKeys = ['boardTheme', 'piecesTheme', 'flipped', 'notation', 'shadow', 'startFen'] as const;
 
 	// board
-	boardKeys.forEach((key)=>{
+	boardKeys.forEach((key) => {
 		// @ts-ignore
 		if (state.board[key] !== defaultState.board[key]) board[key] = state.board[key];
-	})
+	});
 	if (Object.keys(board).length !== 0) config.board = board;
 
 	// movable
-	if (state.movable.enabled && defaultState.movable.enabled && state.movable.color !== defaultState.movable.color) config.movable = state.movable.color;
+	if (state.movable.enabled && defaultState.movable.enabled && state.movable.color !== defaultState.movable.color)
+		config.movable = state.movable.color;
 	if (state.movable.enabled && !defaultState.movable.enabled) config.movable = state.movable.color;
 	if (!state.movable.enabled && defaultState.movable.enabled) config.movable = false;
 
@@ -399,7 +400,7 @@ export const getConfigFromState = (state: State): ChessboardConfig => {
 			| {
 					duration?: number;
 					easing?: EasingFuncs;
-				};
+			  };
 	} = {};
 
 	const transition: {
@@ -408,10 +409,13 @@ export const getConfigFromState = (state: State): ChessboardConfig => {
 	} = {};
 
 	if (state.draggable.enabled && defaultState.draggable.enabled) {
-		if (state.draggable.ghostPiece.enabled !== defaultState.draggable.ghostPiece.enabled) draggable.ghostPiece = state.draggable.ghostPiece.enabled;
+		if (state.draggable.ghostPiece.enabled !== defaultState.draggable.ghostPiece.enabled)
+			draggable.ghostPiece = state.draggable.ghostPiece.enabled;
 		if (state.draggable.transition.enabled && defaultState.draggable.transition.enabled) {
-			if (state.draggable.transition.settings.duration !== defaultState.draggable.transition.settings.duration) transition.duration = state.draggable.transition.settings.duration;
-			if (state.draggable.transition.settings.easing !== defaultState.draggable.transition.settings.easing) transition.easing = state.draggable.transition.settings.easing;
+			if (state.draggable.transition.settings.duration !== defaultState.draggable.transition.settings.duration)
+				transition.duration = state.draggable.transition.settings.duration;
+			if (state.draggable.transition.settings.easing !== defaultState.draggable.transition.settings.easing)
+				transition.easing = state.draggable.transition.settings.easing;
 
 			if (Object.keys(transition).length !== 0) draggable.transition = transition;
 		}
@@ -426,10 +430,10 @@ export const getConfigFromState = (state: State): ChessboardConfig => {
 
 	// legal
 	if (state.legal.enabled && defaultState.legal.enabled) {
-		if (state.legal.preMoves.enabled !== defaultState.legal.preMoves.enabled) config.legal = {preMoves: state.legal.preMoves.enabled};
+		if (state.legal.preMoves.enabled !== defaultState.legal.preMoves.enabled) config.legal = { preMoves: state.legal.preMoves.enabled };
 	}
 	if (state.legal.enabled !== defaultState.legal.enabled) {
-		if (state.legal.preMoves.enabled !== defaultState.legal.preMoves.enabled) config.legal = {preMoves: state.legal.preMoves.enabled};
+		if (state.legal.preMoves.enabled !== defaultState.legal.preMoves.enabled) config.legal = { preMoves: state.legal.preMoves.enabled };
 		else config.legal = state.legal.enabled;
 	}
 
@@ -442,10 +446,10 @@ export const getConfigFromState = (state: State): ChessboardConfig => {
 		nextMove?: boolean;
 		check?: boolean;
 	} = {};
-	const highlightKeys = ["select", "legal", "move", "preMove", "nextMove", "check"] as const;
+	const highlightKeys = ['select', 'legal', 'move', 'preMove', 'nextMove', 'check'] as const;
 
 	if (state.highlight.enabled && defaultState.highlight.enabled) {
-		highlightKeys.forEach((key)=>{
+		highlightKeys.forEach((key) => {
 			if (state.highlight.settings[key] !== defaultState.highlight.settings[key]) highlight[key] = state.highlight.settings[key];
 		});
 
@@ -455,13 +459,15 @@ export const getConfigFromState = (state: State): ChessboardConfig => {
 
 	// drawTools
 	const drawTools: {
-        LshapeKnightMove?: boolean;
-        onlyChessMove?: boolean;
-    } = {};
+		LshapeKnightMove?: boolean;
+		onlyChessMove?: boolean;
+	} = {};
 
 	if (state.drawTools.enabled && defaultState.drawTools.enabled) {
-		if (state.drawTools.settings.LshapeKnightMove !== defaultState.drawTools.settings.LshapeKnightMove) drawTools.LshapeKnightMove = state.drawTools.settings.LshapeKnightMove;
-		if (state.drawTools.settings.onlyChessMove !== defaultState.drawTools.settings.onlyChessMove) drawTools.onlyChessMove = state.drawTools.settings.onlyChessMove;
+		if (state.drawTools.settings.LshapeKnightMove !== defaultState.drawTools.settings.LshapeKnightMove)
+			drawTools.LshapeKnightMove = state.drawTools.settings.LshapeKnightMove;
+		if (state.drawTools.settings.onlyChessMove !== defaultState.drawTools.settings.onlyChessMove)
+			drawTools.onlyChessMove = state.drawTools.settings.onlyChessMove;
 
 		if (Object.keys(drawTools).length !== 0) config.drawTools = drawTools;
 	}
@@ -489,4 +495,4 @@ export const getConfigFromState = (state: State): ChessboardConfig => {
 	if (state.resizible.enabled !== defaultState.resizible.enabled) config.resizible = state.resizible.enabled;
 
 	return config;
-}
+};
