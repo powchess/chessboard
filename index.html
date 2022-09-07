@@ -5,14 +5,14 @@
 		<link rel="icon" href="./favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="content-security-policy" content=""><title>Chessboard • PowChess.com</title><link rel="stylesheet" href="prism-one-dark.css" data-svelte="svelte-tebjht">
-	<link href="./_app/immutable/assets/_layout-ab630dda.css" rel="stylesheet">
-	<link href="./_app/immutable/assets/_page-08e0f60c.css" rel="stylesheet">
-	<link rel="modulepreload" href="./_app/immutable/start-674ea200.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/index-ac479efc.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-b757fffe.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/index-9acba19d.js">
-	<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-1552e030.js">
-	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-9af73b1b.js">
+	<link href="./_app/immutable/assets/_layout-396452f2.css" rel="stylesheet">
+	<link href="./_app/immutable/assets/_page-96210409.css" rel="stylesheet">
+	<link rel="modulepreload" href="./_app/immutable/start-36f3f7de.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/index-c2461a9b.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-47bb4d97.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/index-2174d1c7.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-af07438c.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-32f01136.js">
 	</head>
 	<body>
 		<div>
@@ -20,19 +20,79 @@
 
 
 
-<div class="mt-10 grid grid-cols-center"><div class="col-start-2 gap-10 grid grid-cols-[1fr-auto]"><div class="col-start-1 row-span-2 flex flex-col gap-2 w-60 text-gray-300 text-sm"><div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">board
-				<div class="p-2 pl-4"><div><label for="boardTheme" class="select-none">notation</label>
-						<select><option value="standard">standard</option><option value="darkBlue">darkBlue</option></select></div>
+<div class="mt-10 grid grid-cols-center"><div class="col-start-2 gap-10 grid grid-cols-[auto_auto]"><div class="col-start-1 flex flex-col gap-2 w-60 text-gray-300 text-sm"><div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">board
+				<div class="p-2 pl-4"><div><label for="boardTheme" class="select-none">board theme</label>
+						<select class="svelte-1q80l21"><option value="standard">standard</option><option value="darkBlue">darkBlue</option></select></div>
 
-					<div><input id="notation" type="checkbox" checked>
+					<div><input id="notation" type="checkbox" class="svelte-1q80l21" checked>
 						<label for="notation" class="select-none">notation</label></div>
 
-					<div><input id="flipped" type="checkbox">
+					<div><input id="flipped" type="checkbox" class="svelte-1q80l21">
 						<label for="flipped" class="select-none">flipped</label></div>
 
-					<div><input id="shadow" type="checkbox" checked>
-						<label for="shadow" class="select-none">shadow</label></div></div></div></div>
-		<div class="col-start-2 w-[var(--boardSize,40rem)]"><div class="noselect lg:rounded board text-xs sm:text-sm svelte-wzcws1" style="--boardTheme: url(/_app/immutable/assets/standard-97995bf9.svg);"><div class="noselect h-full w-full"><img style="left:0%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left:12.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left:25%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left:37.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bQ-c7b9a43e.svg" alt="bQ"><img style="left:50%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bK-3500a2e6.svg" alt="bK"><img style="left:62.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left:75%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left:87.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left:0%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:12.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:25%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:37.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:50%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:62.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:75%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:87.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:0%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:12.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:25%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:37.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:50%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:62.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:75%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:87.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:0%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"><img style="left:12.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left:25%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left:37.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wQ-8568b485.svg" alt="wQ"><img style="left:50%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wK-4cdf6dc9.svg" alt="wK"><img style="left:62.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left:75%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left:87.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"></div>
+					<div><input id="shadow" type="checkbox" class="svelte-1q80l21">
+						<label for="shadow" class="select-none">shadow</label></div></div></div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">movable
+				<div class="p-2 pl-4"><div><input id="movableEnabled" type="checkbox" class="svelte-1q80l21" checked>
+						<label for="movableEnabled" class="select-none">enabled</label></div>
+					<div><select class="svelte-1q80l21"><option value="2">Both</option><option value="0">White</option><option value="1">Black</option></select></div></div></div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">draggable
+				<div class="p-2 pl-4"><div><input id="draggableEnabled" type="checkbox" class="svelte-1q80l21" checked>
+						<label for="draggableEnabled" class="select-none">enabled</label></div>
+					<div><input id="ghostPiece" type="checkbox" class="svelte-1q80l21" checked>
+							<label for="ghostPiece" class="select-none">ghost piece</label></div>
+						<div><input id="draggableEnabled" type="checkbox" class="svelte-1q80l21" checked>
+							<label for="draggableEnabled" class="select-none">transition enabled</label></div>
+						<div><input id="transitionDuration" type="number" class="svelte-1q80l21" value="120">
+								<label for="transitionDuration" class="select-none">duration</label></div>
+							<div><label for="easingFuncs" class="select-none">easing func</label>
+								<select id="easingFuncs" class="svelte-1q80l21"><option value="backIn">backIn</option><option value="backInOut">backInOut</option><option value="backOut">backOut</option><option value="bounceIn">bounceIn</option><option value="bounceInOut">bounceInOut</option><option value="bounceOut">bounceOut</option><option value="circIn">circIn</option><option value="circInOut">circInOut</option><option value="circOut">circOut</option><option value="cubicIn">cubicIn</option><option value="cubicInOut">cubicInOut</option><option value="cubicOut">cubicOut</option><option value="elasticIn">elasticIn</option><option value="elasticInOut">elasticInOut</option><option value="elasticOut">elasticOut</option><option value="expoIn">expoIn</option><option value="expoInOut">expoInOut</option><option value="expoOut">expoOut</option><option value="linear">linear</option><option value="quadIn">quadIn</option><option value="quadInOut">quadInOut</option><option value="quadOut">quadOut</option><option value="quartIn">quartIn</option><option value="quartInOut">quartInOut</option><option value="quartOut">quartOut</option><option value="quintIn">quintIn</option><option value="quintInOut">quintInOut</option><option value="quintOut">quintOut</option><option value="sineIn">sineIn</option><option value="sineInOut">sineInOut</option><option value="sineOut">sineOut</option></select></div></div></div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">selectable
+				<div class="p-2 pl-4"><div><input id="selectableEnabled" type="checkbox" class="svelte-1q80l21" checked>
+						<label for="selectableEnabled" class="select-none">enabled</label></div></div></div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">legal
+				<div class="p-2 pl-4"><div><input id="legalEnabled" type="checkbox" class="svelte-1q80l21">
+						<label for="legalEnabled" class="select-none">enabled</label></div>
+					</div></div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">highlight
+				<div class="p-2 pl-4"><div><input id="legalEnabled" type="checkbox" class="svelte-1q80l21" checked>
+						<label for="legalEnabled" class="select-none">enabled</label></div>
+					<div><input id="selectEnabled" type="checkbox" class="svelte-1q80l21" checked>
+								<label for="selectEnabled" class="select-none">select</label>
+							</div><div><input id="legalEnabled" type="checkbox" class="svelte-1q80l21" checked>
+								<label for="legalEnabled" class="select-none">legal</label>
+							</div><div><input id="moveEnabled" type="checkbox" class="svelte-1q80l21" checked>
+								<label for="moveEnabled" class="select-none">move</label>
+							</div><div><input id="preMoveEnabled" type="checkbox" class="svelte-1q80l21">
+								<label for="preMoveEnabled" class="select-none">preMove</label>
+							</div><div><input id="nextMoveEnabled" type="checkbox" class="svelte-1q80l21">
+								<label for="nextMoveEnabled" class="select-none">nextMove</label>
+							</div><div><input id="checkEnabled" type="checkbox" class="svelte-1q80l21" checked>
+								<label for="checkEnabled" class="select-none">check</label>
+							</div></div></div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">drawTools
+				<div class="p-2 pl-4"><div><input id="drawToolsEnabled" type="checkbox" class="svelte-1q80l21" checked>
+						<label for="drawToolsEnabled" class="select-none">enabled</label></div>
+					<div><input id="LshapeKnightMoveEnabled" type="checkbox" class="svelte-1q80l21" checked>
+							<label for="LshapeKnightMoveEnabled" class="select-none">L shape knight move</label></div>
+						<div><input id="onlyChessMoveEnabled" type="checkbox" class="svelte-1q80l21">
+							<label for="onlyChessMoveEnabled" class="select-none">only chess move</label></div></div></div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">sounds
+				<div class="p-2 pl-4"><div><input id="soundsEnabled" type="checkbox" class="svelte-1q80l21" checked>
+						<label for="soundsEnabled" class="select-none">enabled</label></div>
+					<div><input id="MOVEEnabled" type="checkbox" class="svelte-1q80l21" checked>
+								<label for="MOVEEnabled" class="select-none">MOVE</label>
+							</div><div><input id="CAPTUREEnabled" type="checkbox" class="svelte-1q80l21" checked>
+								<label for="CAPTUREEnabled" class="select-none">CAPTURE</label>
+							</div><div><input id="CASTLEEnabled" type="checkbox" class="svelte-1q80l21" checked>
+								<label for="CASTLEEnabled" class="select-none">CASTLE</label>
+							</div><div><input id="UNDOEnabled" type="checkbox" class="svelte-1q80l21" checked>
+								<label for="UNDOEnabled" class="select-none">UNDO</label>
+							</div></div></div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">resizible
+				<div class="p-2 pl-4"><div><input id="resizibleEnabled" type="checkbox" class="svelte-1q80l21" checked>
+						<label for="resizibleEnabled" class="select-none">enabled</label></div></div></div></div>
+		<div class="grid grid-rows-[min-content_auto] gap-10"><div class="w-[var(--boardSize,40rem)]"><div class="noselect lg:rounded board text-xs sm:text-sm svelte-wzcws1" style="--boardTheme: url(/_app/immutable/assets/standard-97995bf9.svg);"><div class="noselect h-full w-full"><img style="left:0%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left:12.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left:25%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left:37.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bQ-c7b9a43e.svg" alt="bQ"><img style="left:50%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bK-3500a2e6.svg" alt="bK"><img style="left:62.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left:75%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left:87.5%;bottom:87.5%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left:0%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:12.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:25%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:37.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:50%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:62.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:75%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:87.5%;bottom:75%; z-Index: 1; opacity: 1;" class="noselect  svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left:0%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:12.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:25%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:37.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:50%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:62.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:75%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:87.5%;bottom:12.5%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left:0%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"><img style="left:12.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left:25%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left:37.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wQ-8568b485.svg" alt="wQ"><img style="left:50%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wK-4cdf6dc9.svg" alt="wK"><img style="left:62.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left:75%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left:87.5%;bottom:0%; z-Index: 1; opacity: 1;" class="noselect cursor-pointer svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"></div>
 	
 	
 	<div class="files noselect svelte-t3eav4"><span style="color: #f0d9b5;" class="svelte-t3eav4">a
@@ -54,7 +114,8 @@
 		</span><span style="color: #b58863;" class="text-right svelte-t3eav4">1
 		</span>
 </div>
-	
+	<div style="color: #b58863;" class="hidden lg:inline svelte-bwuzxv"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M 5 1 Q 6 0 6 2 L 6 4 Q 6 6 4 6 L 2 6 Q 0 6 1 5 Z"></path></svg>
+</div>
 	<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg)" class="rounded svelte-1ez37sv" viewBox="0 0 8 8"><defs><marker id="start-g" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="green" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
 			<marker id="end-g" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="green" d="M 0 4 L 10 10 L 0 16 Z"></path></marker><marker id="start-r" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="red" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
 			<marker id="end-r" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="red" d="M 0 4 L 10 10 L 0 16 Z"></path></marker><marker id="start-b" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="blue" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
@@ -66,27 +127,16 @@
 <audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/capture-3dff493a.wav"></audio>
 <audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/castle-dcf4b2c5.wav"></audio>
 <audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/undo-b4184324.mp3"></audio></div>
-		<div class="col-start-2 row-start-2 shadow-lg rounded"><code style="display:none"></code>
+			<div class="row-start-2"><div class="shadow-lg rounded"><code style="display:none"></code>
 
 <pre class="language-javascript" command-line data-output="2-17"><code class="language-javascript"><!-- HTML_TAG_START --><span class="token keyword">const</span> <span class="token literal-property property">config</span><span class="token operator">:</span> ChessboardConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">board</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-        <span class="token literal-property property">shadow</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-        <span class="token literal-property property">startSize</span><span class="token operator">:</span> <span class="token number">500</span>
-    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">movable</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">draggable</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">selectable</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">legal</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">callbacks</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">highlight</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">drawTools</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-    <span class="token literal-property property">sounds</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
     <span class="token literal-property property">resizible</span><span class="token operator">:</span> <span class="token boolean">true</span>
-<span class="token punctuation">}</span><!-- HTML_TAG_END --></code></pre></div></div></div>
+<span class="token punctuation">}</span><span class="token punctuation">;</span><!-- HTML_TAG_END --></code></pre></div></div></div></div>
+</div>
 
 
-		<script type="module" data-sveltekit-hydrate="ltz4qq">
-		import { start } from "./_app/immutable/start-674ea200.js";
+		<script type="module" data-sveltekit-hydrate="78qxxo">
+		import { start } from "./_app/immutable/start-36f3f7de.js";
 
 		start({
 			env: {},
@@ -100,7 +150,7 @@
 				errors: null
 			},
 			paths: {"base":"","assets":""},
-			target: document.querySelector('[data-sveltekit-hydrate="ltz4qq"]').parentNode,
+			target: document.querySelector('[data-sveltekit-hydrate="78qxxo"]').parentNode,
 			trailing_slash: "never"
 		});
 	</script>
