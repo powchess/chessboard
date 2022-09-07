@@ -1,4 +1,4 @@
-<script context="module" lang="ts">
+<script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import * as easingFuncs from 'svelte/easing';
@@ -9,9 +9,7 @@
 	import type { EasingFuncs } from './boardConfig';
 
 	type Movable = { enabled: boolean; color: Color.WHITE | Color.BLACK | Color.BOTH } | boolean;
-</script>
 
-<script lang="ts">
 	export let square: string;
 	export let name: ChessPiece;
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };

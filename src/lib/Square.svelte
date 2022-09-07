@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { BoardTheme } from './boardConfig';
-
 	import boardThemesStyles from './boardThemes/boardThemes';
 	import type { SquareColor } from './enums';
 
@@ -15,12 +14,10 @@
 
 	const reRenderSquares = () => {
 		const newCoords = getGridCoordsFromSquare(square);
-
 		x = newCoords.x;
 		y = newCoords.y;
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-sequences
 	$: flipped, reRenderSquares();
 </script>
 
