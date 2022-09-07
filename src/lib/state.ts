@@ -124,7 +124,7 @@ export class State {
 	constructor(cfg?: ChessboardConfig) {
 		// TODO: Replace default values with config values
 		const cbSettings = {
-			allowPremoves: true,
+			allowPremoves: false,
 			moveSounds: true,
 			showCheckSqaure: true,
 			showLastMove: true,
@@ -361,4 +361,132 @@ export class State {
 			}
 		}
 	}
+}
+
+// const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof T>
+
+export const getConfigFromState = (state: State): ChessboardConfig => {
+	const defaultState = new State();
+	const config: ChessboardConfig = {};
+	const board: {
+		boardTheme?: BoardTheme;
+		piecesTheme?: PiecesThemes;
+		flipped?: boolean;
+		notation?: boolean;
+		shadow?: boolean;
+		startFen?: string;
+	} = {};
+
+	const boardKeys = ["boardTheme", "piecesTheme", "flipped", "notation", "shadow", "startFen"] as const;
+
+	// board
+	boardKeys.forEach((key)=>{
+		// @ts-ignore
+		if (state.board[key] !== defaultState.board[key]) board[key] = state.board[key];
+	})
+	if (Object.keys(board).length !== 0) config.board = board;
+
+	// movable
+	if (state.movable.enabled && defaultState.movable.enabled && state.movable.color !== defaultState.movable.color) config.movable = state.movable.color;
+	if (state.movable.enabled && !defaultState.movable.enabled) config.movable = state.movable.color;
+	if (!state.movable.enabled && defaultState.movable.enabled) config.movable = false;
+
+	// draggable
+	const draggable: {
+		ghostPiece?: boolean;
+		transition?:
+			| boolean
+			| {
+					duration?: number;
+					easing?: EasingFuncs;
+				};
+	} = {};
+
+	const transition: {
+		duration?: number;
+		easing?: EasingFuncs;
+	} = {};
+
+	if (state.draggable.enabled && defaultState.draggable.enabled) {
+		if (state.draggable.ghostPiece.enabled !== defaultState.draggable.ghostPiece.enabled) draggable.ghostPiece = state.draggable.ghostPiece.enabled;
+		if (state.draggable.transition.enabled && defaultState.draggable.transition.enabled) {
+			if (state.draggable.transition.settings.duration !== defaultState.draggable.transition.settings.duration) transition.duration = state.draggable.transition.settings.duration;
+			if (state.draggable.transition.settings.easing !== defaultState.draggable.transition.settings.easing) transition.easing = state.draggable.transition.settings.easing;
+
+			if (Object.keys(transition).length !== 0) draggable.transition = transition;
+		}
+		if (!state.draggable.transition.enabled && defaultState.draggable.transition.enabled) draggable.transition = false;
+
+		if (Object.keys(draggable).length !== 0) config.draggable = draggable;
+	}
+	if (!state.draggable.enabled && defaultState.draggable.enabled) config.draggable = false;
+
+	// selectable
+	if (state.selectable.enabled !== defaultState.selectable.enabled) config.selectable = state.selectable.enabled;
+
+	// legal
+	if (state.legal.enabled && defaultState.legal.enabled) {
+		if (state.legal.preMoves.enabled !== defaultState.legal.preMoves.enabled) config.legal = {preMoves: state.legal.preMoves.enabled};
+	}
+	if (state.legal.enabled !== defaultState.legal.enabled) {
+		if (state.legal.preMoves.enabled !== defaultState.legal.preMoves.enabled) config.legal = {preMoves: state.legal.preMoves.enabled};
+		else config.legal = state.legal.enabled;
+	}
+
+	// highlight
+	const highlight: {
+		select?: boolean;
+		legal?: boolean;
+		move?: boolean;
+		preMove?: boolean;
+		nextMove?: boolean;
+		check?: boolean;
+	} = {};
+	const highlightKeys = ["select", "legal", "move", "preMove", "nextMove", "check"] as const;
+
+	if (state.highlight.enabled && defaultState.highlight.enabled) {
+		highlightKeys.forEach((key)=>{
+			if (state.highlight.settings[key] !== defaultState.highlight.settings[key]) highlight[key] = state.highlight.settings[key];
+		});
+
+		if (Object.keys(highlight).length !== 0) config.highlight = highlight;
+	}
+	if (state.highlight.enabled !== defaultState.highlight.enabled) config.highlight = state.highlight.enabled;
+
+	// drawTools
+	const drawTools: {
+        LshapeKnightMove?: boolean;
+        onlyChessMove?: boolean;
+    } = {};
+
+	if (state.drawTools.enabled && defaultState.drawTools.enabled) {
+		if (state.drawTools.settings.LshapeKnightMove !== defaultState.drawTools.settings.LshapeKnightMove) drawTools.LshapeKnightMove = state.drawTools.settings.LshapeKnightMove;
+		if (state.drawTools.settings.onlyChessMove !== defaultState.drawTools.settings.onlyChessMove) drawTools.onlyChessMove = state.drawTools.settings.onlyChessMove;
+
+		if (Object.keys(drawTools).length !== 0) config.drawTools = drawTools;
+	}
+	if (state.drawTools.enabled !== defaultState.drawTools.enabled) config.drawTools = state.drawTools.enabled;
+
+	// sounds
+	const sounds: {
+		MOVE?: boolean;
+		CAPTURE?: boolean;
+		CASTLE?: boolean;
+		UNDO?: boolean;
+	} = {};
+
+	if (state.sounds.enabled && defaultState.sounds.enabled) {
+		if (state.sounds.settings.MOVE !== defaultState.sounds.settings.MOVE) sounds.MOVE = state.sounds.settings.MOVE;
+		if (state.sounds.settings.CAPTURE !== defaultState.sounds.settings.CAPTURE) sounds.CAPTURE = state.sounds.settings.CAPTURE;
+		if (state.sounds.settings.CASTLE !== defaultState.sounds.settings.CASTLE) sounds.CASTLE = state.sounds.settings.CASTLE;
+		if (state.sounds.settings.UNDO !== defaultState.sounds.settings.UNDO) sounds.UNDO = state.sounds.settings.UNDO;
+
+		if (Object.keys(sounds).length !== 0) config.sounds = sounds;
+	}
+	if (state.sounds.enabled !== defaultState.sounds.enabled) config.sounds = state.sounds.enabled;
+
+	// resizible
+	if (state.resizible.enabled !== defaultState.resizible.enabled) config.resizible = state.resizible.enabled;
+
+	return config;
 }

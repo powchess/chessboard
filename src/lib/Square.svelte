@@ -31,7 +31,5 @@
 		position: absolute;
 		width: 12.5%;
 		height: 12.5%;
-		max-width: 12.5vw;
-		max-height: 12.5vw;
 	}
 </style>

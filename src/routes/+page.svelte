@@ -1,153 +1,41 @@
 <script context="module" lang="ts">
 	import Prism from 'svelte-prism';
 	import Chessboard from '$lib/Chessboard.svelte';
+	import { getConfigFromState, State } from '$lib/state';
+	import { BoardThemes, EasingFuncsArray, type ChessboardConfig } from '$lib/boardConfig';
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 	import { Color } from '$lib/enums';
-	import { State } from '$lib/state';
-	import {
-		BoardThemes,
-		type BoardTheme,
-		type ChessboardConfig,
-		type EasingFuncs,
-		type KingLocations,
-		type PiecesThemes
-	} from '$lib/boardConfig';
 </script>
 
 <script lang="ts">
-	const defaultState = new State();
-
-	type CBConfig = {
-		board: {
-			boardTheme: BoardTheme;
-			piecesTheme: PiecesThemes;
-			flipped: boolean;
-			notation: boolean;
-			shadow: boolean;
-			startFen: string;
-			startSize: number;
-		};
-
-		movable: boolean | Color.WHITE | Color.BLACK | Color.BOTH;
-
-		draggable:
-			| boolean
-			| {
-					ghostPiece: boolean;
-					transition:
-						| boolean
-						| {
-								duration: number;
-								easing: EasingFuncs;
-						  };
-			  };
-
-		selectable: boolean;
-
-		legal:
-			| boolean
-			| {
-					settings: {
-						allowPromotion: boolean;
-						allowEnPassant: boolean;
-						allowCastling: boolean;
-					};
-					preMoves: boolean;
-			  };
-
-		callbacks: {
-			getLegalMoves?: () => string[];
-			getPreMoves?: () => string[];
-			beforeMove?: (move: string) => void;
-			afterMove?: (move: string) => void;
-			getLastMove?: () => string;
-			getLastMoveSAN?: () => string;
-			getKingLocations?: () => KingLocations;
-			getInCheck?: () => Color.WHITE | Color.BLACK | undefined;
-			getWhiteToMove?: () => boolean;
-		};
-
-		highlight:
-			| boolean
-			| {
-					select: boolean;
-					legal: boolean;
-					move: boolean;
-					preMove: boolean;
-					nextMove: boolean;
-					check: boolean;
-			  };
-
-		drawTools:
-			| boolean
-			| {
-					LshapeKnightMove: boolean;
-					onlyChessMove: boolean;
-			  };
-
-		sounds:
-			| boolean
-			| {
-					MOVE: boolean;
-					CAPTURE: boolean;
-					CASTLE: boolean;
-					UNDO: boolean;
-			  };
-
-		resizible:
-			| boolean
-			| {
-					min: number;
-					max: number;
-			  };
-	};
-
-	const config: CBConfig = {
-		board: {
-			boardTheme: 'standard',
-			piecesTheme: 'standard',
-			flipped: false,
-			notation: true,
-			shadow: true,
-			startFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-			startSize: 500
-		},
-
-		movable: Color.BOTH,
-
-		draggable: true,
-
-		selectable: true,
-
-		legal: false,
-
-		callbacks: {},
-
-		highlight: true,
-
-		drawTools: true,
-
-		sounds: true,
-
+	const config: ChessboardConfig = {
 		resizible: true
 	};
 
-	const getConfigString = (cfg: ChessboardConfig) => {
-		const conf = <ChessboardConfig>JSON.parse(JSON.stringify(cfg));
-		if (conf.board !== undefined) {
-			if (conf.board.boardTheme !== undefined && conf.board.boardTheme === defaultState.board.boardTheme) delete conf.board.boardTheme;
-			if (conf.board.piecesTheme !== undefined && conf.board.piecesTheme === defaultState.board.piecesTheme) delete conf.board.piecesTheme;
-			if (conf.board.flipped !== undefined && conf.board.flipped === defaultState.board.flipped) delete conf.board.flipped;
-			if (conf.board.notation !== undefined && conf.board.notation === defaultState.board.notation) delete conf.board.notation;
-			if (conf.board.shadow !== undefined && conf.board.shadow === defaultState.board.shadow) delete conf.board.shadow;
-			if (conf.board.startFen !== undefined && conf.board.startFen === defaultState.board.startFen) delete conf.board.startFen;
+	let chessboard: Chessboard;
+	let state = new State(config);
+	let mounted = false;
 
-			if (Object.keys(conf.board).length === 0) delete conf.board;
+	onMount(() => {
+		mounted = true;
+		state = chessboard.getState();
+	});
+
+	const getConfigString = (state: State) => {
+		let cfg = getConfigFromState(state);
+
+		if (browser && mounted) {
+			chessboard.setState(state);
 		}
 
-		return `const config: ChessboardConfig = ${JSON.stringify(conf, null, 4)}`.replace(/"([^"]+)":/g, '$1:');
+		return `const config: ChessboardConfig = ${JSON.stringify(cfg, null, 4)};`.replace(/"([^"]+)":/g, '$1:');
 	};
 
-	$: code = getConfigString(config);
+	const highlightNames = ['select', 'legal', 'move', 'preMove', 'nextMove', 'check'] as const;
+	const soundsNames = ['MOVE', 'CAPTURE', 'CASTLE', 'UNDO'] as const;
+
+	$: code = getConfigString(state);
 </script>
 
 <svelte:head>
@@ -156,14 +44,14 @@
 </svelte:head>
 
 <div class="mt-10 grid grid-cols-center">
-	<div class="col-start-2 gap-10 grid grid-cols-[1fr-auto]">
-		<div class="col-start-1 row-span-2 flex flex-col gap-2 w-60 text-gray-300 text-sm">
+	<div class="col-start-2 gap-10 grid grid-cols-[auto_auto]">
+		<div class="col-start-1 flex flex-col gap-2 w-60 text-gray-300 text-sm">
 			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
 				board
 				<div class="p-2 pl-4">
 					<div>
-						<label for="boardTheme" class="select-none">notation</label>
-						<select bind:value={config.board.boardTheme}>
+						<label for="boardTheme" class="select-none">board theme</label>
+						<select bind:value={state.board.boardTheme}>
 							{#each BoardThemes as theme}
 								<option value={theme}>{theme}</option>
 							{/each}
@@ -171,27 +59,178 @@
 					</div>
 
 					<div>
-						<input id="notation" type="checkbox" bind:checked={config.board.notation} />
+						<input id="notation" type="checkbox" bind:checked={state.board.notation} />
 						<label for="notation" class="select-none">notation</label>
 					</div>
 
 					<div>
-						<input id="flipped" type="checkbox" bind:checked={config.board.flipped} />
+						<input id="flipped" type="checkbox" bind:checked={state.board.flipped} />
 						<label for="flipped" class="select-none">flipped</label>
 					</div>
 
 					<div>
-						<input id="shadow" type="checkbox" bind:checked={config.board.shadow} />
+						<input id="shadow" type="checkbox" bind:checked={state.board.shadow} />
 						<label for="shadow" class="select-none">shadow</label>
 					</div>
 				</div>
 			</div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
+				movable
+				<div class="p-2 pl-4">
+					<div>
+						<input id="movableEnabled" type="checkbox" bind:checked={state.movable.enabled} />
+						<label for="movableEnabled" class="select-none">enabled</label>
+					</div>
+					{#if state.movable.enabled}
+						<div>
+							<select bind:value={state.movable.color}>
+								<option value={Color.BOTH}>Both</option>
+								<option value={Color.WHITE}>White</option>
+								<option value={Color.BLACK}>Black</option>
+							</select>
+						</div>
+					{/if}
+				</div>
+			</div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
+				draggable
+				<div class="p-2 pl-4">
+					<div>
+						<input id="draggableEnabled" type="checkbox" bind:checked={state.draggable.enabled} />
+						<label for="draggableEnabled" class="select-none">enabled</label>
+					</div>
+					{#if state.draggable.enabled}
+						<div>
+							<input id="ghostPiece" type="checkbox" bind:checked={state.draggable.ghostPiece.enabled} />
+							<label for="ghostPiece" class="select-none">ghost piece</label>
+						</div>
+						<div>
+							<input id="draggableEnabled" type="checkbox" bind:checked={state.draggable.transition.enabled} />
+							<label for="draggableEnabled" class="select-none">transition enabled</label>
+						</div>
+						{#if state.draggable.transition.enabled}
+							<div>
+								<input id="transitionDuration" type="number" bind:value={state.draggable.transition.settings.duration} />
+								<label for="transitionDuration" class="select-none">duration</label>
+							</div>
+							<div>
+								<label for="easingFuncs" class="select-none">easing func</label>
+								<select id="easingFuncs" bind:value={state.draggable.transition.settings.easing}>
+									{#each EasingFuncsArray as easingFunc}
+										<option value={easingFunc}>{easingFunc}</option>
+									{/each}
+								</select>
+							</div>
+						{/if}
+					{/if}
+				</div>
+			</div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
+				selectable
+				<div class="p-2 pl-4">
+					<div>
+						<input id="selectableEnabled" type="checkbox" bind:checked={state.selectable.enabled} />
+						<label for="selectableEnabled" class="select-none">enabled</label>
+					</div>
+				</div>
+			</div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
+				legal
+				<div class="p-2 pl-4">
+					<div>
+						<input id="legalEnabled" type="checkbox" bind:checked={state.legal.enabled} />
+						<label for="legalEnabled" class="select-none">enabled</label>
+					</div>
+					{#if state.legal.enabled}
+						<div>
+							<input id="preMovesEnabled" type="checkbox" bind:checked={state.legal.preMoves.enabled} />
+							<label for="preMovesEnabled" class="select-none">preMoves enabled</label>
+						</div>
+					{/if}
+				</div>
+			</div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
+				highlight
+				<div class="p-2 pl-4">
+					<div>
+						<input id="legalEnabled" type="checkbox" bind:checked={state.highlight.enabled} />
+						<label for="legalEnabled" class="select-none">enabled</label>
+					</div>
+					{#if state.highlight.enabled}
+						{#each highlightNames as highlight}
+							<div>
+								<input id="{highlight}Enabled" type="checkbox" bind:checked={state.highlight.settings[highlight]} />
+								<label for="{highlight}Enabled" class="select-none">{highlight}</label>
+							</div>
+						{/each}
+					{/if}
+				</div>
+			</div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
+				drawTools
+				<div class="p-2 pl-4">
+					<div>
+						<input id="drawToolsEnabled" type="checkbox" bind:checked={state.drawTools.enabled} />
+						<label for="drawToolsEnabled" class="select-none">enabled</label>
+					</div>
+					{#if state.drawTools.enabled}
+						<div>
+							<input id="LshapeKnightMoveEnabled" type="checkbox" bind:checked={state.drawTools.settings.LshapeKnightMove} />
+							<label for="LshapeKnightMoveEnabled" class="select-none">L shape knight move</label>
+						</div>
+						<div>
+							<input id="onlyChessMoveEnabled" type="checkbox" bind:checked={state.drawTools.settings.onlyChessMove} />
+							<label for="onlyChessMoveEnabled" class="select-none">only chess move</label>
+						</div>
+					{/if}
+				</div>
+			</div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
+				sounds
+				<div class="p-2 pl-4">
+					<div>
+						<input id="soundsEnabled" type="checkbox" bind:checked={state.sounds.enabled} />
+						<label for="soundsEnabled" class="select-none">enabled</label>
+					</div>
+					{#if state.sounds.enabled}
+						{#each soundsNames as sound}
+							<div>
+								<input id="{sound}Enabled" type="checkbox" bind:checked={state.sounds.settings[sound]} />
+								<label for="{sound}Enabled" class="select-none">{sound}</label>
+							</div>
+						{/each}
+					{/if}
+				</div>
+			</div>
+			<div class="bg-slate-900/20 rounded shadow-lg p-2 pl-4 flex flex-col">
+				resizible
+				<div class="p-2 pl-4">
+					<div>
+						<input id="resizibleEnabled" type="checkbox" bind:checked={state.resizible.enabled} />
+						<label for="resizibleEnabled" class="select-none">enabled</label>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="col-start-2 w-[var(--boardSize,40rem)]">
-			<Chessboard {config} />
-		</div>
-		<div class="col-start-2 row-start-2 shadow-lg rounded">
-			<Prism source={code} />
+		<div class="grid grid-rows-[min-content_auto] gap-10">
+			<div class="w-[var(--boardSize,40rem)]">
+				<Chessboard bind:this={chessboard} {config} />
+			</div>
+			<div class="row-start-2">
+				<div class="shadow-lg rounded">
+					<Prism source={code} />
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+	input {
+		color: black;
+	}
+
+	select {
+		color: black;
+	}
+</style>

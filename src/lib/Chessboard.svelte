@@ -2,7 +2,7 @@
 	import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte';
 	import type { ChessboardConfig as Config, KingLocations, MoveTypeSound } from './boardConfig';
 	import Chessboard from './chessboard';
-	import type { Piece as StatePiece } from './state';
+	import { type Piece as StatePiece, type State, getConfigFromState as getCfgFromState } from './state';
 	import Notation from './Notation.svelte';
 	import Piece from './Piece.svelte';
 	import Square from './Square.svelte';
@@ -21,7 +21,7 @@
 </script>
 
 <script lang="ts">
-	export const config: ChessboardConfig | undefined = undefined;
+	export let config: ChessboardConfig;
 
 	const chessboard = new Chessboard(config);
 	const dispatch = createEventDispatcher();
@@ -435,6 +435,18 @@
 		chessboard.state = chessboard.state;
 	};
 
+	export const getState = () => {
+		return chessboard.state;
+	};
+
+	export const setState = (state: State) => {
+		chessboard.state = state;
+	};
+
+	export const getConfigFromState = (state: State) => {
+		return getCfgFromState(state);
+	};
+
 	const handlePieceMoving = (e: CustomEvent) => {
 		const bounding = boardDiv.getBoundingClientRect();
 		if (chessboard.state.legal.enabled) {
@@ -485,7 +497,7 @@
 	};
 
 	$: setSize(chessboard.state.board.size - (chessboard.state.board.size % 8));
-	$: setConfigSettings(config);
+	// $: setConfigSettings(config);
 
 	onMount(() => {
 		updateLegalStateIfNeeded();
