@@ -2,7 +2,6 @@
 	import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte';
 	import type { ChessboardConfig as Config, KingLocations, MoveTypeSound } from './boardConfig';
 	import Chessboard from './chessboard';
-	import { type Piece as StatePiece, type State, getConfigFromState as getCfgFromState } from './state';
 	import Notation from './Notation.svelte';
 	import Piece from './Piece.svelte';
 	import Square from './Square.svelte';
@@ -16,6 +15,7 @@
 	import type { ChessPiece } from './chessTypes';
 	import { Color, SquareColor } from './enums';
 	import { browser } from '$app/environment';
+	import type { State, Piece as StatePiece } from './state/index';
 
 	export type ChessboardConfig = Config;
 </script>
@@ -444,7 +444,7 @@
 	};
 
 	export const getConfigFromState = (state: State) => {
-		return getCfgFromState(state);
+		return state.getConfig();
 	};
 
 	const handlePieceMoving = (e: CustomEvent) => {

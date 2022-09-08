@@ -1,7 +1,7 @@
 <script context="module" lang="ts">
 	import Prism from 'svelte-prism';
 	import Chessboard from '$lib/Chessboard.svelte';
-	import { getConfigFromState, State } from '$lib/state';
+	import { State } from '$lib/state/index';
 	import { BoardThemes, EasingFuncsArray, type ChessboardConfig } from '$lib/boardConfig';
 	import { browser } from '$app/environment';
 	import { onMount } from 'svelte';
@@ -23,7 +23,7 @@
 	});
 
 	const getConfigString = (state: State) => {
-		let cfg = getConfigFromState(state);
+		let cfg = state.getConfig();
 
 		if (browser && mounted) {
 			chessboard.setState(state);
@@ -153,8 +153,8 @@
 				highlight
 				<div class="p-2 pl-4">
 					<div>
-						<input id="legalEnabled" type="checkbox" bind:checked={state.highlight.enabled} />
-						<label for="legalEnabled" class="select-none">enabled</label>
+						<input id="highlightEnabled" type="checkbox" bind:checked={state.highlight.enabled} />
+						<label for="highlightEnabled" class="select-none">enabled</label>
 					</div>
 					{#if state.highlight.enabled}
 						{#each highlightNames as highlight}

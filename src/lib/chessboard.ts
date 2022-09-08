@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { SquareColor } from './enums';
 import type { ChessBoard, ChessFile, ChessPiece } from './chessTypes';
-import { State, type Square, type Piece } from './state';
+import { State, type Square, type Piece } from './state/index';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils';
 import type { ChessboardConfig } from './boardConfig';
 

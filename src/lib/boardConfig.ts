@@ -3,7 +3,7 @@ import type { Color } from './enums';
 type TupleToUnion<T extends unknown[]> = T[number];
 export const BoardThemes = ['standard', 'darkBlue'] as const;
 export type BoardTheme = 'standard' | 'darkBlue';
-export type PiecesThemes = 'standard';
+export type PiecesTheme = 'standard';
 export type MoveTypeSound = 'MOVE' | 'CAPTURE' | 'CASTLE' | 'UNDO';
 // prettier-ignore
 type EasingTuple = ['backIn','backInOut','backOut','bounceIn','bounceInOut','bounceOut','circIn','circInOut','circOut','cubicIn','cubicInOut','cubicOut','elasticIn','elasticInOut','elasticOut','expoIn','expoInOut','expoOut','linear','quadIn','quadInOut','quadOut','quartIn','quartInOut','quartOut','quintIn','quintInOut','quintOut','sineIn','sineInOut','sineOut'];
@@ -16,7 +16,7 @@ export type KingLocations = { [Color.WHITE]: string; [Color.BLACK]: string };
 export type ChessboardConfig = {
 	board?: {
 		boardTheme?: BoardTheme;
-		piecesTheme?: PiecesThemes;
+		piecesTheme?: PiecesTheme;
 		flipped?: boolean;
 		notation?: boolean;
 		shadow?: boolean;
