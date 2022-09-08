@@ -21,7 +21,7 @@
 	});
 
 	const getConfigString = (newState: State) => {
-		let cfg = newState.getConfig();
+		const cfg = newState.getConfig();
 
 		if (browser && mounted) {
 			chessboard.setState(newState);
