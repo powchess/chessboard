@@ -1,32 +1,30 @@
-<script context="module" lang="ts">
+<script lang="ts">
 	import Prism from 'svelte-prism';
+	import { onMount } from 'svelte';
 	import Chessboard from '$lib/Chessboard.svelte';
 	import { State } from '$lib/state/index';
 	import { BoardThemes, EasingFuncsArray, type ChessboardConfig } from '$lib/boardConfig';
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
 	import { Color } from '$lib/enums';
-</script>
 
-<script lang="ts">
 	const config: ChessboardConfig = {
 		resizible: true
 	};
 
 	let chessboard: Chessboard;
 	let state = new State(config);
-	let mounted = false;
+	let mounted: boolean = false;
 
 	onMount(() => {
 		mounted = true;
 		state = chessboard.getState();
 	});
 
-	const getConfigString = (state: State) => {
-		let cfg = state.getConfig();
+	const getConfigString = (newState: State) => {
+		let cfg = newState.getConfig();
 
 		if (browser && mounted) {
-			chessboard.setState(state);
+			chessboard.setState(newState);
 		}
 
 		return `const config: ChessboardConfig = ${JSON.stringify(cfg, null, 4)};`.replace(/"([^"]+)":/g, '$1:');

@@ -9,15 +9,16 @@
 </script>
 
 <div class="files noselect">
-	{#each files as _, i}
-		<span style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};">
+	{#each files as file, i}
+		<span data-file={file} style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};">
 			{files[flipped ? Math.abs(i - 7) : i]}
 		</span>
 	{/each}
 </div>
 <div class="ranks noselect">
-	{#each files as _, i}
+	{#each files as file, i}
 		<span
+			data-file={file}
 			style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};"
 			class={flipped ? '' : 'text-right'}
 		>

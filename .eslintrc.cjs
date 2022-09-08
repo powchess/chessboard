@@ -1,19 +1,42 @@
 module.exports = {
 	root: true,
 	parser: '@typescript-eslint/parser',
-	extends: ['airbnb', 'airbnb-typescript', 'prettier'],
-	plugins: ['svelte3', '@typescript-eslint', 'prettier'],
+	extends: ['airbnb', 'airbnb-typescript', 'prettier', 'plugin:svelte/recommended'],
+	plugins: ['@typescript-eslint', 'prettier'],
 	ignorePatterns: ['*.cjs', '*.js', 'node_modules', 'build', 'static'],
-	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
+	overrides: [
+		{
+			files: ['*.svelte'],
+			parser: 'svelte-eslint-parser',
+			parserOptions: {
+				parser: '@typescript-eslint/parser'
+			},
+			rules: {
+				'import/no-unresolved': 'off',
+				'import/no-extraneous-dependencies': 'off',
+				'import/no-mutable-exports': 'off',
+				'import/newline-after-import': 'error',
+				'@typescript-eslint/no-unused-expressions': 'off',
+				'no-sequences': 'off',
+				'no-self-assign': 'off'
+			}
+		}
+	],
 	settings: {
-		'svelte3/typescript': () => require('typescript'),
-		'svelte3/ignore-styles': () => true.valueOf
+		svelte: {
+			compileOptions: {
+				postcss: {
+					configFilePath: './postcss.config.cjs'
+				}
+			}
+		}
 	},
 	parserOptions: {
 		ecmaVersion: 2020,
 		sourceType: 'module',
 		tsconfigRootDir: __dirname,
-		project: './tsconfig.json'
+		project: './tsconfig.json',
+		extraFileExtensions: ['.svelte']
 	},
 	env: {
 		browser: true,
@@ -24,9 +47,11 @@ module.exports = {
 		'import/extensions': 'off',
 		'no-nested-ternary': 'off',
 		'no-plusplus': 'off',
-		'import/no-extraneous-dependencies': 'off',
+		'no-restricted-exports': 'off',
 		'no-continue': 'off',
-		'import/no-unresolved': 'off',
-		'import/no-mutable-exports': 'off'
+		'no-restricted-syntax': 'off',
+		'no-underscore-dangle': 'off',
+		'import/prefer-default-export': 'off',
+		'@typescript-eslint/no-unnecessary-type-assertion': 'error'
 	}
 };

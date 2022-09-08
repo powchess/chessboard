@@ -5,7 +5,6 @@
 	let showModal = false;
 	let isWhite: boolean;
 
-	// eslint-disable-next-line import/prefer-default-export
 	export function openPromotionModal(whiteToMove: boolean) {
 		showModal = true;
 		if (whiteToMove) isWhite = true;

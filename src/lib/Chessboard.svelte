@@ -1,4 +1,8 @@
 <script context="module" lang="ts">
+	export type ChessboardConfig = Config;
+</script>
+
+<script lang="ts">
 	import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte';
 	import type { ChessboardConfig as Config, KingLocations, MoveTypeSound } from './boardConfig';
 	import Chessboard from './chessboard';
@@ -17,10 +21,6 @@
 	import { browser } from '$app/environment';
 	import type { State, Piece as StatePiece } from './state/index';
 
-	export type ChessboardConfig = Config;
-</script>
-
-<script lang="ts">
 	export let config: ChessboardConfig;
 
 	const chessboard = new Chessboard(config);
@@ -435,17 +435,13 @@
 		chessboard.state = chessboard.state;
 	};
 
-	export const getState = () => {
-		return chessboard.state;
-	};
+	export const getState = () => chessboard.state;
 
 	export const setState = (state: State) => {
 		chessboard.state = state;
 	};
 
-	export const getConfigFromState = (state: State) => {
-		return state.getConfig();
-	};
+	export const getConfigFromState = (state: State) => state.getConfig();
 
 	const handlePieceMoving = (e: CustomEvent) => {
 		const bounding = boardDiv.getBoundingClientRect();
@@ -455,23 +451,6 @@
 				chessboard.preMoveHover(getSquareFromCoords(e.detail.x - bounding.x, e.detail.y - bounding.y));
 		}
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
-	};
-
-	const handlePromotion = (e: CustomEvent): void => {
-		const piece = chessboard.getPieceFromSquare(promotionLastMove.substring(2, 4));
-		if (!piece) return;
-
-		const newPiece = (piece.name[0] + (<string>e.detail).toUpperCase()) as ChessPiece;
-		const newMove = promotionLastMove + <string>e.detail;
-
-		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(newMove);
-
-		chessboard.setPiece(piece.square, newPiece);
-		chessboard.state.pieces = chessboard.state.pieces;
-		sounds.playMoveSound('MOVE');
-
-		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(newMove);
-		updateLegalStateIfNeeded();
 	};
 
 	const setGhostPiece = (piece: StatePiece) => {
@@ -496,8 +475,24 @@
 		}
 	};
 
+	const handlePromotion = (e: CustomEvent) => {
+		const piece = chessboard.getPieceFromSquare(promotionLastMove.substring(2, 4));
+		if (!piece) return;
+
+		const newPiece = (piece.name[0] + e.detail.toUpperCase()) as ChessPiece;
+		const newMove = promotionLastMove + e.detail;
+
+		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(newMove);
+
+		chessboard.setPiece(piece.square, newPiece);
+		chessboard.state.pieces = chessboard.state.pieces;
+		sounds.playMoveSound('MOVE');
+
+		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(newMove);
+		updateLegalStateIfNeeded();
+	};
+
 	$: setSize(chessboard.state.board.size - (chessboard.state.board.size % 8));
-	// $: setConfigSettings(config);
 
 	onMount(() => {
 		updateLegalStateIfNeeded();

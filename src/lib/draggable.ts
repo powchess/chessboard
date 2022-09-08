@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
-import type { Tweened } from 'svelte/motion';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { get } from 'svelte/store';
+import type { Tweened } from 'svelte/motion';
 import { fileToIndex, squareToSQXY } from './utils';
 
 function getEndSquare(
@@ -320,7 +321,6 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 			}
 
 			if (boardFlipped !== newParams.boardFlipped) circle = createTouchCircle(node, touchScale, newParams.boardFlipped);
-
 			boardFlipped = newParams.boardFlipped;
 		}
 	};
