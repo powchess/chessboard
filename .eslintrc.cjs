@@ -1,7 +1,7 @@
 module.exports = {
 	root: true,
 	parser: '@typescript-eslint/parser',
-	extends: ['airbnb', 'airbnb-typescript', 'prettier', 'plugin:svelte/recommended'],
+	extends: ['airbnb', 'airbnb-typescript', 'plugin:@typescript-eslint/recommended', 'prettier', 'plugin:svelte/recommended'],
 	plugins: ['@typescript-eslint', 'prettier'],
 	ignorePatterns: ['*.cjs', '*.js', 'node_modules', 'build', 'static'],
 	overrides: [
@@ -51,7 +51,6 @@ module.exports = {
 		'no-continue': 'off',
 		'no-restricted-syntax': 'off',
 		'no-underscore-dangle': 'off',
-		'import/prefer-default-export': 'off',
-		'@typescript-eslint/no-unnecessary-type-assertion': 'error'
+		'import/prefer-default-export': 'off'
 	}
 };
