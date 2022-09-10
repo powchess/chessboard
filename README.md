@@ -7,6 +7,11 @@
 
 This is the Chessboard UI Package which is used on [PowChess](https://powchess.com).
 
+## Demos
+
+⭐️ <a href="https://board.powchess.com/" target="_blank">Demo Website</a>\
+⭐️ <a href="https://powchess.com/" target="_blank">PowChess</a>
+
 ## Installation
 
 ```sh

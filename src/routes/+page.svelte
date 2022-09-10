@@ -13,7 +13,7 @@
 
 	let chessboard: Chessboard;
 	let state = new State(config);
-	let mounted: boolean = false;
+	let mounted = false;
 
 	onMount(() => {
 		mounted = true;
