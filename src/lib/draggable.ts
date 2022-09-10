@@ -46,6 +46,8 @@ type DragParams = {
 	startSquare: string;
 	boardFlipped: boolean;
 	onlyShow: boolean;
+	duration: number;
+	easingFunc: (t: number) => number;
 	coords: Tweened<{
 		x: number;
 		y: number;
@@ -93,13 +95,12 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	const boardDiv = <HTMLDivElement>node.parentNode;
 	let currentSquare: string;
 
-	let { startSquare, boardFlipped, onlyShow } = params;
+	let { startSquare, boardFlipped, onlyShow, duration, easingFunc } = params;
 	const { coords } = params;
 
 	let startX = get(coords).x;
 	let startY = get(coords).y;
 
-	const duration = 120;
 	const touchScale = 1.6;
 	let circle = createTouchCircle(node, touchScale, boardFlipped);
 	node.draggable = false;
@@ -134,7 +135,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 								: coord.y - (y - node.offsetHeight * 1.5 - node.getBoundingClientRect().y) / node.clientWidth,
 						scale: e instanceof MouseEvent ? 1 : touchScale
 					}),
-					{ duration }
+					{ duration, easing: easingFunc }
 				);
 				nodeCentered = true;
 				node.style.zIndex = '30';
@@ -225,7 +226,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 			);
 		}
 		coords
-			.update(() => ({ x: startX, y: startY, scale: 1 }), { duration })
+			.update(() => ({ x: startX, y: startY, scale: 1 }), { duration, easing: easingFunc })
 			.then(() => {
 				node.dispatchEvent(new CustomEvent('animationEnded'));
 			});
@@ -308,6 +309,8 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		},
 		update(newParams: DragParams) {
 			startSquare = newParams.startSquare;
+			duration = newParams.duration;
+			easingFunc = newParams.easingFunc;
 
 			if (newParams.onlyShow !== onlyShow) {
 				onlyShow = newParams.onlyShow;

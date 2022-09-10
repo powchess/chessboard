@@ -7,15 +7,14 @@
 	import type { ChessPiece } from './chessTypes';
 	import { Color } from './enums';
 	import type { EasingFuncs } from './boardConfig';
-
-	type Movable = { enabled: boolean; color: Color.WHITE | Color.BLACK | Color.BOTH } | boolean;
+	import type MovableState from './state/movable';
 
 	export let square: string;
 	export let name: ChessPiece;
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
 	export let whiteToMove = false;
-	export let movable: Movable;
+	export let movable: MovableState;
 	export let ghostPiece = false;
 	export let easing: EasingFuncs = 'cubicInOut';
 	export let duration = 120;
@@ -32,7 +31,8 @@
 		const newCoords = getGridCoordsFromSquare(sq);
 
 		coords.update(() => ({ x: newCoords.x, y: newCoords.y, scale: 1 }), {
-			duration: initialized ? curDuration : 0
+			duration: initialized ? curDuration : 0,
+			easing: easingFuncs[easing]
 		});
 
 		if (!initialized) initialized = true;
@@ -46,14 +46,11 @@
 	};
 
 	const canMove = () =>
-		movable === true ||
-		(movable !== false &&
-			movable.enabled &&
-			(movable.color === getColorFromString(name) ||
-				(movable.color === Color.BOTH &&
-					((whiteToMove && getColorFromString(name) === Color.WHITE) || (!whiteToMove && getColorFromString(name) === Color.BLACK)))));
+		movable.enabled &&
+		(movable.color === getColorFromString(name) ||
+			(movable.color === Color.BOTH &&
+				((whiteToMove && getColorFromString(name) === Color.WHITE) || (!whiteToMove && getColorFromString(name) === Color.BLACK))));
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-expressions, no-sequences
 	$: flipped, reRenderPieces(square);
 	$: pieceZIndex = typeof movable === 'boolean' ? (movable ? 1 : 0) : movable.enabled ? 1 : 0;
 </script>
@@ -63,6 +60,8 @@
 		startSquare: square,
 		onlyShow: !canMove(),
 		boardFlipped: flipped,
+		duration,
+		easingFunc: easingFuncs[easing],
 		coords
 	}}
 	on:dropped={dropped}

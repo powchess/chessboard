@@ -20,6 +20,7 @@
 	import { Color, SquareColor } from './enums';
 	import { browser } from '$app/environment';
 	import type { State, Piece as StatePiece } from './state/index';
+	import MovableState from './state/movable';
 
 	export let config: ChessboardConfig;
 
@@ -524,6 +525,7 @@
 				<Piece
 					square={piece.square}
 					name={piece.name}
+					duration={chessboard.state.draggable.transition.settings.duration}
 					easing={chessboard.state.draggable.transition.settings.easing}
 					whiteToMove={chessboard.state.legal.whiteToMove}
 					movable={chessboard.state.movable}
@@ -553,7 +555,7 @@
 			duration={0}
 			square={chessboard.state.draggable.ghostPiece.piece.square}
 			name={chessboard.state.draggable.ghostPiece.piece.name}
-			movable={false}
+			movable={new MovableState(false)}
 			getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 			flipped={chessboard.state.board.flipped}
 		/>

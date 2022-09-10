@@ -43,9 +43,9 @@ export default class BoardState {
 		if (config !== undefined) {
 			if (config.boardTheme !== undefined) this.boardTheme = config.boardTheme;
 			if (config.piecesTheme !== undefined) this.piecesTheme = config.piecesTheme;
+			if (config.flipped !== undefined) this.flipped = config.flipped;
 			if (config.notation !== undefined) this.notation = config.notation;
 			if (config.shadow !== undefined) this.shadow = config.shadow;
-			if (config.flipped !== undefined) this.flipped = config.flipped;
 			if (config.startFen !== undefined) this.startFen = config.startFen;
 		}
 	};
