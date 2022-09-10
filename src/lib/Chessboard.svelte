@@ -148,6 +148,10 @@
 		if (chessboard.state.callbacks.getInCheck) setCheckSquare(chessboard.state.callbacks.getInCheck());
 	};
 
+	export const playMoveSound = (moveType: MoveTypeSound) => {
+		if (chessboard.state.sounds.enabled) sounds.playMoveSound(moveType);
+	};
+
 	export const makeMove = (move: string): void => {
 		if (move.substring(0, 2) === move.substring(2, 4)) return;
 		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(move);
@@ -160,13 +164,13 @@
 
 		if (rookMove && chessboard.state.legal.enabled && chessboard.state.legal.settings.allowCastling) {
 			movePiece(rookMove, false);
-			sounds.playMoveSound('CASTLE');
+			playMoveSound('CASTLE');
 		} else if (capturedPawnSquare && chessboard.state.legal.enabled && chessboard.state.legal.settings.allowEnPassant) {
 			removePiece(capturedPawnSquare);
-			sounds.playMoveSound('CAPTURE');
+			playMoveSound('CAPTURE');
 		} else if (chessboard.isCapture(move)) {
-			sounds.playMoveSound('CAPTURE');
-		} else sounds.playMoveSound('MOVE');
+			playMoveSound('CAPTURE');
+		} else playMoveSound('MOVE');
 
 		chessboard.removeGhostPiece();
 		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
@@ -273,7 +277,7 @@
 		const piece = chessboard.getPieceFromSquare(square);
 		dispatch('squareClick', { square, piece: piece ? piece.name : undefined });
 
-		if (!chessboard.state.legal.enabled || !chessboard.state.selectable.enabled) {
+		if (!chessboard.state.selectable.enabled) {
 			chessboard.state.selectable.selectedPiece = undefined;
 			return;
 		}
@@ -388,12 +392,12 @@
 		if (chessboard.state.callbacks.getLastMove) {
 			const lastMove = chessboard.state.callbacks.getLastMove();
 
-			if (sound !== 'MOVE') sounds.playMoveSound(sound);
-			else if (chessboard.isCastling(lastMove)) sounds.playMoveSound('CASTLE');
-			else sounds.playMoveSound(sound);
+			if (sound !== 'MOVE') playMoveSound(sound);
+			else if (chessboard.isCastling(lastMove)) playMoveSound('CASTLE');
+			else playMoveSound(sound);
 
 			highlightMove(lastMove);
-		} else sounds.playMoveSound(sound);
+		} else playMoveSound(sound);
 
 		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
 		chessboard.state.pieces = chessboard.state.pieces;
@@ -487,7 +491,7 @@
 
 		chessboard.setPiece(piece.square, newPiece);
 		chessboard.state.pieces = chessboard.state.pieces;
-		sounds.playMoveSound('MOVE');
+		playMoveSound('MOVE');
 
 		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(newMove);
 		updateLegalStateIfNeeded();
@@ -527,6 +531,7 @@
 					name={piece.name}
 					duration={chessboard.state.draggable.transition.settings.duration}
 					easing={chessboard.state.draggable.transition.settings.easing}
+					legal={chessboard.state.legal.enabled}
 					whiteToMove={chessboard.state.legal.whiteToMove}
 					movable={chessboard.state.movable}
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
@@ -553,6 +558,7 @@
 		<Piece
 			ghostPiece={true}
 			duration={0}
+			legal={chessboard.state.legal.enabled}
 			square={chessboard.state.draggable.ghostPiece.piece.square}
 			name={chessboard.state.draggable.ghostPiece.piece.name}
 			movable={new MovableState(false)}

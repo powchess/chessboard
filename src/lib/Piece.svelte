@@ -13,6 +13,7 @@
 	export let name: ChessPiece;
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
+	export let legal: boolean;
 	export let whiteToMove = false;
 	export let movable: MovableState;
 	export let ghostPiece = false;
@@ -45,11 +46,22 @@
 		dispatch('move', square + e.detail);
 	};
 
-	const canMove = () =>
-		movable.enabled &&
-		(movable.color === getColorFromString(name) ||
-			(movable.color === Color.BOTH &&
-				((whiteToMove && getColorFromString(name) === Color.WHITE) || (!whiteToMove && getColorFromString(name) === Color.BLACK))));
+	const canMove = (_movable: MovableState) => {
+		if (!_movable.enabled) return false;
+
+		if (legal) {
+			if (_movable.color === Color.WHITE && whiteToMove && getColorFromString(name) === Color.WHITE) return true;
+			if (_movable.color === Color.BLACK && !whiteToMove && getColorFromString(name) === Color.BLACK) return true;
+			if (_movable.color === Color.BOTH) {
+				if (getColorFromString(name) === Color.WHITE && whiteToMove) return true;
+				if (getColorFromString(name) === Color.BLACK && !whiteToMove) return true;
+			}
+			return false;
+		}
+
+		if (_movable.color === getColorFromString(name) || _movable.color === Color.BOTH) return true;
+		return false;
+	};
 
 	$: flipped, reRenderPieces(square);
 	$: pieceZIndex = typeof movable === 'boolean' ? (movable ? 1 : 0) : movable.enabled ? 1 : 0;
@@ -58,7 +70,7 @@
 <img
 	use:drag={{
 		startSquare: square,
-		onlyShow: !canMove(),
+		onlyShow: !canMove(movable),
 		boardFlipped: flipped,
 		duration,
 		easingFunc: easingFuncs[easing],
@@ -70,7 +82,7 @@
 	on:animationEnded
 	on:moving={(e) => dispatch('moving', e.detail)}
 	style="left:{$coords.x * 12.5}%;bottom:{$coords.y * 12.5}%; z-Index: {pieceZIndex}; opacity: {ghostPiece ? 0.3 : 1};"
-	class="noselect {canMove() ? 'cursor-pointer' : ''}"
+	class="noselect {canMove(movable) ? 'cursor-pointer' : ''}"
 	src={getChessPieceImage(name)}
 	alt={name}
 />

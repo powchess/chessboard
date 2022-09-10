@@ -17,7 +17,7 @@
 	on:resizing={(e) => setSize(e.detail.size)}
 	on:endResizing={(e) => setSize(e.detail.size)}
 	style="color: {boardThemesStyles.colors[chessboard.state.board.boardTheme].black};"
-	class="hidden lg:inline"
+	class="hidden lg:inline z-50"
 >
 	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor">
 		<path d="M 5 1 Q 6 0 6 2 L 6 4 Q 6 6 4 6 L 2 6 Q 0 6 1 5 Z" />

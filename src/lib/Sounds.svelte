@@ -53,15 +53,17 @@
 				break;
 			case 'CAPTURE':
 				if (sounds.CAPTURE && allowPlaySound('CAPTURE')) sounds.CAPTURE.play();
+				else if (sounds.MOVE && allowPlaySound('MOVE')) sounds.MOVE.play();
 				break;
 			case 'CASTLE':
 				if (sounds.CASTLE && allowPlaySound('CASTLE')) sounds.CASTLE.play();
+				else if (sounds.MOVE && allowPlaySound('MOVE')) sounds.MOVE.play();
 				break;
 			case 'UNDO':
 				if (sounds.UNDO && allowPlaySound('UNDO')) {
 					sounds.UNDO.volume = 0.3;
 					sounds.UNDO.play();
-				}
+				} else if (sounds.MOVE && allowPlaySound('MOVE')) sounds.MOVE.play();
 				break;
 			default:
 				break;
