@@ -5,14 +5,14 @@
 		<link rel="icon" href="./favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="content-security-policy" content=""><title>Chessboard • PowChess.com</title><link rel="stylesheet" href="prism-one-dark.css" data-svelte="svelte-tebjht">
-	<link href="./_app/immutable/assets/_layout-86e8b859.css" rel="stylesheet">
+	<link href="./_app/immutable/assets/_layout-4c07a2b7.css" rel="stylesheet">
 	<link href="./_app/immutable/assets/_page-6324f4fb.css" rel="stylesheet">
-	<link rel="modulepreload" href="./_app/immutable/start-bf93d278.js">
+	<link rel="modulepreload" href="./_app/immutable/start-a2f16fac.js">
 	<link rel="modulepreload" href="./_app/immutable/chunks/index-e66a4755.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-f0947f97.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-e5248207.js">
 	<link rel="modulepreload" href="./_app/immutable/chunks/index-d15955ac.js">
 	<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-5f1d243d.js">
-	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-e561a50f.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-2be4706e.js">
 	</head>
 	<body>
 		<div>
@@ -127,16 +127,27 @@
 <audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/capture-3dff493a.wav"></audio>
 <audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/castle-dcf4b2c5.wav"></audio>
 <audio preload="auto"><track kind="captions"><source src="/_app/immutable/assets/undo-b4184324.mp3"></audio></div>
-			<div class="row-start-2"><div class="shadow-lg rounded"><code style="display:none"></code>
+			<div class="row-start-2 relative"><div class="shadow-lg rounded "><div class="absolute right-2 top-2 flex gap-4"><button class="text-gray-500 font-mono flex text-[0.8rem] mt-1"><span class="text-yellow-600">ts</span>
+							<span class="text-gray-600">/</span>
+							<span class="">js</span></button>
+						<button type="button" class="box-border rounded-sm bg-slate-800 bg-opacity-40 text-gray-500 transition hover:text-gray-300 focus:z-10 focus:ring-1 focus:ring-blue-600 p-1"><svg style="transform: translate(1px, 0px);" xmlns="http://www.w3.org/2000/svg" class="h-5" fill="none" viewBox="0 0 24 24" aria-hidden="true" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg></button></div>
+					<code style="display:none"></code>
 
-<pre class="language-javascript" command-line data-output="2-17"><code class="language-javascript"><!-- HTML_TAG_START --><span class="token keyword">const</span> <span class="token literal-property property">config</span><span class="token operator">:</span> ChessboardConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
-    <span class="token literal-property property">resizible</span><span class="token operator">:</span> <span class="token boolean">true</span>
-<span class="token punctuation">}</span><span class="token punctuation">;</span><!-- HTML_TAG_END --></code></pre></div></div></div></div>
+<pre class="language-javascript" command-line data-output="2-17"><code class="language-javascript"><!-- HTML_TAG_START --><span class="token operator">&lt;</span>script lang<span class="token operator">=</span><span class="token string">"ts"</span><span class="token operator">></span>
+	<span class="token keyword">import</span> Chessboard <span class="token keyword">from</span> <span class="token string">'@powchess/chessboard'</span><span class="token punctuation">;</span>
+	<span class="token keyword">import</span> type <span class="token punctuation">{</span> ChessboardConfig <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'@powchess/chessboard/boardConfig'</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">const</span> <span class="token literal-property property">config</span><span class="token operator">:</span> ChessboardConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
+	    <span class="token literal-property property">resizible</span><span class="token operator">:</span> <span class="token boolean">true</span>
+	<span class="token punctuation">}</span><span class="token punctuation">;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">></span>
+
+<span class="token operator">&lt;</span>Chessboard <span class="token punctuation">{</span>config<span class="token punctuation">}</span> <span class="token operator">/</span><span class="token operator">></span><!-- HTML_TAG_END --></code></pre></div></div></div></div>
 </div>
 
 
-		<script type="module" data-sveltekit-hydrate="1axc2zi">
-		import { start } from "./_app/immutable/start-bf93d278.js";
+		<script type="module" data-sveltekit-hydrate="1737no">
+		import { start } from "./_app/immutable/start-a2f16fac.js";
 
 		start({
 			env: {},
@@ -150,7 +161,7 @@
 				errors: null
 			},
 			paths: {"base":"","assets":""},
-			target: document.querySelector('[data-sveltekit-hydrate="1axc2zi"]').parentNode,
+			target: document.querySelector('[data-sveltekit-hydrate="1737no"]').parentNode,
 			trailing_slash: "never"
 		});
 	</script>
