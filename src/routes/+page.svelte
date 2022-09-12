@@ -14,26 +14,76 @@
 	let chessboard: Chessboard;
 	let state = new State(config);
 	let mounted = false;
+	let tsEnabled = true;
+	let copied = false;
+	let button: HTMLButtonElement;
+	let code = '';
 
 	onMount(() => {
 		mounted = true;
 		state = chessboard.getState();
 	});
 
-	const getConfigString = (newState: State) => {
+	const getConfigString = (newState: State, ts: boolean) => {
 		const cfg = newState.getConfig();
+
+		const typescript = `\n	import type { ChessboardConfig } from '@powchess/chessboard/boardConfig';`;
 
 		if (browser && mounted) {
 			chessboard.setState(newState);
 		}
 
-		return `const config: ChessboardConfig = ${JSON.stringify(cfg, null, 4)};`.replace(/"([^"]+)":/g, '$1:');
+		let configString = JSON.stringify(cfg, null, 4)
+			.replace(/"([^"]+)":/g, '$1:')
+			.replaceAll('\n', '\n\t');
+
+		const importColor = "\n\timport { Color } from '@powchess/chessboard/enums';";
+
+		if (ts) {
+			configString = configString
+				.replaceAll('movable: 0', 'movable: Color.WHITE')
+				.replaceAll('movable: 1', 'movable: Color.BLACK')
+				.replaceAll('movable: 2', 'movable: Color.BOTH');
+		}
+
+		/* eslint-disable prefer-template */
+		/* eslint-disable no-useless-escape */
+		const resultString =
+			`<script${ts ? ' lang="ts"' : ''}>\n` +
+			`	import Chessboard from '@powchess/chessboard';` +
+			(ts ? typescript : '') +
+			((configString.includes('movable: Color.WHITE') ||
+				configString.includes('movable: Color.BLACK') ||
+				configString.includes('movable: Color.BOTH')) &&
+			ts
+				? importColor
+				: '') +
+			'\n\n' +
+			`	const config${ts ? ': ChessboardConfig' : ''} = ${configString};\n` +
+			`<\/script>\n\n` +
+			`<Chessboard {config} />`;
+
+		return resultString;
 	};
+
+	function copyToClipboard() {
+		navigator.clipboard.writeText(code);
+		copied = true;
+		setTimeout(() => {
+			copied = false;
+		}, 2000);
+		button.setAttribute('data-cooltipz-dir', 'top');
+		button.setAttribute('aria-label', 'Copied!');
+		setTimeout(() => {
+			button.removeAttribute('aria-label');
+			button.removeAttribute('data-cooltipz-dir');
+		}, 2000);
+	}
 
 	const highlightNames = ['select', 'legal', 'move', 'preMove', 'nextMove', 'check'] as const;
 	const soundsNames = ['MOVE', 'CAPTURE', 'CASTLE', 'UNDO'] as const;
 
-	$: code = getConfigString(state);
+	$: code = getConfigString(state, tsEnabled);
 </script>
 
 <svelte:head>
@@ -214,8 +264,61 @@
 			<div class="w-[var(--boardSize,40rem)]">
 				<Chessboard bind:this={chessboard} {config} />
 			</div>
-			<div class="row-start-2">
-				<div class="shadow-lg rounded">
+			<div class="row-start-2 relative">
+				<div class="shadow-lg rounded ">
+					<div class="absolute right-2 top-2 flex gap-4">
+						<button
+							on:click={() => {
+								tsEnabled = !tsEnabled;
+							}}
+							class="text-gray-500 font-mono flex text-[0.8rem] mt-1"
+						>
+							<span class={tsEnabled ? 'text-yellow-600' : ''}>ts</span>
+							<span class="text-gray-600">/</span>
+							<span class={!tsEnabled ? 'text-yellow-600' : ''}>js</span>
+						</button>
+						<button
+							type="button"
+							bind:this={button}
+							on:click={copyToClipboard}
+							class="box-border rounded-sm bg-slate-800 bg-opacity-40 text-gray-500 transition hover:text-gray-300 focus:z-10 focus:ring-1 focus:ring-blue-600 p-1"
+						>
+							{#if copied}
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5 text-green-500"
+									fill="none"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+									/>
+								</svg>
+							{:else}
+								<svg
+									style="transform: translate(1px, 0px);"
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-5"
+									fill="none"
+									viewBox="0 0 24 24"
+									aria-hidden="true"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+									/>
+								</svg>
+							{/if}
+						</button>
+					</div>
 					<Prism source={code} />
 				</div>
 			</div>
