@@ -319,7 +319,7 @@
 							{/if}
 						</button>
 					</div>
-					<Prism source={code} />
+					<Prism source={code} language="svelte" />
 				</div>
 			</div>
 		</div>
