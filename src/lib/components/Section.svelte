@@ -14,7 +14,7 @@
 		on:click={() => {
 			expanded = !expanded;
 		}}
-		class="flex justify-between px-4 py-2 transition hover:bg-slate-900/40 rounded"
+		class="flex justify-between px-4 py-2 {showExpand ? 'transition hover:bg-slate-800/40' : ''} rounded"
 		disabled={!showExpand}
 	>
 		<div class="flex gap-1">
@@ -40,7 +40,7 @@
 	</button>
 
 	{#if expanded}
-		<div class="pb-2 px-4" transition:slide|local>
+		<div class="py-2 px-4" transition:slide|local>
 			<slot />
 		</div>
 	{/if}
