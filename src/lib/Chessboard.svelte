@@ -265,7 +265,8 @@
 
 	const boardClick = (e: PointerEvent): void => {
 		if (e.button === 2) {
-			clearAllSquares();
+			clearAllSquares(SquareColor.LEGAL);
+			clearAllSquares(SquareColor.PREMOVE);
 			chessboard.state.selectable.selectedPiece = undefined;
 			return;
 		}

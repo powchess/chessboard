@@ -5,15 +5,15 @@
 	import { State } from '$lib/state/index';
 	import type { ChessboardConfig } from '$lib/boardConfig';
 	import { browser } from '$app/environment';
-	import Board from './Board.svelte';
-	import Movable from './Movable.svelte';
-	import Draggable from './Draggable.svelte';
-	import Section from './Section.svelte';
-	import Legal from './Legal.svelte';
-	import Highlight from './Highlight.svelte';
-	import DrawTools from './DrawTools.svelte';
-	import Sounds from './Sounds.svelte';
-	import CopyButton from './CopyButton.svelte';
+	import Board from '$lib/components/Board.svelte';
+	import Movable from '$lib/components/Movable.svelte';
+	import Draggable from '$lib/components/Draggable.svelte';
+	import Section from '$lib/components/Section.svelte';
+	import Legal from '$lib/components/Legal.svelte';
+	import Highlight from '$lib/components/Highlight.svelte';
+	import DrawTools from '$lib/components/DrawTools.svelte';
+	import Sounds from '$lib/components/Sounds.svelte';
+	import CopyButton from '$lib/components/CopyButton.svelte';
 
 	const config: ChessboardConfig = {
 		board: {

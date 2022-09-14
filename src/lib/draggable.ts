@@ -239,7 +239,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		nodeCentered = false;
 		node.style.removeProperty('cursor');
 		setTimeout(() => {
-			node.style.zIndex = '10';
+			node.style.zIndex = '1';
 		}, duration);
 		circle.remove();
 	}
