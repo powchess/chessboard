@@ -23,6 +23,7 @@
 	import MovableState from './state/movable';
 
 	export let config: ChessboardConfig;
+	export let className = '';
 
 	const chessboard = new Chessboard(config);
 	const dispatch = createEventDispatcher();
@@ -521,7 +522,7 @@
 	on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 	bind:this={boardDiv}
 	bind:clientWidth={chessboard.state.board.size}
-	class="noselect lg:rounded board text-xs{chessboard.state.board.shadow ? ' shadow-lg' : ''} sm:text-sm"
+	class="noselect lg:rounded board text-xs{chessboard.state.board.shadow ? ' shadow-lg' : ''} sm:text-sm {className}"
 	style="--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 >
 	<div class="noselect h-full w-full">
