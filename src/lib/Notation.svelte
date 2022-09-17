@@ -19,8 +19,9 @@
 	{#each files as file, i}
 		<span
 			data-file={file}
-			style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};"
-			class={flipped ? '' : 'text-right'}
+			style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};{flipped
+				? ' text-align: right;'
+				: ''}"
 		>
 			{flipped ? i + 1 : Math.abs(i - 8)}
 		</span>

@@ -522,10 +522,10 @@
 	on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 	bind:this={boardDiv}
 	bind:clientWidth={chessboard.state.board.size}
-	class="noselect lg:rounded board text-xs{chessboard.state.board.shadow ? ' shadow-lg' : ''} sm:text-sm {className}"
+	class="noselect board {chessboard.state.board.shadow ? ' shadow' : ''} text-sm {className}"
 	style="--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 >
-	<div class="noselect h-full w-full">
+	<div style="width: 100%; height: 100%" class="noselect">
 		{#if chessboard.state.board.startFen}
 			{#each chessboard.state.pieces as piece (piece)}
 				<Piece
@@ -614,5 +614,18 @@
 		max-width: 100%;
 		max-height: 100%;
 		background-image: var(--boardTheme);
+		font-size: 0.75rem;
+		line-height: 1rem;
+	}
+
+	.shadow {
+		box-shadow: 0 0 #0000, 0 0 #0000, 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+	}
+
+	@media (min-width: 640px) {
+		.text-sm {
+			font-size: 0.875rem;
+			line-height: 1.25rem;
+		}
 	}
 </style>

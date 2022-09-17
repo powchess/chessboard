@@ -82,7 +82,7 @@
 	on:animationEnded
 	on:moving={(e) => dispatch('moving', e.detail)}
 	style="left:{$coords.x * 12.5}%;bottom:{$coords.y * 12.5}%; z-Index: {pieceZIndex}; opacity: {ghostPiece ? 0.3 : 1};"
-	class="noselect {canMove(movable) ? 'cursor-pointer' : ''}"
+	class="noselect {canMove(movable) ? 'pointer' : ''}"
 	src={getChessPieceImage(name)}
 	alt={name}
 />

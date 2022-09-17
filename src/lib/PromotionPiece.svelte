@@ -18,9 +18,18 @@
 </script>
 
 <button on:click={makePromotion}>
-	<img
-		src={pieceSrc}
-		alt="Promotion to {piece.toUpperCase()}"
-		class="rounded-md border border-gray-300 hover:border-sky-600 hover:bg-gray-600"
-	/>
+	<img src={pieceSrc} alt="Promotion to {piece.toUpperCase()}" />
 </button>
+
+<style>
+	img {
+		border-radius: 0.375rem;
+		border-width: 1px;
+		border-color: rgb(209 213 219 / 1);
+	}
+
+	img::hover {
+		border-color: rgb(2 132 199 / 1);
+		background-color: rgb(75 85 99 / 1);
+	}
+</style>

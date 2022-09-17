@@ -22,5 +22,6 @@
 <style>
 	input {
 		color: black;
+		user-select: none;
 	}
 </style>

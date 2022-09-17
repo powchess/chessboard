@@ -14,7 +14,7 @@
 
 {#if showModal}
 	<div class="modal">
-		<div in:fly={{ x: 100, duration: 300 }} out:fly={{ x: -200, duration: 100 }} class="modal-content p-3 gap-3">
+		<div in:fly={{ x: 100, duration: 300 }} out:fly={{ x: -200, duration: 100 }} class="modal-content">
 			{#each ['q', 'r', 'b', 'n'] as piece}
 				<PromotionPiece {piece} bind:isWhite bind:showModal on:newPromotion />
 			{/each}
@@ -35,6 +35,8 @@
 	}
 
 	.modal-content {
+		padding: 0.75rem;
+		gap: 0.75rem;
 		z-index: 9999999;
 		display: flex;
 		justify-content: space-evenly;

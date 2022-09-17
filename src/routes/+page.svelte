@@ -114,7 +114,7 @@
 		</div>
 		<div class="grid grid-rows-[min-content_auto] gap-10">
 			<div class="w-[var(--boardSize,40rem)]">
-				<Chessboard bind:this={chessboard} {config} />
+				<Chessboard bind:this={chessboard} {config} className={'rounded'} />
 			</div>
 			<div class="row-start-2 relative">
 				<div class="shadow-lg rounded ">

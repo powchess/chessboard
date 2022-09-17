@@ -25,7 +25,7 @@
 	const ArrowColors = ['green', 'red', 'blue', 'orange'] as const;
 </script>
 
-<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotate({flipped ? '180deg' : '0deg'})" class="rounded" viewBox="0 0 8 8">
+<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotate({flipped ? '180deg' : '0deg'})" viewBox="0 0 8 8">
 	<defs>
 		{#each ArrowColors as color}
 			<marker
