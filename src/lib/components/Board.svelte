@@ -9,7 +9,7 @@
 	export let shadow: boolean;
 </script>
 
-<Section {name}>
+<Section {name} expanded={true}>
 	<div>
 		<select bind:value={boardTheme}>
 			{#each BoardThemes as theme}

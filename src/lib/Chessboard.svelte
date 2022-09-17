@@ -593,7 +593,7 @@
 			flipped={chessboard.state.board.flipped}
 			bind:svg={arrowsSvg}
 			{computerArrows}
-			LshapeKnightMove={chessboard.state.drawTools.settings.LshapeKnightMove}
+			knightLShape={chessboard.state.drawTools.settings.knightLShape}
 		/>
 	{/if}
 	{#if chessboard.state.legal.enabled}

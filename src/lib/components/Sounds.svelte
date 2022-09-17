@@ -4,7 +4,6 @@
 
 	export let name = 'Sounds';
 	export let enabled = false;
-
 	export let settings: SoundsState['settings'];
 
 	const soundsNames = ['MOVE', 'CAPTURE', 'CASTLE', 'UNDO'] as const;

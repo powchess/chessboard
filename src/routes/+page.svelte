@@ -9,7 +9,6 @@
 	import Movable from '$lib/components/Movable.svelte';
 	import Draggable from '$lib/components/Draggable.svelte';
 	import Section from '$lib/components/Section.svelte';
-	import Legal from '$lib/components/Legal.svelte';
 	import Highlight from '$lib/components/Highlight.svelte';
 	import DrawTools from '$lib/components/DrawTools.svelte';
 	import Sounds from '$lib/components/Sounds.svelte';
@@ -84,7 +83,7 @@
 	<link rel="stylesheet" href="prism-one-dark.css" />
 </svelte:head>
 
-<div class="mt-10 grid grid-cols-center">
+<div class="my-10 grid grid-cols-center">
 	<div class="col-start-2 gap-10 grid grid-cols-[auto_auto]">
 		<div class="col-start-1 flex flex-col gap-2 w-60 text-gray-300 text-sm">
 			<Board
@@ -102,11 +101,10 @@
 				bind:easing={state.draggable.transition.settings.easing}
 			/>
 			<Section name={'Selectable'} bind:enabled={state.selectable.enabled} showExpand={false} />
-			<Legal bind:enabled={state.legal.enabled} bind:preMovesEnabled={state.legal.preMoves.enabled} />
 			<Highlight bind:enabled={state.highlight.enabled} bind:settings={state.highlight.settings} />
 			<DrawTools
 				bind:enabled={state.drawTools.enabled}
-				bind:LshapeKnightMove={state.drawTools.settings.LshapeKnightMove}
+				bind:knightLShape={state.drawTools.settings.knightLShape}
 				bind:onlyChessMove={state.drawTools.settings.onlyChessMove}
 			/>
 			<Sounds bind:enabled={state.sounds.enabled} bind:settings={state.sounds.settings} />

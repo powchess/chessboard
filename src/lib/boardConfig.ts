@@ -85,7 +85,7 @@ export type ChessboardConfig = {
 	drawTools?:
 		| boolean
 		| {
-				LshapeKnightMove?: boolean;
+				knightLShape?: boolean;
 				onlyChessMove?: boolean;
 		  };
 

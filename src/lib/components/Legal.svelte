@@ -3,7 +3,6 @@
 
 	export let name = 'Legal';
 	export let enabled = false;
-
 	export let preMovesEnabled = false;
 </script>
 

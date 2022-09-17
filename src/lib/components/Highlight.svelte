@@ -4,7 +4,6 @@
 
 	export let name = 'Highlight';
 	export let enabled = false;
-
 	export let settings: HighlightState['settings'];
 
 	const highlightNames = ['select', 'legal', 'move', 'preMove', 'nextMove', 'check'] as const;

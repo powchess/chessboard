@@ -2,11 +2,9 @@
 	import { slide } from 'svelte/transition';
 
 	export let name = 'board';
-	// eslint-disable-next-line no-undef-init
 	export let enabled: boolean | undefined = undefined;
 	export let showExpand = true;
-
-	let expanded = false;
+	export let expanded = false;
 </script>
 
 <div class="bg-slate-900/20 rounded shadow-lg flex flex-col">

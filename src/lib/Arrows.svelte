@@ -4,7 +4,7 @@
 
 	export let flipped = false;
 	export let svg: SVGGElement;
-	export let LshapeKnightMove = false;
+	export let knightLShape = false;
 	export let computerArrows: ArrowData[] = [];
 
 	let mounted = false;
@@ -12,7 +12,7 @@
 	function redrawComputerArrows(data: ArrowData[]) {
 		if (!mounted) return;
 		removeComupterArrows(svg);
-		drawComputerArrows(svg, data, LshapeKnightMove);
+		drawComputerArrows(svg, data, knightLShape);
 	}
 
 	$: redrawComputerArrows(computerArrows);

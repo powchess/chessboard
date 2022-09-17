@@ -5,7 +5,6 @@
 
 	export let name = 'Draggable';
 	export let enabled = false;
-
 	export let ghostPiece = false;
 	export let transition = false;
 	export let duration = 120;

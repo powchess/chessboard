@@ -5,7 +5,7 @@ type Props = {
 	flipped: boolean;
 	enabled: boolean;
 	settings: {
-		LshapeKnightMove: boolean;
+		knightLShape: boolean;
 		onlyChessMove: boolean;
 	};
 };
@@ -50,14 +50,14 @@ function changeExistArrow(
 	arrow: SVGPolylineElement,
 	startSquare: SqXY,
 	endSquare: SqXY,
-	LshapeKnightMove?: boolean,
+	knightLShape?: boolean,
 	color?: string,
 	opacity?: number
 ) {
 	let midPoint: SqXY = { x: -1, y: -1 };
 	let end: SqXY;
 	let angle;
-	if (isKnightMove(startSquare, endSquare) && LshapeKnightMove) {
+	if (isKnightMove(startSquare, endSquare) && knightLShape) {
 		if (Math.abs(endSquare.x - startSquare.x) === 2) midPoint = { x: endSquare.x, y: startSquare.y };
 		else midPoint = { x: startSquare.x, y: endSquare.y };
 
@@ -84,7 +84,7 @@ function changeExistArrow(
 	arrow.setAttribute(
 		'points',
 		`${start.x + 0.5},${start.y + 0.5} ${
-			midPoint.x !== -1 && midPoint.y !== -1 && LshapeKnightMove ? `${midPoint.x + 0.5},${midPoint.y + 0.5} ` : ''
+			midPoint.x !== -1 && midPoint.y !== -1 && knightLShape ? `${midPoint.x + 0.5},${midPoint.y + 0.5} ` : ''
 		}${end.x + 0.5},${end.y + 0.5}`
 	);
 	arrow.setAttribute('data-sqID', `${getChessMove(startSquare, endSquare)}`);
@@ -137,9 +137,9 @@ function changeColor(
 	}
 }
 
-function createArrow(startSquare: SqXY, endSquare: SqXY, LshapeKnightMove?: boolean, color?: string, opacity?: number) {
+function createArrow(startSquare: SqXY, endSquare: SqXY, knightLShape?: boolean, color?: string, opacity?: number) {
 	const drawingSVG = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-	changeExistArrow(drawingSVG, startSquare, endSquare, LshapeKnightMove, color, opacity);
+	changeExistArrow(drawingSVG, startSquare, endSquare, knightLShape, color, opacity);
 
 	drawingSVG.setAttribute('fill', 'none');
 	drawingSVG.setAttribute('stroke-width', '0.25');
@@ -151,12 +151,12 @@ function createArrow(startSquare: SqXY, endSquare: SqXY, LshapeKnightMove?: bool
 	return drawingSVG;
 }
 
-export function drawComputerArrows(svg: SVGGElement, data: ArrowData[], LshapeKnightMove?: boolean): void {
+export function drawComputerArrows(svg: SVGGElement, data: ArrowData[], knightLShape?: boolean): void {
 	data.forEach((element) => {
 		const arrow = createArrow(
 			squareToSQXY(element.move.substring(0, 2)),
 			squareToSQXY(element.move.substring(2, 4)),
-			LshapeKnightMove,
+			knightLShape,
 			element.color,
 			element.opacity
 		);
@@ -242,11 +242,11 @@ export default function drawArrows(node: HTMLDivElement, params: Props) {
 				}
 			});
 			if (drawingSVG instanceof SVGCircleElement) {
-				drawingSVG = createArrow(startSquare, endSquare, settings.LshapeKnightMove);
+				drawingSVG = createArrow(startSquare, endSquare, settings.knightLShape);
 				changeColor(svg, drawingSVG, startSquare, e.shiftKey, e.ctrlKey, e.altKey);
 				svg.appendChild(drawingSVG);
 			} else if (drawingSVG instanceof SVGPolylineElement) {
-				changeExistArrow(drawingSVG, startSquare, endSquare, settings.LshapeKnightMove);
+				changeExistArrow(drawingSVG, startSquare, endSquare, settings.knightLShape);
 			}
 		}
 	}

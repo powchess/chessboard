@@ -18,7 +18,8 @@ module.exports = {
 				'import/newline-after-import': 'error',
 				'@typescript-eslint/no-unused-expressions': 'off',
 				'no-sequences': 'off',
-				'no-self-assign': 'off'
+				'no-self-assign': 'off',
+				'no-undef-init': 'off'
 			}
 		}
 	],
