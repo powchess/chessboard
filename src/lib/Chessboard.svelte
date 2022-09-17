@@ -130,6 +130,7 @@
 		if (chessboard.state.callbacks.getPreMoves && !canMove() && chessboard.state.legal.preMoves.enabled)
 			chessboard.state.legal.preMoves.moves = chessboard.state.callbacks.getPreMoves();
 		else chessboard.state.legal.preMoves.moves.length = 0;
+
 		if (chessboard.state.callbacks.getLegalMoves && canMove()) chessboard.state.legal.moves = chessboard.state.callbacks.getLegalMoves();
 		else chessboard.state.legal.moves.length = 0;
 
@@ -534,6 +535,7 @@
 					duration={chessboard.state.draggable.transition.settings.duration}
 					easing={chessboard.state.draggable.transition.settings.easing}
 					legal={chessboard.state.legal.enabled}
+					preMoves={chessboard.state.legal.preMoves.enabled}
 					whiteToMove={chessboard.state.legal.whiteToMove}
 					movable={chessboard.state.movable}
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}

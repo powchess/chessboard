@@ -14,6 +14,7 @@
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
 	export let legal: boolean;
+	export let preMoves = false;
 	export let whiteToMove = false;
 	export let movable: MovableState;
 	export let ghostPiece = false;
@@ -50,6 +51,7 @@
 		if (!_movable.enabled) return false;
 
 		if (legal) {
+			if (preMoves) return true;
 			if (_movable.color === Color.WHITE && whiteToMove && getColorFromString(name) === Color.WHITE) return true;
 			if (_movable.color === Color.BLACK && !whiteToMove && getColorFromString(name) === Color.BLACK) return true;
 			if (_movable.color === Color.BOTH) {
