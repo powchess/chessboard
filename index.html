@@ -5,14 +5,14 @@
 		<link rel="icon" href="./favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="content-security-policy" content=""><title>Chessboard • PowChess.com</title><link rel="stylesheet" href="prism-one-dark.css" data-svelte="svelte-tebjht">
-	<link href="./_app/immutable/assets/_layout-d65b23d0.css" rel="stylesheet">
+	<link href="./_app/immutable/assets/_layout-1602f517.css" rel="stylesheet">
 	<link href="./_app/immutable/assets/_page-e563f93a.css" rel="stylesheet">
-	<link rel="modulepreload" href="./_app/immutable/start-7bc843bf.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/index-fbdf9990.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-2ea4f3be.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/index-96162ab3.js">
-	<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-4128c9bf.js">
-	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-665540a0.js">
+	<link rel="modulepreload" href="./_app/immutable/start-65d3bc56.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/index-18bffe9d.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-4aa5d315.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/index-c2b86799.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-5c9d215e.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-cfb22eec.js">
 	</head>
 	<body>
 		<div>
@@ -20,11 +20,21 @@
 
 
 
-<div class="mt-10 grid grid-cols-center"><div class="col-start-2 gap-10 grid grid-cols-[auto_auto]"><div class="col-start-1 flex flex-col gap-2 w-60 text-gray-300 text-sm"><div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1">
+<div class="my-10 grid grid-cols-center"><div class="col-start-2 gap-10 grid grid-cols-[auto_auto]"><div class="col-start-1 flex flex-col gap-2 w-60 text-gray-300 text-sm"><div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1">
 			<span class="ml-[21px]">Board</span></div>
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-180"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
-	</div>
+	<div class="py-2 px-4"><div><select class="svelte-1q80l21"><option value="standard">standard</option><option value="darkBlue">darkBlue</option></select>
+		<label for="boardTheme" class="select-none">board theme</label></div>
+
+	<div><input id="notation" type="checkbox" class="svelte-1q80l21" checked>
+		<label for="notation" class="select-none">notation</label></div>
+
+	<div><input id="flipped" type="checkbox" class="svelte-1q80l21">
+		<label for="flipped" class="select-none">flipped</label></div>
+
+	<div><input id="shadow" type="checkbox" class="svelte-1q80l21" checked>
+		<label for="shadow" class="select-none">shadow</label></div></div></div>
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
 			<span class="">Movable</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
@@ -38,11 +48,6 @@
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2  rounded" disabled><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
 			<span class="">Selectable</span></div>
 		</button>
-
-	</div>
-			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1">
-			<span class="">Legal</span></div>
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
 	</div>
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
@@ -121,8 +126,8 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Chessboard</span> <span class="token language-javascript"><span class="token punctuation">{</span>config<span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><!-- HTML_TAG_END --></code></pre></div></div></div></div></div>
 
 
-		<script type="module" data-sveltekit-hydrate="1mwwlyd">
-		import { start } from "./_app/immutable/start-7bc843bf.js";
+		<script type="module" data-sveltekit-hydrate="152ijvm">
+		import { start } from "./_app/immutable/start-65d3bc56.js";
 
 		start({
 			env: {},
@@ -133,10 +138,10 @@
 				params: {},
 				routeId: "",
 				data: (function(a,b){return [{type:"data",data:b,uses:{dependencies:a,params:a,parent:a,url:a}},b]}(void 0,null)),
-				errors: null
+				form: null
 			},
 			paths: {"base":"","assets":""},
-			target: document.querySelector('[data-sveltekit-hydrate="1mwwlyd"]').parentNode,
+			target: document.querySelector('[data-sveltekit-hydrate="152ijvm"]').parentNode,
 			trailing_slash: "never"
 		});
 	</script>
