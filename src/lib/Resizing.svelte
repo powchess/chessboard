@@ -32,7 +32,7 @@
 		transform: translate(50%, 50%);
 		width: 3.125%;
 		height: 3.125%;
-		z-index: 3;
+		z-index: 4;
 		cursor: nwse-resize;
 	}
 

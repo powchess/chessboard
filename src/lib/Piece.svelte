@@ -66,7 +66,7 @@
 	};
 
 	$: flipped, reRenderPieces(square);
-	$: pieceZIndex = typeof movable === 'boolean' ? (movable ? 1 : 0) : movable.enabled ? 1 : 0;
+	$: pieceZIndex = typeof movable === 'boolean' ? (movable ? 2 : 1) : movable.enabled ? 2 : 1;
 </script>
 
 <img
