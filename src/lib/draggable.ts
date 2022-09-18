@@ -218,7 +218,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
 		const targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
 
-		if (targetSquare && targetSquare !== startSquare) {
+		if (targetSquare) {
 			node.dispatchEvent(
 				new CustomEvent('dropped', {
 					detail: targetSquare

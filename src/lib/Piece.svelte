@@ -16,10 +16,14 @@
 	export let legal: boolean;
 	export let preMoves = false;
 	export let whiteToMove = false;
-	export let movable: MovableState;
+	export let movableState: MovableState;
 	export let ghostPiece = false;
 	export let easing: EasingFuncs = 'cubicInOut';
 	export let duration = 120;
+
+	export let piecesWasDeselected = false;
+	let selected = false;
+	$: if (piecesWasDeselected) selected = false;
 
 	const dispatch = createEventDispatcher();
 	let curDuration = duration;
@@ -43,36 +47,41 @@
 
 	const dropped = (e: CustomEvent) => {
 		curDuration = 0;
-		dispatch('endDragging', e.detail);
-		dispatch('move', square + e.detail);
+		if (square === e.detail) {
+			if (!selected) dispatch('select');
+			else dispatch('deselect');
+			selected = !selected;
+		} else selected = false;
+		dispatch('endDragging', square + e.detail);
+		if (square !== e.detail) dispatch('move', square + e.detail);
 	};
 
-	const canMove = (_movable: MovableState) => {
-		if (!_movable.enabled) return false;
+	const canMove = (movable: MovableState) => {
+		if (!movable.enabled) return false;
 
 		if (legal) {
-			if (preMoves) return true;
-			if (_movable.color === Color.WHITE && whiteToMove && getColorFromString(name) === Color.WHITE) return true;
-			if (_movable.color === Color.BLACK && !whiteToMove && getColorFromString(name) === Color.BLACK) return true;
-			if (_movable.color === Color.BOTH) {
+			if (preMoves && getColorFromString(name) === movable.color) return true;
+			if (movable.color === Color.WHITE && whiteToMove && getColorFromString(name) === Color.WHITE) return true;
+			if (movable.color === Color.BLACK && !whiteToMove && getColorFromString(name) === Color.BLACK) return true;
+			if (movable.color === Color.BOTH) {
 				if (getColorFromString(name) === Color.WHITE && whiteToMove) return true;
 				if (getColorFromString(name) === Color.BLACK && !whiteToMove) return true;
 			}
 			return false;
 		}
 
-		if (_movable.color === getColorFromString(name) || _movable.color === Color.BOTH) return true;
+		if (movable.color === getColorFromString(name) || movable.color === Color.BOTH) return true;
 		return false;
 	};
 
 	$: flipped, reRenderPieces(square);
-	$: pieceZIndex = typeof movable === 'boolean' ? (movable ? 2 : 1) : movable.enabled ? 2 : 1;
+	$: pieceZIndex = typeof movableState === 'boolean' ? (movableState ? 2 : 1) : movableState.enabled ? 2 : 1;
 </script>
 
 <img
 	use:drag={{
 		startSquare: square,
-		onlyShow: !canMove(movable),
+		onlyShow: !canMove(movableState),
 		boardFlipped: flipped,
 		duration,
 		easingFunc: easingFuncs[easing],
@@ -84,7 +93,7 @@
 	on:animationEnded
 	on:moving={(e) => dispatch('moving', e.detail)}
 	style="left:{$coords.x * 12.5}%;bottom:{$coords.y * 12.5}%; z-Index: {pieceZIndex}; opacity: {ghostPiece ? 0.3 : 1};"
-	class="noselect {canMove(movable) ? 'pointer' : ''}"
+	class="noselect {canMove(movableState) ? 'pointer' : ''}"
 	src={getChessPieceImage(name)}
 	alt={name}
 />

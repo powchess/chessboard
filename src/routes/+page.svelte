@@ -13,10 +13,24 @@
 	import DrawTools from '$lib/components/DrawTools.svelte';
 	import Sounds from '$lib/components/Sounds.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
+	import { Color } from '$lib/enums';
+	import Legal from '$lib/components/Legal.svelte';
 
 	const config: ChessboardConfig = {
+		movable: Color.WHITE,
 		board: {
 			shadow: true
+		},
+		legal: {
+			preMoves: true
+		},
+		callbacks: {
+			getLegalMoves: () => ['e2e4', 'd2d4'],
+			getPreMoves: () => ['d7d5', 'e7e5']
+		},
+		highlight: {
+			preMove: true,
+			nextMove: true
 		},
 		resizible: true
 	};
@@ -41,9 +55,25 @@
 			chessboard.setState(newState);
 		}
 
-		let configString = JSON.stringify(cfg, null, 4)
+		// eslint-disable-next-line prefer-const
+		let callbackStrings: string[] = [];
+
+		let configString = JSON.stringify(
+			cfg,
+			(_key, value) => {
+				if (typeof value === 'function') {
+					callbackStrings.push(value.toString());
+
+					return `{function_${callbackStrings.length - 1}}`;
+				}
+
+				return value;
+			},
+			4
+		)
 			.replace(/"([^"]+)":/g, '$1:')
-			.replaceAll('\n', '\n\t');
+			.replaceAll('\n', '\n\t')
+			.replace(/"\{function_(\d+)\}"/g, (_match, id) => callbackStrings[id]);
 
 		const importColor = "\n\timport { Color } from '@powchess/chessboard/enums';";
 
@@ -101,6 +131,7 @@
 				bind:easing={state.draggable.transition.settings.easing}
 			/>
 			<Section name={'Selectable'} bind:enabled={state.selectable.enabled} showExpand={false} />
+			<Legal bind:enabled={state.legal.enabled} bind:preMovesEnabled={state.legal.preMoves.enabled} />
 			<Highlight bind:enabled={state.highlight.enabled} bind:settings={state.highlight.settings} />
 			<DrawTools
 				bind:enabled={state.drawTools.enabled}

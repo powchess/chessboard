@@ -17,7 +17,7 @@
 	>
 		<div class="flex gap-1">
 			{#if enabled !== undefined}
-				<input type="checkbox" bind:checked={enabled} class="mr-1" />
+				<input on:click|stopPropagation type="checkbox" bind:checked={enabled} class="mr-1" />
 			{/if}
 			<span class={enabled === undefined ? 'ml-[21px]' : ''}>{name}</span>
 		</div>
