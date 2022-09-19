@@ -31,7 +31,7 @@ function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boole
 	svg.setAttribute('height', (node.offsetHeight * newScale).toString());
 	svg.style.position = 'absolute';
 	svg.style.zIndex = '100';
-	svg.style.transform = `translate(${boardFlipped ? '' : '-'}${(25 * newScale) / 2}%, -${(25 * newScale) / 2}%)`;
+	svg.style.translate = `${boardFlipped ? '' : '-'}${(25 * newScale) / 2}%, -${(25 * newScale) / 2}%`;
 	svg.style.opacity = '0.2';
 	circle.setAttribute('r', ((node.offsetWidth * newScale) / 2).toString());
 	circle.setAttribute('cx', ((node.offsetWidth * newScale) / 2).toString());
@@ -97,6 +97,8 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 
 	let { startSquare, boardFlipped, onlyShow, duration, easingFunc } = params;
 	const { coords } = params;
+
+	node.style.cursor = onlyShow ? 'default' : 'pointer';
 
 	let startX = get(coords).x;
 	let startY = get(coords).y;
@@ -235,9 +237,9 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		y = 0;
 		globalDX = 0;
 		globalDY = 0;
+		node.style.cursor = onlyShow ? 'default' : 'pointer';
 
 		nodeCentered = false;
-		node.style.removeProperty('cursor');
 		setTimeout(() => {
 			node.style.zIndex = '1';
 		}, duration);
@@ -317,9 +319,11 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 				if (onlyShow) {
 					node.removeEventListener('mousedown', mousedown);
 					node.removeEventListener('touchstart', mousedown);
+					node.style.cursor = 'default';
 				} else {
 					node.addEventListener('mousedown', mousedown);
 					node.addEventListener('touchstart', mousedown);
+					node.style.cursor = 'pointer';
 				}
 			}
 

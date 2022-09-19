@@ -91,9 +91,15 @@
 	on:clicked
 	on:startMoving
 	on:animationEnded
-	on:moving={(e) => dispatch('moving', e.detail)}
-	style="left:{$coords.x * 12.5}%;bottom:{$coords.y * 12.5}%; z-Index: {pieceZIndex}; opacity: {ghostPiece ? 0.3 : 1};"
-	class="noselect {canMove(movableState) ? 'pointer' : ''}"
+	on:moving={(e) => {
+		dispatch('moving', e.detail);
+	}}
+	style="left:{$coords.x * 12.5}%; 
+		bottom:{$coords.y * 12.5}%; 
+		z-Index: {pieceZIndex}; 
+		opacity: {ghostPiece ? 0.3 : 1}; 
+		cursor: pointer;"
+	class="noselect"
 	src={getChessPieceImage(name)}
 	alt={name}
 />
@@ -103,9 +109,5 @@
 		position: absolute;
 		aspect-ratio: 1;
 		width: 12.5%;
-	}
-
-	.pointer {
-		cursor: pointer;
 	}
 </style>
