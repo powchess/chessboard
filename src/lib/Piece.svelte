@@ -104,4 +104,8 @@
 		aspect-ratio: 1;
 		width: 12.5%;
 	}
+
+	.pointer {
+		cursor: pointer;
+	}
 </style>
