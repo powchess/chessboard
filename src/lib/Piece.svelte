@@ -94,8 +94,9 @@
 	on:moving={(e) => {
 		dispatch('moving', e.detail);
 	}}
-	style="left:{$coords.x * 12.5}%; 
-		bottom:{$coords.y * 12.5}%; 
+	style="left: {$coords.x * 12.5}%; 
+		bottom: {$coords.y * 12.5}%; 
+		scale: {$coords.scale};
 		z-Index: {pieceZIndex}; 
 		opacity: {ghostPiece ? 0.3 : 1}; 
 		cursor: pointer;"
