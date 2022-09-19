@@ -21,13 +21,7 @@
 		board: {
 			shadow: true
 		},
-		legal: {
-			preMoves: true
-		},
-		callbacks: {
-			getLegalMoves: () => ['e2e4', 'd2d4'],
-			getPreMoves: () => ['d7d5', 'e7e5']
-		},
+		legal: false,
 		highlight: {
 			preMove: true,
 			nextMove: true
@@ -114,8 +108,8 @@
 </svelte:head>
 
 <div class="my-10 grid grid-cols-center">
-	<div class="col-start-2 gap-10 grid grid-cols-[auto_auto]">
-		<div class="col-start-1 flex flex-col gap-2 w-60 text-gray-300 text-sm">
+	<div class="lg:col-start-2 gap-10 grid lg:grid-cols-[auto_auto]">
+		<div class="flex flex-col gap-2 mx-auto w-60 text-gray-300 text-sm">
 			<Board
 				bind:boardTheme={state.board.boardTheme}
 				bind:notation={state.board.notation}
@@ -142,7 +136,7 @@
 			<Section name={'Resizible'} bind:enabled={state.resizible.enabled} showExpand={false} />
 		</div>
 		<div class="grid grid-rows-[min-content_auto] gap-10">
-			<div class="w-[var(--boardSize,40rem)]">
+			<div class="w-full lg:w-[var(--boardSize,40rem)]">
 				<Chessboard bind:this={chessboard} {config} className={'rounded'} />
 			</div>
 			<div class="row-start-2 relative">
