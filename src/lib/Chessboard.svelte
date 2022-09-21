@@ -326,12 +326,8 @@
 				chessboard.state.legal.preMoves.moves.includes(chessboard.state.selectable.selectedPiece.square + square)
 			) {
 				makeNextMove(chessboard.state.selectable.selectedPiece.square + square);
-			} else {
-				clearAllSquares(SquareColor.LEGAL);
-				clearAllSquares(SquareColor.PREMOVE);
-				clearAllSquares(SquareColor.SELECT);
 			}
-			chessboard.state.selectable.selectedPiece = undefined;
+			deselect();
 			return;
 		}
 

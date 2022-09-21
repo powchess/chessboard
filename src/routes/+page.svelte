@@ -21,7 +21,13 @@
 		board: {
 			shadow: true
 		},
-		legal: false,
+		legal: {
+			preMoves: true
+		},
+		callbacks: {
+			getLegalMoves: () => ['e2d8q', 'd2d4'],
+			getPreMoves: () => ['d7d5', 'e7e5']
+		},
 		highlight: {
 			preMove: true,
 			nextMove: true

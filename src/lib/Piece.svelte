@@ -47,13 +47,14 @@
 
 	const dropped = (e: CustomEvent) => {
 		curDuration = 0;
+		if (!e.detail) dispatch('deselect');
 		if (square === e.detail) {
 			if (!selected) dispatch('select');
 			else dispatch('deselect');
 			selected = !selected;
 		} else selected = false;
 		dispatch('endDragging', square + e.detail);
-		if (square !== e.detail) dispatch('move', square + e.detail);
+		if (square !== e.detail && e.detail) dispatch('move', square + e.detail);
 	};
 
 	const canMove = (movable: MovableState) => {
