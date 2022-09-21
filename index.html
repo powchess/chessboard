@@ -7,12 +7,12 @@
 		<meta http-equiv="content-security-policy" content=""><title>Chessboard • PowChess.com</title><link rel="stylesheet" href="prism-one-dark.css" data-svelte="svelte-tebjht">
 	<link href="./_app/immutable/assets/_layout-9974758f.css" rel="stylesheet">
 	<link href="./_app/immutable/assets/_page-f4a6db4a.css" rel="stylesheet">
-	<link rel="modulepreload" href="./_app/immutable/start-172626d5.js">
+	<link rel="modulepreload" href="./_app/immutable/start-c9083f3f.js">
 	<link rel="modulepreload" href="./_app/immutable/chunks/index-18bffe9d.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-ec414489.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-778c558f.js">
 	<link rel="modulepreload" href="./_app/immutable/chunks/index-c2b86799.js">
 	<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-5c9d215e.js">
-	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-44151a68.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-7d60f49c.js">
 	</head>
 	<body>
 		<div>
@@ -37,9 +37,9 @@
 		<label for="shadow" class="select-none">shadow</label></div></div></div>
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
 			<span class="">Movable</span></div>
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-180"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
-	</div>
+	<div class="py-2 px-4"><div><select class="svelte-1jggghe"><option value="2">Both</option><option value="0">White</option><option value="1">Black</option></select></div></div></div>
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
 			<span class="">Draggable</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
@@ -50,7 +50,7 @@
 		</button>
 
 	</div>
-			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
+			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1">
 			<span class="">Legal</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
@@ -126,13 +126,6 @@
 	        <span class="token literal-property property">shadow</span><span class="token operator">:</span> <span class="token boolean">true</span>
 	    <span class="token punctuation">}</span><span class="token punctuation">,</span>
 	    <span class="token literal-property property">movable</span><span class="token operator">:</span> Color<span class="token punctuation">.</span><span class="token constant">WHITE</span><span class="token punctuation">,</span>
-	    <span class="token literal-property property">legal</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-	        <span class="token literal-property property">preMoves</span><span class="token operator">:</span> <span class="token boolean">true</span>
-	    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-	    <span class="token literal-property property">highlight</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-	        <span class="token literal-property property">preMove</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
-	        <span class="token literal-property property">nextMove</span><span class="token operator">:</span> <span class="token boolean">true</span>
-	    <span class="token punctuation">}</span><span class="token punctuation">,</span>
 	    <span class="token literal-property property">resizible</span><span class="token operator">:</span> <span class="token boolean">true</span>
 	<span class="token punctuation">}</span><span class="token punctuation">;</span>
 </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
@@ -140,8 +133,8 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Chessboard</span> <span class="token language-javascript"><span class="token punctuation">{</span>config<span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><!-- HTML_TAG_END --></code></pre></div></div></div></div></div>
 
 
-		<script type="module" data-sveltekit-hydrate="nouw68">
-		import { start } from "./_app/immutable/start-172626d5.js";
+		<script type="module" data-sveltekit-hydrate="19wqt5r">
+		import { start } from "./_app/immutable/start-c9083f3f.js";
 
 		start({
 			env: {},
@@ -155,7 +148,7 @@
 				form: null
 			},
 			paths: {"base":"","assets":""},
-			target: document.querySelector('[data-sveltekit-hydrate="nouw68"]').parentNode,
+			target: document.querySelector('[data-sveltekit-hydrate="19wqt5r"]').parentNode,
 			trailing_slash: "never"
 		});
 	</script>
