@@ -21,17 +21,6 @@
 		board: {
 			shadow: true
 		},
-		legal: {
-			preMoves: true
-		},
-		callbacks: {
-			getLegalMoves: () => ['e2d8q', 'd2d4'],
-			getPreMoves: () => ['d7d5', 'e7e5']
-		},
-		highlight: {
-			preMove: true,
-			nextMove: true
-		},
 		resizible: true
 	};
 
@@ -121,8 +110,9 @@
 				bind:notation={state.board.notation}
 				bind:flipped={state.board.flipped}
 				bind:shadow={state.board.shadow}
+				expanded={true}
 			/>
-			<Movable bind:enabled={state.movable.enabled} bind:color={state.movable.color} />
+			<Movable bind:enabled={state.movable.enabled} bind:color={state.movable.color} expanded={true} />
 			<Draggable
 				bind:enabled={state.draggable.enabled}
 				bind:ghostPiece={state.draggable.ghostPiece.enabled}

@@ -8,6 +8,7 @@
 	import { Color } from './enums';
 	import type { EasingFuncs } from './boardConfig';
 	import type MovableState from './state/movable';
+	import type { Piece } from './state';
 
 	export let square: string;
 	export let name: ChessPiece;
@@ -21,9 +22,8 @@
 	export let easing: EasingFuncs = 'cubicInOut';
 	export let duration = 120;
 
-	export let piecesWasDeselected = false;
+	export let selectedPiece: Piece | undefined = undefined;
 	let selected = false;
-	$: if (piecesWasDeselected) selected = false;
 
 	const dispatch = createEventDispatcher();
 	let curDuration = duration;
@@ -75,6 +75,9 @@
 		return false;
 	};
 
+	const curPieceWasDeselected = (piece: Piece | undefined) => piece === undefined || piece.name !== name || piece.square !== square;
+
+	$: if (curPieceWasDeselected(selectedPiece)) selected = false;
 	$: flipped, reRenderPieces(square);
 	$: pieceZIndex = typeof movableState === 'boolean' ? (movableState ? 2 : 1) : movableState.enabled ? 2 : 1;
 </script>

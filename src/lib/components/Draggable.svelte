@@ -9,9 +9,11 @@
 	export let transition = false;
 	export let duration = 120;
 	export let easing = 'easeInOut';
+
+	export let expanded = false;
 </script>
 
-<Section {name} bind:enabled>
+<Section {name} bind:enabled {expanded}>
 	<div>
 		<input id="ghostPiece" type="checkbox" bind:checked={ghostPiece} />
 		<label for="ghostPiece" class="select-none">ghost piece</label>

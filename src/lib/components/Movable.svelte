@@ -5,9 +5,11 @@
 	export let name = 'Movable';
 	export let enabled = false;
 	export let color: Color;
+
+	export let expanded = false;
 </script>
 
-<Section {name} bind:enabled>
+<Section {name} bind:enabled {expanded}>
 	<div>
 		<select bind:value={color}>
 			<option value={Color.BOTH}>Both</option>

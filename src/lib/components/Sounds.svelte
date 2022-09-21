@@ -7,9 +7,11 @@
 	export let settings: SoundsState['settings'];
 
 	const soundsNames = ['MOVE', 'CAPTURE', 'CASTLE', 'UNDO'] as const;
+
+	export let expanded = false;
 </script>
 
-<Section {name} bind:enabled>
+<Section {name} bind:enabled {expanded}>
 	{#each soundsNames as sound}
 		<div>
 			<input id="{sound}Enabled" type="checkbox" bind:checked={settings[sound]} />

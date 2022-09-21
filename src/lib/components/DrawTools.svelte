@@ -5,9 +5,11 @@
 	export let enabled = false;
 	export let knightLShape = false;
 	export let onlyChessMove = false;
+
+	export let expanded = false;
 </script>
 
-<Section {name} bind:enabled>
+<Section {name} bind:enabled {expanded}>
 	<div>
 		<input id="knightLShapeMoveEnabled" type="checkbox" bind:checked={knightLShape} />
 		<label for="knightLShapeMoveEnabled" class="select-none">L shape knight move</label>

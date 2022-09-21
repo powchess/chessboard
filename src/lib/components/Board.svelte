@@ -7,9 +7,11 @@
 	export let notation: boolean;
 	export let flipped: boolean;
 	export let shadow: boolean;
+
+	export let expanded = false;
 </script>
 
-<Section {name} expanded={true}>
+<Section {name} {expanded}>
 	<div>
 		<select bind:value={boardTheme}>
 			{#each BoardThemes as theme}

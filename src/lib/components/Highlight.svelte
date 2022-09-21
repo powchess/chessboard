@@ -7,9 +7,11 @@
 	export let settings: HighlightState['settings'];
 
 	const highlightNames = ['select', 'legal', 'move', 'preMove', 'nextMove', 'check'] as const;
+
+	export let expanded = false;
 </script>
 
-<Section {name} bind:enabled>
+<Section {name} bind:enabled {expanded}>
 	{#each highlightNames as highlight}
 		<div>
 			<input id="{highlight}Enabled" type="checkbox" bind:checked={settings[highlight]} />
