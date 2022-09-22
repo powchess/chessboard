@@ -10,18 +10,12 @@
 </script>
 
 <Section {name} bind:enabled {expanded}>
-	<div>
+	<div class="mb-2">
 		<input id="knightLShapeMoveEnabled" type="checkbox" bind:checked={knightLShape} />
 		<label for="knightLShapeMoveEnabled" class="select-none">L shape knight move</label>
 	</div>
-	<div>
+	<div class="mb-2">
 		<input id="onlyChessMoveEnabled" type="checkbox" bind:checked={onlyChessMove} />
 		<label for="onlyChessMoveEnabled" class="select-none">only chess move</label>
 	</div>
 </Section>
-
-<style>
-	input {
-		color: black;
-	}
-</style>

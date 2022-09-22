@@ -8,7 +8,6 @@ import LegalState from './legal';
 import HighlightState from './highlight';
 import DrawToolsState from './drawTools';
 import SoundsState from './sounds';
-import ResizibleState from './resizible';
 import type { SquareColor } from '$lib/enums';
 import Callbacks from './callbacks';
 
@@ -46,8 +45,6 @@ export class State {
 
 	public sounds: SoundsState;
 
-	public resizible: ResizibleState;
-
 	constructor(cfg?: ChessboardConfig) {
 		this.pieces = [];
 		this.markedSquares = new Set();
@@ -63,7 +60,6 @@ export class State {
 		this.highlight = new HighlightState(cfg?.highlight);
 		this.drawTools = new DrawToolsState(cfg?.drawTools);
 		this.sounds = new SoundsState(cfg?.sounds);
-		this.resizible = new ResizibleState(cfg?.resizible);
 	}
 
 	public setConfigSettings(cfg: ChessboardConfig) {
@@ -76,7 +72,6 @@ export class State {
 		this.highlight.setConfigSettings(cfg.highlight);
 		this.drawTools.setConfigSettings(cfg.drawTools);
 		this.sounds.setConfigSettings(cfg.sounds);
-		this.resizible.setConfigSettings(cfg.resizible);
 	}
 
 	public getConfig = (): ChessboardConfig => ({
@@ -88,7 +83,6 @@ export class State {
 		// callbacks: this.callbacks.getConfig(),
 		highlight: this.highlight.getConfig(),
 		drawTools: this.drawTools.getConfig(),
-		sounds: this.sounds.getConfig(),
-		resizible: this.resizible.getConfig()
+		sounds: this.sounds.getConfig()
 	});
 }

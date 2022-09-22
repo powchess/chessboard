@@ -19,9 +19,12 @@
 	const config: ChessboardConfig = {
 		movable: Color.WHITE,
 		board: {
-			shadow: true
-		},
-		resizible: true
+			style: {
+				shadow: true,
+				borderRadius: '0.25rem'
+			},
+			resizible: true
+		}
 	};
 
 	let chessboard: Chessboard;
@@ -109,7 +112,11 @@
 				bind:boardTheme={state.board.boardTheme}
 				bind:notation={state.board.notation}
 				bind:flipped={state.board.flipped}
-				bind:shadow={state.board.shadow}
+				bind:shadow={state.board.style.shadow}
+				bind:borderRadius={state.board.style.borderRadius}
+				bind:resizible={state.board.resizible.enabled}
+				bind:min={state.board.resizible.min}
+				bind:max={state.board.resizible.max}
 				expanded={true}
 			/>
 			<Movable bind:enabled={state.movable.enabled} bind:color={state.movable.color} expanded={true} />
@@ -129,11 +136,11 @@
 				bind:onlyChessMove={state.drawTools.settings.onlyChessMove}
 			/>
 			<Sounds bind:enabled={state.sounds.enabled} bind:settings={state.sounds.settings} />
-			<Section name={'Resizible'} bind:enabled={state.resizible.enabled} showExpand={false} />
+			<Section name={'Resizible'} bind:enabled={state.board.resizible.enabled} showExpand={false} />
 		</div>
 		<div class="grid grid-rows-[min-content_auto] gap-10">
 			<div class="w-full lg:w-[var(--boardSize,40rem)]">
-				<Chessboard bind:this={chessboard} {config} className={'rounded'} />
+				<Chessboard bind:this={chessboard} {config} />
 			</div>
 			<div class="row-start-2 relative">
 				<div class="shadow-lg rounded ">

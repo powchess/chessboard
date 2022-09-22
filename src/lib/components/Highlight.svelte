@@ -13,15 +13,9 @@
 
 <Section {name} bind:enabled {expanded}>
 	{#each highlightNames as highlight}
-		<div>
+		<div class="mb-2">
 			<input id="{highlight}Enabled" type="checkbox" bind:checked={settings[highlight]} />
 			<label for="{highlight}Enabled" class="select-none">{highlight}</label>
 		</div>
 	{/each}
 </Section>
-
-<style>
-	input {
-		color: black;
-	}
-</style>

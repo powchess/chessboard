@@ -10,8 +10,8 @@
 <div
 	on:pointerdown|stopPropagation
 	use:resizing={{
-		minWidth: chessboard.state.resizible.settings.min,
-		maxWidth: chessboard.state.resizible.settings.max,
+		minWidth: chessboard.state.board.resizible.min,
+		maxWidth: chessboard.state.board.resizible.max,
 		curWidth: chessboard.state.board.size
 	}}
 	on:resizing={(e) => setSize(e.detail.size)}

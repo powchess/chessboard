@@ -10,11 +10,16 @@ export default class BoardState {
 
 	public notation: boolean;
 
-	public shadow: boolean;
+	public style: {
+		shadow: boolean;
+		borderRadius: `${number}rem` | `${number}px`;
+	};
 
 	public startFen: string;
 
 	public size: number;
+
+	public resizible: { enabled: boolean; min: number; max: number };
 
 	public defaultState = {
 		boardTheme: 'standard',
@@ -23,7 +28,12 @@ export default class BoardState {
 		notation: true,
 		shadow: false,
 		startFen: defaultFEN,
-		size: 0
+		size: 0,
+		style: {
+			shadow: false,
+			borderRadius: '0rem'
+		},
+		resizible: { enabled: false, min: 256, max: 1024 }
 	} as const;
 
 	constructor(config?: ChessboardConfig['board']) {
@@ -31,10 +41,11 @@ export default class BoardState {
 		this.piecesTheme = this.defaultState.piecesTheme;
 		this.flipped = this.defaultState.flipped;
 		this.notation = this.defaultState.notation;
-		this.shadow = this.defaultState.shadow;
 		this.startFen = this.defaultState.startFen;
 
 		this.size = this.defaultState.size;
+		this.style = { ...this.defaultState.style };
+		this.resizible = { ...this.defaultState.resizible };
 
 		this.setConfigSettings(config);
 	}
@@ -45,8 +56,11 @@ export default class BoardState {
 			if (config.piecesTheme !== undefined) this.piecesTheme = config.piecesTheme;
 			if (config.flipped !== undefined) this.flipped = config.flipped;
 			if (config.notation !== undefined) this.notation = config.notation;
-			if (config.shadow !== undefined) this.shadow = config.shadow;
 			if (config.startFen !== undefined) this.startFen = config.startFen;
+			if (config.style !== undefined) {
+				if (config.style.shadow !== undefined) this.style.shadow = config.style.shadow;
+				if (config.style.borderRadius !== undefined) this.style.borderRadius = config.style.borderRadius;
+			}
 		}
 	};
 
@@ -56,8 +70,13 @@ export default class BoardState {
 			...(this.piecesTheme !== this.defaultState.piecesTheme && { piecesTheme: this.piecesTheme }),
 			...(this.flipped !== this.defaultState.flipped && { flipped: this.flipped }),
 			...(this.notation !== this.defaultState.notation && { notation: this.notation }),
-			...(this.shadow !== this.defaultState.shadow && { shadow: this.shadow }),
-			...(this.startFen !== this.defaultState.startFen && { startFen: this.startFen })
+			...(this.startFen !== this.defaultState.startFen && { startFen: this.startFen }),
+			...((this.style.shadow !== this.defaultState.style.shadow || this.style.borderRadius !== this.defaultState.style.borderRadius) && {
+				style: {
+					...(this.style.shadow !== this.defaultState.style.shadow && { shadow: this.style.shadow }),
+					...(this.style.borderRadius !== this.defaultState.style.borderRadius && { borderRadius: this.style.borderRadius })
+				}
+			})
 		};
 		if (Object.keys(cfg).length === 0) return undefined;
 		return cfg;

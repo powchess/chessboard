@@ -19,9 +19,18 @@ export type ChessboardConfig = {
 		piecesTheme?: PiecesTheme;
 		flipped?: boolean;
 		notation?: boolean;
-		shadow?: boolean;
 		startFen?: string;
 		startSize?: number;
+		style?: {
+			shadow?: boolean;
+			borderRadius?: `${number}rem` | `${number}px`;
+		};
+		resizible?:
+			| boolean
+			| {
+					min?: number;
+					max?: number;
+			  };
 	};
 
 	/**
@@ -96,12 +105,5 @@ export type ChessboardConfig = {
 				CAPTURE?: boolean;
 				CASTLE?: boolean;
 				UNDO?: boolean;
-		  };
-
-	resizible?:
-		| boolean
-		| {
-				min?: number;
-				max?: number;
 		  };
 };

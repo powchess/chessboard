@@ -22,5 +22,9 @@
 <style>
 	select {
 		color: black;
+		border-radius: 0.125rem;
+		padding-left: 4px;
+		padding-top: 2px;
+		padding-bottom: 2px;
 	}
 </style>

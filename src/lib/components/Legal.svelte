@@ -14,9 +14,3 @@
 		<label for="preMovesEnabled" class="select-none">preMoves</label>
 	</div>
 </Section>
-
-<style>
-	input {
-		color: black;
-	}
-</style>

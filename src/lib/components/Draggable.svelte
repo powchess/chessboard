@@ -14,7 +14,7 @@
 </script>
 
 <Section {name} bind:enabled {expanded}>
-	<div>
+	<div class="mb-2">
 		<input id="ghostPiece" type="checkbox" bind:checked={ghostPiece} />
 		<label for="ghostPiece" class="select-none">ghost piece</label>
 	</div>
@@ -43,9 +43,17 @@
 <style>
 	select {
 		color: black;
+		border-radius: 0.125rem;
+		padding-left: 4px;
+		padding-top: 2px;
+		padding-bottom: 2px;
 	}
 
 	input {
 		color: black;
+		border-radius: 0.125rem;
+		padding-left: 4px;
+		padding-top: 2px;
+		padding-bottom: 2px;
 	}
 </style>

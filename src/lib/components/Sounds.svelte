@@ -13,16 +13,9 @@
 
 <Section {name} bind:enabled {expanded}>
 	{#each soundsNames as sound}
-		<div>
+		<div class="mb-2">
 			<input id="{sound}Enabled" type="checkbox" bind:checked={settings[sound]} />
-			<label for="{sound}Enabled" class="select-none">{sound}</label>
+			<label for="{sound}Enabled" class="select-none">{sound.toLowerCase()}</label>
 		</div>
 	{/each}
 </Section>
-
-<style>
-	input {
-		color: black;
-		user-select: none;
-	}
-</style>

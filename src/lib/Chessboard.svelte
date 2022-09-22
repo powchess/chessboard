@@ -36,7 +36,7 @@
 	let promotionLastMove = '';
 
 	onDestroy(() => {
-		if (browser && document.documentElement.hasAttribute('style') && chessboard.state.resizible.enabled)
+		if (browser && document.documentElement.hasAttribute('style') && chessboard.state.board.resizible.enabled)
 			document.documentElement.removeAttribute('style');
 	});
 
@@ -422,7 +422,7 @@
 	export const setSize = (size: number) => {
 		if (!size || chessboard.state.board.size === size) return;
 		chessboard.state.board.size = size;
-		if (browser && chessboard.state.resizible.enabled)
+		if (browser && chessboard.state.board.resizible.enabled)
 			document.documentElement.style.setProperty('--boardSize', `${chessboard.state.board.size}px`);
 	};
 
@@ -561,7 +561,7 @@
 	onMount(() => {
 		updateLegalStateIfNeeded();
 		if (chessboard.state.callbacks.getLastMove) highlightMove(chessboard.state.callbacks.getLastMove());
-		if (chessboard.state.resizible) setSize(chessboard.state.board.size - (chessboard.state.board.size % 8));
+		if (chessboard.state.board.resizible) setSize(chessboard.state.board.size - (chessboard.state.board.size % 8));
 	});
 </script>
 
@@ -579,8 +579,10 @@
 	on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 	bind:this={boardDiv}
 	bind:clientWidth={chessboard.state.board.size}
-	class="noselect board {chessboard.state.board.shadow ? ' shadow' : ''} text-sm {className}"
-	style="--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
+	class="noselect board {chessboard.state.board.style.shadow ? 'shadow' : ''} text-sm {className}"
+	style="
+	--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard}); 
+	border-radius: {chessboard.state.board.style.borderRadius};"
 >
 	<div style="width: 100%; height: 100%" class="noselect">
 		{#if chessboard.state.board.startFen}
@@ -643,7 +645,7 @@
 	{#if chessboard.state.board.notation}
 		<Notation theme={chessboard.state.board.boardTheme} flipped={chessboard.state.board.flipped} />
 	{/if}
-	{#if chessboard.state.resizible.enabled}
+	{#if chessboard.state.board.resizible.enabled}
 		<Resizing {chessboard} {setSize} />
 	{/if}
 	{#if chessboard.state.drawTools.enabled}
