@@ -5,14 +5,14 @@
 		<link rel="icon" href="./favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="content-security-policy" content=""><title>Chessboard • PowChess.com</title><link rel="stylesheet" href="prism-one-dark.css" data-svelte="svelte-tebjht">
-	<link href="./_app/immutable/assets/_layout-9974758f.css" rel="stylesheet">
-	<link href="./_app/immutable/assets/_page-f4a6db4a.css" rel="stylesheet">
-	<link rel="modulepreload" href="./_app/immutable/start-c9083f3f.js">
+	<link href="./_app/immutable/assets/_layout-740fbc2e.css" rel="stylesheet">
+	<link href="./_app/immutable/assets/_page-333202b6.css" rel="stylesheet">
+	<link rel="modulepreload" href="./_app/immutable/start-6ab2fdab.js">
 	<link rel="modulepreload" href="./_app/immutable/chunks/index-18bffe9d.js">
-	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-778c558f.js">
+	<link rel="modulepreload" href="./_app/immutable/chunks/singletons-8b3e6e31.js">
 	<link rel="modulepreload" href="./_app/immutable/chunks/index-c2b86799.js">
 	<link rel="modulepreload" href="./_app/immutable/components/pages/_layout.svelte-5c9d215e.js">
-	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-7d60f49c.js">
+	<link rel="modulepreload" href="./_app/immutable/components/pages/_page.svelte-07782ba6.js">
 	</head>
 	<body>
 		<div>
@@ -24,22 +24,29 @@
 			<span class="ml-[21px]">Board</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-180"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
-	<div class="py-2 px-4"><div><select class="svelte-1q80l21"><option value="standard">standard</option><option value="darkBlue">darkBlue</option></select>
+	<div class="py-2 px-4"><div class="mb-2"><select class="svelte-lnr7xr"><option value="standard">standard</option><option value="darkBlue">darkBlue</option></select>
 		<label for="boardTheme" class="select-none">board theme</label></div>
 
-	<div><input id="notation" type="checkbox" class="svelte-1q80l21" checked>
+	<div class="mb-2"><input id="notation" type="checkbox" class="svelte-lnr7xr" checked>
 		<label for="notation" class="select-none">notation</label></div>
 
-	<div><input id="flipped" type="checkbox" class="svelte-1q80l21">
+	<div class="mb-2"><input id="flipped" type="checkbox" class="svelte-lnr7xr">
 		<label for="flipped" class="select-none">flipped</label></div>
 
-	<div><input id="shadow" type="checkbox" class="svelte-1q80l21" checked>
-		<label for="shadow" class="select-none">shadow</label></div></div></div>
+	<div><input id="styleEnabled" type="checkbox" class="svelte-lnr7xr" checked>
+		<label for="styleEnabled" class="select-none">style</label></div>
+	<div class="pl-2 pr-4 flex-col"><div class="flex gap-2 mb-2"><input id="shadow" type="checkbox" class="svelte-lnr7xr" checked>
+				<label for="shadow" class="select-none">shadow</label></div>
+			<div class="flex gap-2 mb-2"><input id="borderRadius" type="number" class="w-16 svelte-lnr7xr" min="0" max="1" value="0.25">
+				<label for="borderRadius" class="select-none whitespace-nowrap">border-radius (rem)</label></div></div>
+	<div class="mt-2 mb-1"><input id="resizibleEnabled" type="checkbox" class="svelte-lnr7xr">
+		<label for="resizibleEnabled" class="select-none">resizible</label></div>
+	</div></div>
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
 			<span class="">Movable</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-180"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
-	<div class="py-2 px-4"><div><select class="svelte-1jggghe"><option value="2">Both</option><option value="0">White</option><option value="1">Black</option></select></div></div></div>
+	<div class="py-2 px-4"><div><select class="svelte-xrxnwg"><option value="2">Both</option><option value="0">White</option><option value="1">Black</option></select></div></div></div>
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
 			<span class="">Draggable</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
@@ -70,12 +77,12 @@
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
 	</div>
-			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2  rounded" disabled><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
+			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2  rounded" disabled><div class="flex gap-1"><input type="checkbox" class="mr-1">
 			<span class="">Resizible</span></div>
 		</button>
 
 	</div></div>
-		<div class="grid grid-rows-[min-content_auto] gap-10"><div class="w-full lg:w-[var(--boardSize,40rem)]"><div class="noselect board  shadow text-sm rounded svelte-1bsiysh" style="--boardTheme: url(/_app/immutable/assets/standard-97995bf9.svg);"><div style="width: 100%; height: 100%" class="noselect"><img style="left: 0%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left: 12.5%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left: 25%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left: 37.5%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bQ-c7b9a43e.svg" alt="bQ"><img style="left: 50%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bK-3500a2e6.svg" alt="bK"><img style="left: 62.5%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left: 75%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left: 87.5%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left: 0%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 12.5%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 25%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 37.5%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 50%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 62.5%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 75%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 87.5%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 0%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 12.5%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 25%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 37.5%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 50%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 62.5%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 75%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 87.5%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 0%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"><img style="left: 12.5%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left: 25%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left: 37.5%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wQ-8568b485.svg" alt="wQ"><img style="left: 50%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wK-4cdf6dc9.svg" alt="wK"><img style="left: 62.5%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left: 75%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left: 87.5%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"></div>
+		<div class="grid grid-rows-[min-content_auto] gap-10"><div class="w-full lg:w-[var(--boardSize,40rem)]"><div class="noselect board shadow text-sm  svelte-1bsiysh" style="--boardTheme: url(/_app/immutable/assets/standard-97995bf9.svg); border-radius: 0.25rem;"><div style="width: 100%; height: 100%" class="noselect"><img style="left: 0%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left: 12.5%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left: 25%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left: 37.5%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bQ-c7b9a43e.svg" alt="bQ"><img style="left: 50%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bK-3500a2e6.svg" alt="bK"><img style="left: 62.5%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bB-c430b746.svg" alt="bB"><img style="left: 75%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bN-d3912d91.svg" alt="bN"><img style="left: 87.5%; bottom: 87.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bR-e39efb08.svg" alt="bR"><img style="left: 0%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 12.5%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 25%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 37.5%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 50%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 62.5%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 75%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 87.5%; bottom: 75%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/bP-84e521e8.svg" alt="bP"><img style="left: 0%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 12.5%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 25%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 37.5%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 50%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 62.5%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 75%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 87.5%; bottom: 12.5%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wP-f78bae6c.svg" alt="wP"><img style="left: 0%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"><img style="left: 12.5%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left: 25%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left: 37.5%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wQ-8568b485.svg" alt="wQ"><img style="left: 50%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wK-4cdf6dc9.svg" alt="wK"><img style="left: 62.5%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wB-1ff2f149.svg" alt="wB"><img style="left: 75%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wN-a4c975a2.svg" alt="wN"><img style="left: 87.5%; bottom: 0%; scale: 1; z-Index: 2; opacity: 1; cursor: pointer;" class="noselect svelte-1g241z" src="/_app/immutable/assets/wR-5eb92d73.svg" alt="wR"></div>
 	
 	
 	<div class="files noselect svelte-t3eav4"><span data-file="a" style="color: #f0d9b5;" class="svelte-t3eav4">a
@@ -97,8 +104,7 @@
 		</span><span data-file="h" style="color: #b58863;" class="svelte-t3eav4">1
 		</span>
 </div>
-	<div style="color: #b58863;" class="svelte-mmuauc"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M 5 1 Q 6 0 6 2 L 6 4 Q 6 6 4 6 L 2 6 Q 0 6 1 5 Z"></path></svg>
-</div>
+	
 	<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg)" viewBox="0 0 8 8" class="svelte-19gv2n4"><defs><marker id="start-g" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="green" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
 			<marker id="end-g" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="green" d="M 0 4 L 10 10 L 0 16 Z"></path></marker><marker id="start-r" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="red" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
 			<marker id="end-r" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="red" d="M 0 4 L 10 10 L 0 16 Z"></path></marker><marker id="start-b" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="blue" d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z"></path></marker>
@@ -123,18 +129,20 @@
 
 	<span class="token keyword">const</span> <span class="token literal-property property">config</span><span class="token operator">:</span> ChessboardConfig <span class="token operator">=</span> <span class="token punctuation">{</span>
 	    <span class="token literal-property property">board</span><span class="token operator">:</span> <span class="token punctuation">{</span>
-	        <span class="token literal-property property">shadow</span><span class="token operator">:</span> <span class="token boolean">true</span>
+	        <span class="token literal-property property">style</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+	            <span class="token literal-property property">shadow</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+	            <span class="token literal-property property">borderRadius</span><span class="token operator">:</span> <span class="token string">"0.25rem"</span>
+	        <span class="token punctuation">}</span>
 	    <span class="token punctuation">}</span><span class="token punctuation">,</span>
-	    <span class="token literal-property property">movable</span><span class="token operator">:</span> Color<span class="token punctuation">.</span><span class="token constant">WHITE</span><span class="token punctuation">,</span>
-	    <span class="token literal-property property">resizible</span><span class="token operator">:</span> <span class="token boolean">true</span>
+	    <span class="token literal-property property">movable</span><span class="token operator">:</span> Color<span class="token punctuation">.</span><span class="token constant">WHITE</span>
 	<span class="token punctuation">}</span><span class="token punctuation">;</span>
 </span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span>
 
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>Chessboard</span> <span class="token language-javascript"><span class="token punctuation">{</span>config<span class="token punctuation">}</span></span> <span class="token punctuation">/></span></span><!-- HTML_TAG_END --></code></pre></div></div></div></div></div>
 
 
-		<script type="module" data-sveltekit-hydrate="19wqt5r">
-		import { start } from "./_app/immutable/start-c9083f3f.js";
+		<script type="module" data-sveltekit-hydrate="18fa4r2">
+		import { start } from "./_app/immutable/start-6ab2fdab.js";
 
 		start({
 			env: {},
@@ -148,7 +156,7 @@
 				form: null
 			},
 			paths: {"base":"","assets":""},
-			target: document.querySelector('[data-sveltekit-hydrate="19wqt5r"]').parentNode,
+			target: document.querySelector('[data-sveltekit-hydrate="18fa4r2"]').parentNode,
 			trailing_slash: "never"
 		});
 	</script>
