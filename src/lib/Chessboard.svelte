@@ -581,8 +581,10 @@
 	bind:clientWidth={chessboard.state.board.size}
 	class="noselect board {chessboard.state.board.style.shadow ? 'shadow' : ''} text-sm {className}"
 	style="
-	--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard}); 
-	border-radius: {chessboard.state.board.style.borderRadius};"
+	--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});
+	{chessboard.state.board.style.borderRadius !== '0rem' && chessboard.state.board.style.borderRadius !== '0px'
+		? `border-radius: ${chessboard.state.board.style.borderRadius};`
+		: ''}"
 >
 	<div style="width: 100%; height: 100%" class="noselect">
 		{#if chessboard.state.board.startFen}
