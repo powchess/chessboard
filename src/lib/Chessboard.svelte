@@ -177,6 +177,16 @@
 		if (chessboard.state.sounds.enabled) sounds.playMoveSound(moveType);
 	};
 
+	const setGhostPiece = (piece: StatePiece) => {
+		chessboard.setGhostPiece(piece);
+		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
+	};
+
+	const removeGhostPiece = () => {
+		chessboard.removeGhostPiece();
+		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
+	};
+
 	export const makeMove = (move: string): void => {
 		if (move.substring(0, 2) === move.substring(2, 4)) return;
 		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(move);
@@ -196,8 +206,7 @@
 			playMoveSound('CAPTURE');
 		} else playMoveSound('MOVE');
 
-		chessboard.removeGhostPiece();
-		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
+		removeGhostPiece();
 		movePiece(move);
 
 		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(move);
@@ -397,7 +406,7 @@
 		chessboard.updatePiecesWithFen(fen);
 
 		clearAllSquares();
-		chessboard.removeGhostPiece();
+		removeGhostPiece();
 
 		updateLegalStateIfNeeded();
 
@@ -413,7 +422,6 @@
 			highlightMove(lastMove);
 		} else if (sound !== false) playMoveSound(sound);
 
-		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
@@ -503,16 +511,6 @@
 				chessboard.preMoveHover(getSquareFromCoords(e.detail.x - bounding.x, e.detail.y - bounding.y));
 		}
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
-	};
-
-	const setGhostPiece = (piece: StatePiece) => {
-		chessboard.setGhostPiece(piece);
-		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
-	};
-
-	const removeGhostPiece = () => {
-		chessboard.removeGhostPiece();
-		chessboard.state.draggable.ghostPiece.piece = chessboard.state.draggable.ghostPiece.piece;
 	};
 
 	const startDragging = (piece: StatePiece) => {
@@ -613,7 +611,6 @@
 					on:endDragging
 					on:select={() => selectPiece(piece.square)}
 					on:deselect={() => deselect()}
-					on:animationEnded={removeGhostPiece}
 				/>
 			{/each}
 		{/if}

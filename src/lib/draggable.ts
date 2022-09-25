@@ -95,6 +95,8 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	const boardDiv = <HTMLDivElement>node.parentNode;
 	let currentSquare: string;
 
+	let dragging = false;
+
 	let { startSquare, boardFlipped, onlyShow, duration, easingFunc } = params;
 	const { coords } = params;
 
@@ -206,6 +208,8 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
 		const targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
 
+		dragging = false;
+
 		node.dispatchEvent(
 			new CustomEvent('dropped', {
 				detail: targetSquare
@@ -214,7 +218,8 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		coords
 			.update(() => ({ x: startX, y: startY, scale: 1 }), { duration, easing: easingFunc })
 			.then(() => {
-				node.dispatchEvent(new CustomEvent('animationEnded'));
+				if (!dragging) node.dispatchEvent(new CustomEvent('animationEnded'));
+				if (!dragging) node.style.zIndex = '1';
 			});
 
 		x = 0;
@@ -224,9 +229,6 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		node.style.cursor = onlyShow ? 'default' : 'pointer';
 
 		nodeCentered = false;
-		setTimeout(() => {
-			node.style.zIndex = '1';
-		}, duration);
 		circle.remove();
 	}
 
@@ -256,6 +258,8 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		globalDY = 0;
 		scrollX = window.scrollX;
 		scrollY = window.scrollY;
+
+		dragging = true;
 
 		node.dispatchEvent(new CustomEvent('clicked'));
 
