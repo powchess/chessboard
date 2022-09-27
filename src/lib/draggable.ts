@@ -219,7 +219,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 			.update(() => ({ x: startX, y: startY, scale: 1 }), { duration, easing: easingFunc })
 			.then(() => {
 				if (!dragging) node.dispatchEvent(new CustomEvent('animationEnded'));
-				if (!dragging) node.style.zIndex = '1';
+				if (!dragging) node.style.zIndex = '2';
 			});
 
 		x = 0;
@@ -227,13 +227,14 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		globalDX = 0;
 		globalDY = 0;
 		node.style.cursor = onlyShow ? 'default' : 'pointer';
-
+		setTimeout(() => {
+			node.style.zIndex = '2';
+		}, duration);
 		nodeCentered = false;
 		circle.remove();
 	}
 
 	function pointerdown(e: PointerEvent): void {
-		e.preventDefault();
 		if (e.button !== 0 || !e.isPrimary) return;
 
 		startX = boardFlipped ? 7 - fileToIndex(startSquare[0]) : fileToIndex(startSquare[0]);

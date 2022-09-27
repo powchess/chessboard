@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Prism from 'svelte-prism';
 	import { onMount } from 'svelte';
+	import { Chess, type Move } from 'chess.js';
 	import Chessboard from '$lib/Chessboard.svelte';
 	import { State } from '$lib/state/index';
 	import type { ChessboardConfig } from '$lib/boardConfig';
@@ -16,8 +17,29 @@
 	import { Color } from '$lib/enums';
 	import Legal from '$lib/components/Legal.svelte';
 
+	const chess = new Chess();
+
 	const config: ChessboardConfig = {
-		movable: Color.WHITE,
+		movable: Color.BOTH,
+		legal: true,
+		callbacks: {
+			afterMove: (move) =>
+				chess.move({ from: move.substring(0, 2), to: move.substring(2, 4), ...(move.length > 4 && { promotion: move[4] }) }),
+			getLegalMoves: () =>
+				(<Move[]>chess.moves({ verbose: true })).map((move) => {
+					return move.from + move.to + (move.promotion ?? '');
+				}),
+			getWhiteToMove: () => chess.turn() === 'w',
+			getInCheck: () => {
+				if (!chess.inCheck()) return undefined;
+				return chess.turn() === 'w' ? Color.BLACK : Color.WHITE;
+			},
+			getLastMove: () => {
+				const lastMove = chess.history({ verbose: true }).pop() as Move;
+				if (!lastMove) return '';
+				return lastMove.from + lastMove.to + (lastMove.promotion ?? '');
+			}
+		},
 		board: {
 			style: {
 				shadow: true,
@@ -71,9 +93,9 @@
 
 		if (ts) {
 			configString = configString
-				.replaceAll('movable: 0', 'movable: Color.WHITE')
-				.replaceAll('movable: 1', 'movable: Color.BLACK')
-				.replaceAll('movable: 2', 'movable: Color.BOTH');
+				.replaceAll(`movable: ${Color.WHITE}`, 'movable: Color.WHITE')
+				.replaceAll(`movable: ${Color.BLACK}`, 'movable: Color.BLACK')
+				.replaceAll(`movable: ${Color.BOTH}`, 'movable: Color.BOTH');
 		}
 
 		function needColorImport() {
@@ -85,14 +107,25 @@
 		}
 
 		/* eslint-disable no-useless-escape */
-		const resultString = `\
+		let resultString = `\
 <script${ts ? ' lang="ts"' : ''}>
-	import Chessboard from '@powchess/chessboard';${ts ? typescript : ''}${needColorImport() && ts ? importColor : ''}
+	import Chessboard from '@powchess/chessboard';${ts ? typescript : ''}${needColorImport() && ts ? importColor : ''}${
+			state.legal.enabled && ts ? "\n\timport { Chess, type Move } from 'chess.js';" : ''
+		}
 
 	const config${ts ? ': ChessboardConfig' : ''} = ${configString};
 <\/script>
 
 <Chessboard {config} />`;
+
+		if (!ts) {
+			resultString = resultString
+				.replaceAll('Color.WHITE', `${Color.WHITE}`)
+				.replaceAll('Color.BLACK', `${Color.BLACK}`)
+				.replaceAll('Color.BOTH', `${Color.BOTH}`);
+		}
+
+		resultString = resultString.replaceAll('__vite_ssr_import_14__.', '');
 
 		return resultString;
 	};
@@ -128,7 +161,7 @@
 				bind:easing={state.draggable.transition.settings.easing}
 			/>
 			<Section name={'Selectable'} bind:enabled={state.selectable.enabled} showExpand={false} />
-			<Legal bind:enabled={state.legal.enabled} bind:preMovesEnabled={state.legal.preMoves.enabled} />
+			<Legal expanded={true} bind:enabled={state.legal.enabled} bind:preMovesEnabled={state.legal.preMoves.enabled} />
 			<Highlight bind:enabled={state.highlight.enabled} bind:settings={state.highlight.settings} />
 			<DrawTools
 				bind:enabled={state.drawTools.enabled}
@@ -136,10 +169,9 @@
 				bind:onlyChessMove={state.drawTools.settings.onlyChessMove}
 			/>
 			<Sounds bind:enabled={state.sounds.enabled} bind:settings={state.sounds.settings} />
-			<Section name={'Resizible'} bind:enabled={state.board.resizible.enabled} showExpand={false} />
 		</div>
 		<div class="grid grid-rows-[min-content_auto] gap-10">
-			<div class="w-full lg:w-[var(--boardSize,40rem)]">
+			<div class="w-full lg:w-[var(--boardSize,50rem)]">
 				<Chessboard bind:this={chessboard} {config} />
 			</div>
 			<div class="row-start-2 relative">

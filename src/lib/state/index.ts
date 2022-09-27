@@ -80,7 +80,7 @@ export class State {
 		draggable: this.draggable.getConfig(),
 		selectable: this.selectable.getConfig(),
 		legal: this.legal.getConfig(),
-		// callbacks: this.callbacks.getConfig(),
+		...(this.legal.enabled && { callbacks: this.callbacks.getConfig() }),
 		highlight: this.highlight.getConfig(),
 		drawTools: this.drawTools.getConfig(),
 		sounds: this.sounds.getConfig()

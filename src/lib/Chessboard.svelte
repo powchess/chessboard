@@ -20,7 +20,6 @@
 	import { Color, SquareColor } from './enums';
 	import { browser } from '$app/environment';
 	import type { State, Piece as StatePiece } from './state/index';
-	import MovableState from './state/movable';
 
 	export let config: ChessboardConfig;
 	export let className = '';
@@ -590,12 +589,9 @@
 				<Piece
 					square={piece.square}
 					name={piece.name}
-					duration={chessboard.state.draggable.transition.settings.duration}
-					easing={chessboard.state.draggable.transition.settings.easing}
-					legal={chessboard.state.legal.enabled}
-					preMoves={chessboard.state.legal.preMoves.enabled}
+					legalState={chessboard.state.legal}
+					draggableState={chessboard.state.draggable}
 					selectedPiece={chessboard.state.selectable.selectedPiece}
-					whiteToMove={chessboard.state.legal.whiteToMove}
 					movableState={chessboard.state.movable}
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 					flipped={chessboard.state.board.flipped}
@@ -617,12 +613,9 @@
 	</div>
 	{#if chessboard.state.draggable.ghostPiece.enabled && chessboard.state.draggable.ghostPiece.piece !== undefined}
 		<Piece
-			ghostPiece={true}
-			duration={0}
-			legal={chessboard.state.legal.enabled}
+			isGhost={true}
 			square={chessboard.state.draggable.ghostPiece.piece.square}
 			name={chessboard.state.draggable.ghostPiece.piece.name}
-			movableState={new MovableState(false)}
 			getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 			flipped={chessboard.state.board.flipped}
 		/>

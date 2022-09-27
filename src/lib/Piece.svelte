@@ -6,28 +6,30 @@
 	import getChessPieceImage from './chessPieceSVGs';
 	import type { ChessPiece } from './chessTypes';
 	import { Color } from './enums';
-	import type { EasingFuncs } from './boardConfig';
 	import type MovableState from './state/movable';
 	import type { Piece } from './state';
+	import type DraggableState from './state/draggable';
+	import type LegalState from './state/legal';
 
 	export let square: string;
 	export let name: ChessPiece;
 	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
 	export let flipped: boolean;
-	export let legal: boolean;
-	export let preMoves = false;
-	export let whiteToMove = false;
-	export let movableState: MovableState;
-	export let ghostPiece = false;
-	export let easing: EasingFuncs = 'cubicInOut';
-	export let duration = 120;
+	export let isGhost = false;
+
+	export let draggableState: DraggableState | undefined = undefined;
+	export let legalState: LegalState | undefined = undefined;
+	export let movableState: MovableState | undefined = undefined;
 
 	export let selectedPiece: Piece | undefined = undefined;
 	let selected = false;
 
 	const dispatch = createEventDispatcher();
-	let curDuration = duration;
-	const coords = tweened({ x: 0, y: 0, scale: 1 }, { duration: curDuration, easing: easingFuncs[easing] });
+	let curDuration = draggableState?.transition?.enabled ? draggableState.transition.settings.duration : 0;
+	const coords = tweened(
+		{ x: 0, y: 0, scale: 1 },
+		{ duration: curDuration, easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut'] }
+	);
 
 	let initialized = false;
 
@@ -38,11 +40,11 @@
 
 		coords.update(() => ({ x: newCoords.x, y: newCoords.y, scale: 1 }), {
 			duration: initialized ? curDuration : 0,
-			easing: easingFuncs[easing]
+			easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut']
 		});
 
 		if (!initialized) initialized = true;
-		curDuration = duration;
+		curDuration = draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0;
 	};
 
 	const dropped = (e: CustomEvent) => {
@@ -57,16 +59,16 @@
 		if (square !== e.detail && e.detail) dispatch('move', square + e.detail);
 	};
 
-	const canMove = (movable: MovableState) => {
-		if (!movable.enabled) return false;
+	const canMove = (movable?: MovableState) => {
+		if (!movable?.enabled) return false;
 
-		if (legal) {
-			if (preMoves && getColorFromString(name) === movable.color) return true;
-			if (movable.color === Color.WHITE && whiteToMove && getColorFromString(name) === Color.WHITE) return true;
-			if (movable.color === Color.BLACK && !whiteToMove && getColorFromString(name) === Color.BLACK) return true;
+		if (legalState?.enabled) {
+			if (legalState.preMoves.enabled && getColorFromString(name) === movable.color) return true;
+			if (movable.color === Color.WHITE && legalState.whiteToMove && getColorFromString(name) === Color.WHITE) return true;
+			if (movable.color === Color.BLACK && !legalState.whiteToMove && getColorFromString(name) === Color.BLACK) return true;
 			if (movable.color === Color.BOTH) {
-				if (getColorFromString(name) === Color.WHITE && whiteToMove) return true;
-				if (getColorFromString(name) === Color.BLACK && !whiteToMove) return true;
+				if (getColorFromString(name) === Color.WHITE && legalState.whiteToMove) return true;
+				if (getColorFromString(name) === Color.BLACK && !legalState.whiteToMove) return true;
 			}
 			return false;
 		}
@@ -79,7 +81,7 @@
 
 	$: if (curPieceWasDeselected(selectedPiece)) selected = false;
 	$: flipped, reRenderPieces(square);
-	$: pieceZIndex = typeof movableState === 'boolean' ? (movableState ? 2 : 1) : movableState.enabled ? 2 : 1;
+	$: pieceZIndex = typeof movableState === 'boolean' ? (movableState ? 2 : 1) : movableState?.enabled ? 2 : 1;
 </script>
 
 <img
@@ -87,8 +89,8 @@
 		startSquare: square,
 		onlyShow: !canMove(movableState),
 		boardFlipped: flipped,
-		duration,
-		easingFunc: easingFuncs[easing],
+		duration: draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0,
+		easingFunc: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut'],
 		coords
 	}}
 	on:dropped={dropped}
@@ -101,8 +103,8 @@
 	style="left: {$coords.x * 12.5}%; 
 		bottom: {$coords.y * 12.5}%; 
 		scale: {$coords.scale};
-		z-Index: {ghostPiece ? 0 : pieceZIndex}; 
-		opacity: {ghostPiece ? 0.3 : 1}; 
+		z-Index: {isGhost ? 0 : pieceZIndex}; 
+		opacity: {isGhost ? 0.3 : 1}; 
 		cursor: pointer;"
 	class="noselect"
 	src={getChessPieceImage(name)}
