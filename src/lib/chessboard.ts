@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { SquareColor } from './enums';
+import { Color, SquareColor } from './enums';
 import type { ChessBoard, ChessFile, ChessPiece } from './chessTypes';
 import { State, type Square, type Piece } from './state/index';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils';
-import type { ChessboardConfig } from './boardConfig';
+import type { ChessboardConfig, KingLocations } from './boardConfig';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
 
@@ -270,6 +270,20 @@ export default class Chessboard {
 			this.state.pieces.splice(this.state.pieces.indexOf(piece), 1);
 		});
 	};
+
+	public getKingLocations(): KingLocations {
+		const kingLocations: KingLocations = {
+			[Color.WHITE]: '',
+			[Color.BLACK]: ''
+		};
+
+		this.state.pieces.forEach((piece: Piece) => {
+			if (piece.name === 'wK') kingLocations[Color.WHITE] = piece.square;
+			if (piece.name === 'bK') kingLocations[Color.BLACK] = piece.square;
+		});
+
+		return kingLocations;
+	}
 
 	public getShortFEN() {
 		if (this.state.pieces.length === 0) return emptyFEN;

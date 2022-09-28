@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { Chess, type Move } from 'chess.js';
 	import Chessboard from '$lib/Chessboard.svelte';
-	import { State } from '$lib/state/index';
+	import { defaultFEN, State } from '$lib/state/index';
 	import type { ChessboardConfig } from '$lib/boardConfig';
 	import { browser } from '$app/environment';
 	import Board from '$lib/components/Board.svelte';
@@ -24,7 +24,11 @@
 		legal: true,
 		callbacks: {
 			afterMove: (move) =>
-				chess.move({ from: move.substring(0, 2), to: move.substring(2, 4), ...(move.length > 4 && { promotion: move[4] }) }),
+				chess.move({
+					from: move.substring(0, 2),
+					to: move.substring(2, 4),
+					...(move.length > 4 && { promotion: move[4] })
+				}),
 			getLegalMoves: () =>
 				(<Move[]>chess.moves({ verbose: true })).map((move) => {
 					return move.from + move.to + (move.promotion ?? '');
@@ -32,7 +36,7 @@
 			getWhiteToMove: () => chess.turn() === 'w',
 			getInCheck: () => {
 				if (!chess.inCheck()) return undefined;
-				return chess.turn() === 'w' ? Color.BLACK : Color.WHITE;
+				return chess.turn() === 'w' ? Color.WHITE : Color.BLACK;
 			},
 			getLastMove: () => {
 				const lastMove = chess.history({ verbose: true }).pop() as Move;
@@ -49,6 +53,52 @@
 		}
 	};
 
+	const callbacksTS = `{
+			afterMove: (move) =>
+				chess.move({
+					from: move.substring(0, 2),
+					to: move.substring(2, 4),
+					...(move.length > 4 && { promotion: move[4] })
+				}),
+			getLegalMoves: () =>
+				(<Move[]>chess.moves({ verbose: true })).map((move) => {
+					return move.from + move.to + (move.promotion ?? '');
+				}),
+			getWhiteToMove: () => chess.turn() === 'w',
+			getInCheck: () => {
+				if (!chess.inCheck()) return undefined;
+				return chess.turn() === 'w' ? Color.WHITE : Color.BLACK;
+			},
+			getLastMove: () => {
+				const lastMove = chess.history({ verbose: true }).pop() as Move;
+				if (!lastMove) return '';
+				return lastMove.from + lastMove.to + (lastMove.promotion ?? '');
+			}
+		}`;
+
+	const callbacksJS = `{
+			afterMove: (move) =>
+				chess.move({
+					from: move.substring(0, 2),
+					to: move.substring(2, 4),
+					...(move.length > 4 && { promotion: move[4] })
+				}),
+			getLegalMoves: () =>
+				chess.moves({ verbose: true }).map((move) => {
+					return move.from + move.to + (move.promotion ?? '');
+				}),
+			getWhiteToMove: () => chess.turn() === 'w',
+			getInCheck: () => {
+				if (!chess.inCheck()) return undefined;
+				return chess.turn() === 'w' ? ${Color.WHITE} : ${Color.BLACK};
+			},
+			getLastMove: () => {
+				const lastMove = chess.history({ verbose: true }).pop();
+				if (!lastMove) return '';
+				return lastMove.from + lastMove.to + (lastMove.promotion ?? '');
+			}
+		}`;
+
 	let chessboard: Chessboard;
 	let state = new State(config);
 	let mounted = false;
@@ -63,31 +113,28 @@
 	const getConfigString = (newState: State, ts: boolean) => {
 		const cfg = newState.getConfig();
 
-		const typescript = `\n\timport type { ChessboardConfig } from '@powchess/chessboard/boardConfig';`;
+		const importConfig = `\n\timport type { ChessboardConfig } from '@powchess/chessboard/boardConfig';`;
 
 		if (browser && mounted) {
 			chessboard.setState(newState);
 		}
 
-		// eslint-disable-next-line prefer-const
-		let callbackStrings: string[] = [];
-
 		let configString = JSON.stringify(
 			cfg,
-			(_key, value) => {
-				if (typeof value === 'function') {
-					callbackStrings.push(value.toString());
-
-					return `{function_${callbackStrings.length - 1}}`;
+			(key, value) => {
+				if (key === 'callbacks') {
+					return `{functions}`;
 				}
 
 				return value;
 			},
 			4
-		)
+		);
+
+		configString = configString
 			.replace(/"([^"]+)":/g, '$1:')
 			.replaceAll('\n', '\n\t')
-			.replace(/"\{function_(\d+)\}"/g, (_match, id) => callbackStrings[id]);
+			.replace('"{functions}"', ts ? callbacksTS : callbacksJS);
 
 		const importColor = "\n\timport { Color } from '@powchess/chessboard/enums';";
 
@@ -109,9 +156,9 @@
 		/* eslint-disable no-useless-escape */
 		let resultString = `\
 <script${ts ? ' lang="ts"' : ''}>
-	import Chessboard from '@powchess/chessboard';${ts ? typescript : ''}${needColorImport() && ts ? importColor : ''}${
-			state.legal.enabled && ts ? "\n\timport { Chess, type Move } from 'chess.js';" : ''
-		}
+	import Chessboard from '@powchess/chessboard';${ts ? importConfig : ''}${needColorImport() && ts ? importColor : ''}${
+			state.legal.enabled ? (ts ? "\n\timport { Chess, type Move } from 'chess.js';" : "\n\timport { Chess } from 'chess.js';") : ''
+		}${state.legal.enabled ? '\n\n\tconst chess = new Chess();' : ''}
 
 	const config${ts ? ': ChessboardConfig' : ''} = ${configString};
 <\/script>
@@ -125,12 +172,15 @@
 				.replaceAll('Color.BOTH', `${Color.BOTH}`);
 		}
 
-		resultString = resultString.replaceAll('__vite_ssr_import_14__.', '');
-
 		return resultString;
 	};
 
 	$: code = getConfigString(state, tsEnabled);
+	$: if (state.legal.enabled) {
+		state.board.startFen = defaultFEN;
+		chess.load(state.board.startFen);
+		if (browser && mounted) chessboard.setFEN(state.board.startFen, false);
+	}
 </script>
 
 <svelte:head>

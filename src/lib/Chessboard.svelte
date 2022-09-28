@@ -169,6 +169,7 @@
 		}
 
 		if (chessboard.state.callbacks.getKingLocations) kingLocations = chessboard.state.callbacks.getKingLocations();
+		else kingLocations = chessboard.getKingLocations();
 		if (chessboard.state.callbacks.getInCheck) setCheckSquare(chessboard.state.callbacks.getInCheck());
 	};
 
@@ -411,6 +412,7 @@
 
 		if (chessboard.state.callbacks.getLastMove) {
 			const lastMove = chessboard.state.callbacks.getLastMove();
+			chessboard.state.legal.lastMove = lastMove;
 
 			if (sound !== false) {
 				if (sound !== 'MOVE') playMoveSound(sound);
