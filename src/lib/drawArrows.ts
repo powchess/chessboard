@@ -1,3 +1,4 @@
+import type { ChessSquare } from './chessTypes';
 import { squareToSQXY } from './utils';
 
 type Props = {
@@ -10,11 +11,22 @@ type Props = {
 	};
 };
 
-export type ArrowData = {
-	move: string;
+export type Tool = {
 	color: string;
 	opacity: number;
+	fixed: boolean;
 };
+
+export type ArrowTool = {
+	from: ChessSquare;
+	to: ChessSquare;
+	type: 'arrow';
+} & Tool;
+
+export type CircleTool = {
+	square: ChessSquare;
+	type: 'circle';
+} & Tool;
 
 type Pair<T> = { x: T; y: T };
 
@@ -151,17 +163,29 @@ function createArrow(startSquare: SqXY, endSquare: SqXY, knightLShape?: boolean,
 	return drawingSVG;
 }
 
-export function drawComputerArrows(svg: SVGGElement, data: ArrowData[], knightLShape?: boolean): void {
+function createCircle(square: SqXY, color?: string, opacity?: number | string) {
+	const circleSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+	circleSVG.setAttribute('cx', `${square.x + 0.5}`);
+	circleSVG.setAttribute('cy', `${square.y + 0.5}`);
+	circleSVG.setAttribute('r', `0.465`);
+	circleSVG.setAttribute('opacity', opacity ? `${opacity}` : '0.4');
+	circleSVG.setAttribute('fill', 'none');
+	circleSVG.setAttribute('stroke-width', '0.07');
+	circleSVG.setAttribute('stroke', color ?? 'green');
+	return circleSVG;
+}
+
+export function drawTools(svg: SVGGElement, data: (CircleTool | ArrowTool)[], knightLShape?: boolean): void {
 	data.forEach((element) => {
-		const arrow = createArrow(
-			squareToSQXY(element.move.substring(0, 2)),
-			squareToSQXY(element.move.substring(2, 4)),
-			knightLShape,
-			element.color,
-			element.opacity
-		);
-		arrow.setAttribute('sf', '');
-		svg.appendChild(arrow);
+		if (element.type === 'circle') {
+			const square = squareToSQXY(element.square);
+			const circle = createCircle(square, element.color, element.opacity);
+			svg.appendChild(circle);
+		} else if (element.type === 'arrow') {
+			const arrow = createArrow(squareToSQXY(element.from), squareToSQXY(element.to), knightLShape, element.color, element.opacity);
+			arrow.setAttribute('fixed', '');
+			svg.appendChild(arrow);
+		}
 	});
 }
 
@@ -191,17 +215,6 @@ export default function drawArrows(node: HTMLDivElement, params: Props) {
 		};
 	}
 
-	function createCircle(square: SqXY) {
-		drawingSVG = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-		drawingSVG.setAttribute('cx', `${square.x + 0.5}`);
-		drawingSVG.setAttribute('cy', `${square.y + 0.5}`);
-		drawingSVG.setAttribute('r', `0.465`);
-		drawingSVG.setAttribute('opacity', '0.4');
-		drawingSVG.setAttribute('fill', 'none');
-		drawingSVG.setAttribute('stroke-width', '0.07');
-		drawingSVG.setAttribute('stroke', 'green');
-	}
-
 	function handleMousemove(e: MouseEvent) {
 		if (drawingSVG === undefined || (startSquare.x === -1 && startSquare.y === -1)) return;
 		const endSquare = getSVGCoords(e.clientX, e.clientY);
@@ -216,7 +229,7 @@ export default function drawArrows(node: HTMLDivElement, params: Props) {
 			getChessMove(startSquare, endSquare);
 			if (drawingSVG instanceof SVGPolylineElement) {
 				drawingSVG.remove(); // remove from DOM
-				createCircle(endSquare);
+				drawingSVG = createCircle(endSquare);
 			}
 
 			changeColor(svg, drawingSVG, startSquare, e.shiftKey, e.ctrlKey, e.altKey);
@@ -309,7 +322,7 @@ export default function drawArrows(node: HTMLDivElement, params: Props) {
 			const square = getSVGCoords(e.clientX, e.clientY);
 			startSquare = square;
 
-			createCircle(square);
+			drawingSVG = createCircle(square);
 			changeColor(svg, drawingSVG, startSquare, e.shiftKey, e.ctrlKey, e.altKey);
 
 			toBeRemoved = undefined;

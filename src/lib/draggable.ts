@@ -3,24 +3,27 @@
 import { get } from 'svelte/store';
 import type { Tweened } from 'svelte/motion';
 import { fileToIndex, squareToSQXY } from './utils';
+import type { ChessFile, ChessRank, ChessSquare } from './chessTypes';
 
 function getEndSquare(
-	startSquare: string,
+	startSquare: ChessSquare,
 	directionX: number,
 	directionY: number,
 	boardFlipped: boolean | undefined
-): string | null | undefined {
+): ChessSquare | null | undefined {
 	if (directionX === 0 && directionY === 0) return startSquare;
 
-	const files = boardFlipped ? ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].reverse() : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-	const ranks = boardFlipped ? ['8', '7', '6', '5', '4', '3', '2', '1'].reverse() : ['8', '7', '6', '5', '4', '3', '2', '1'];
+	const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
+	const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'] as const;
 
-	const newFile = files[files.indexOf(startSquare[0]) + directionX];
-	const newRank = ranks[ranks.indexOf(startSquare[1]) + directionY];
+	const newFile: ChessFile =
+		files[boardFlipped ? 7 - files.indexOf(<ChessFile>startSquare[0]) - directionX : files.indexOf(<ChessFile>startSquare[0]) + directionX];
+	const newRank: ChessRank =
+		ranks[boardFlipped ? 7 - ranks.indexOf(<ChessRank>startSquare[1]) - directionY : ranks.indexOf(<ChessRank>startSquare[1]) + directionY];
 
 	if (!newFile || !newRank) return undefined;
 
-	return newFile + newRank;
+	return `${newFile}${newRank}`;
 }
 
 function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boolean | undefined): SVGElement {
@@ -43,7 +46,7 @@ function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boole
 }
 
 type DragParams = {
-	startSquare: string;
+	startSquare: ChessSquare;
 	boardFlipped: boolean;
 	onlyShow: boolean;
 	duration: number;
@@ -93,7 +96,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	let nodeCentered = false;
 	let timeout: number;
 	const boardDiv = <HTMLDivElement>node.parentNode;
-	let currentSquare: string;
+	let currentSquare: ChessSquare | undefined;
 
 	let dragging = false;
 
@@ -154,7 +157,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 					boardDiv.appendChild(circle);
 				}
 			} else if (currentSquare) {
-				currentSquare = '';
+				currentSquare = undefined;
 			}
 		}
 
@@ -228,7 +231,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		globalDY = 0;
 		node.style.cursor = onlyShow ? 'default' : 'pointer';
 		setTimeout(() => {
-			node.style.zIndex = '2';
+			if (!dragging) node.style.zIndex = '2';
 		}, duration);
 		nodeCentered = false;
 		circle.remove();
@@ -237,7 +240,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	function pointerdown(e: PointerEvent): void {
 		if (e.button !== 0 || !e.isPrimary) return;
 
-		startX = boardFlipped ? 7 - fileToIndex(startSquare[0]) : fileToIndex(startSquare[0]);
+		startX = boardFlipped ? 7 - fileToIndex(<ChessFile>startSquare[0]) : fileToIndex(<ChessFile>startSquare[0]);
 		startY = boardFlipped ? 8 - parseInt(startSquare[1], 10) : parseInt(startSquare[1], 10) - 1;
 
 		currentSquare = startSquare;

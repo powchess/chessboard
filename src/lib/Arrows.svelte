@@ -1,25 +1,25 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { drawComputerArrows, removeComupterArrows, type ArrowData } from './drawArrows';
+	import { drawTools, removeComupterArrows, type ArrowTool, type CircleTool } from './drawArrows';
 
 	export let flipped = false;
 	export let svg: SVGGElement;
 	export let knightLShape = false;
-	export let computerArrows: ArrowData[] = [];
+	export let tools: (CircleTool | ArrowTool)[] = [];
 
 	let mounted = false;
 
-	function redrawComputerArrows(data: ArrowData[]) {
+	function redrawTools(data: (CircleTool | ArrowTool)[]) {
 		if (!mounted) return;
 		removeComupterArrows(svg);
-		drawComputerArrows(svg, data, knightLShape);
+		drawTools(svg, data, knightLShape);
 	}
 
-	$: redrawComputerArrows(computerArrows);
+	$: redrawTools(tools);
 
 	onMount(() => {
 		mounted = true;
-		redrawComputerArrows(computerArrows);
+		redrawTools(tools);
 	});
 
 	const ArrowColors = ['green', 'red', 'blue', 'orange'] as const;

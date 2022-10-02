@@ -1,4 +1,4 @@
-import type { ChessPiece } from '../chessTypes';
+import type { ChessPiece, ChessSquare } from '../chessTypes';
 import type { ChessboardConfig } from '../boardConfig';
 import BoardState from './board';
 import MovableState from './movable';
@@ -19,8 +19,8 @@ export type ArrowData = {
 	opacity: number;
 };
 
-export type Piece = { square: string; name: ChessPiece };
-export type Square = { square: string; color: SquareColor };
+export type Piece = { square: ChessSquare; name: ChessPiece };
+export type Square = { square: ChessSquare; color: SquareColor };
 
 export class State {
 	public pieces: Piece[];

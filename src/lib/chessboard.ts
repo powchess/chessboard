@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { Color, SquareColor } from './enums';
-import type { ChessBoard, ChessFile, ChessPiece } from './chessTypes';
+import { SquareColor } from './enums';
+import type { ChessBoard, ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes';
 import { State, type Square, type Piece } from './state/index';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils';
-import type { ChessboardConfig, KingLocations } from './boardConfig';
+import type { ChessboardConfig } from './boardConfig';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
 
@@ -36,7 +36,7 @@ export default class Chessboard {
 		});
 	};
 
-	public highlightSquare = (square: string, mode: SquareColor) => {
+	public highlightSquare = (square: ChessSquare, mode: SquareColor) => {
 		const newSquare: Square = {
 			square,
 			color: mode
@@ -51,7 +51,7 @@ export default class Chessboard {
 		this.state.markedSquares.add(newSquare);
 	};
 
-	public legalHover = (sqr: string) => {
+	public legalHover = (sqr: ChessSquare) => {
 		this.state.markedSquares.forEach((square) => {
 			if (square.square === sqr && square.color === SquareColor.LEGAL) square.color = SquareColor.LEGALHOVER;
 			else if (square.square !== sqr && square.color === SquareColor.LEGALHOVER) {
@@ -66,7 +66,7 @@ export default class Chessboard {
 		});
 	};
 
-	public preMoveHover = (sqr: string) => {
+	public preMoveHover = (sqr: ChessSquare) => {
 		this.state.markedSquares.forEach((square) => {
 			if (square.square === sqr && square.color === SquareColor.PREMOVE) square.color = SquareColor.PREMOVEHOVER;
 			else if (square.square !== sqr && square.color === SquareColor.PREMOVEHOVER) {
@@ -83,7 +83,7 @@ export default class Chessboard {
 		});
 	};
 
-	public toggleSquareHighlight = (square: string, mode: SquareColor): boolean => {
+	public toggleSquareHighlight = (square: ChessSquare, mode: SquareColor): boolean => {
 		const newSquare: Square = {
 			square,
 			color: mode
@@ -114,7 +114,7 @@ export default class Chessboard {
 		return selectedSquare;
 	};
 
-	public clearSquare = (square: string, mode?: SquareColor) => {
+	public clearSquare = (square: ChessSquare, mode?: SquareColor) => {
 		if (square.length !== 2) {
 			return;
 		}
@@ -132,14 +132,14 @@ export default class Chessboard {
 			});
 	};
 
-	public setPiece = (square: string, name: ChessPiece) => {
+	public setPiece = (square: ChessSquare, name: ChessPiece) => {
 		if (this.notValidThing({ square, piece: name })) return;
 		const piece = this.state.pieces.find((p) => p.square === square);
 		if (piece) piece.name = name;
 		else this.state.pieces.push({ square, name });
 	};
 
-	public removePiece = (square: string) => {
+	public removePiece = (square: ChessSquare) => {
 		if (this.notValidThing({ square })) return;
 		this.state.pieces.forEach((element, i) => {
 			if (element.square === square) {
@@ -152,11 +152,11 @@ export default class Chessboard {
 		this.state.pieces.length = 0;
 	};
 
-	public getGridCoordsFromSquare = (square: string): { x: number; y: number } => {
+	public getGridCoordsFromSquare = (square: ChessSquare): { x: number; y: number } => {
 		if (this.notValidThing({ square })) return { x: 0, y: 0 };
 
 		const file = <ChessFile>square[0];
-		const rank = square[1];
+		const rank = <ChessRank>square[1];
 
 		const x = this.state.board.flipped ? Math.abs(this.letters[file] - 7) : this.letters[file];
 		const y = this.state.board.flipped ? Math.abs(parseInt(rank, 10) - 8) : parseInt(rank, 10) - 1;
@@ -172,8 +172,8 @@ export default class Chessboard {
 		let moveSuccessful = false;
 		let cachedPiece: Piece | undefined;
 
-		const startSQ = move.substring(0, 2);
-		const endSQ = move.substring(2, 4);
+		const startSQ = <ChessSquare>move.substring(0, 2);
+		const endSQ = <ChessSquare>move.substring(2, 4);
 		const promPiece = move.substring(4);
 
 		this.state.pieces.forEach((piece: Piece) => {
@@ -197,7 +197,8 @@ export default class Chessboard {
 		} else this.state.legal.lastMove = move;
 	};
 
-	private getSquareFromIndices = (x: number, y: number): string => Object.keys(this.letters)[x] + (y + 1).toString();
+	private getSquareFromIndices = (x: number, y: number): ChessSquare =>
+		`${<ChessFile>Object.keys(this.letters)[x]}${<ChessRank>(y + 1).toString()}`;
 
 	public updatePiecesWithFen = (fen: string): void => {
 		const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
@@ -232,7 +233,7 @@ export default class Chessboard {
 				const oldPiece = this.getPieceFromSquare(this.getSquareFromIndices(x, Math.abs(y - 7)));
 				if (piece && !oldPiece) {
 					piecesAdded.push({
-						square: this.getSquareFromIndices(x, Math.abs(y - 7)),
+						square: <ChessSquare>this.getSquareFromIndices(x, Math.abs(y - 7)),
 						name: piece
 					});
 				}
@@ -241,7 +242,7 @@ export default class Chessboard {
 				}
 				if (piece && oldPiece && piece !== oldPiece.name) {
 					piecesAdded.push({
-						square: this.getSquareFromIndices(x, Math.abs(y - 7)),
+						square: <ChessSquare>this.getSquareFromIndices(x, Math.abs(y - 7)),
 						name: piece
 					});
 					piecesDeleted.push(oldPiece);
@@ -271,18 +272,16 @@ export default class Chessboard {
 		});
 	};
 
-	public getKingLocations(): KingLocations {
-		const kingLocations: KingLocations = {
-			[Color.WHITE]: '',
-			[Color.BLACK]: ''
-		};
+	public getWhiteKingSquare(): ChessSquare | undefined {
+		const king = this.state.pieces.find((piece) => piece.name === 'wK');
+		if (king) return king.square;
+		return undefined;
+	}
 
-		this.state.pieces.forEach((piece: Piece) => {
-			if (piece.name === 'wK') kingLocations[Color.WHITE] = piece.square;
-			if (piece.name === 'bK') kingLocations[Color.BLACK] = piece.square;
-		});
-
-		return kingLocations;
+	public getBlackKingSquare(): ChessSquare | undefined {
+		const king = this.state.pieces.find((piece) => piece.name === 'bK');
+		if (king) return king.square;
+		return undefined;
 	}
 
 	public getShortFEN() {
@@ -291,13 +290,13 @@ export default class Chessboard {
 		const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
 
 		this.state.pieces.forEach((piece) => {
-			board[rankToIndex(piece.square[1])][fileToIndex(piece.square[0])] = piece.name;
+			board[rankToIndex(<ChessRank>piece.square[1])][fileToIndex(<ChessFile>piece.square[0])] = piece.name;
 		});
 
 		return getShortFenFromBoard(board);
 	}
 
-	public getPieceFromSquare(square: string): Piece | undefined {
+	public getPieceFromSquare(square: ChessSquare): Piece | undefined {
 		let piece: Piece | undefined;
 		this.state.pieces.forEach((element) => {
 			if (element.square === square) piece = element;
@@ -306,7 +305,7 @@ export default class Chessboard {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	private notValidThing = (payload: { square?: string; piece?: string; move?: string }): boolean => {
+	private notValidThing = (payload: { square?: ChessSquare; piece?: string; move?: string }): boolean => {
 		const { square, piece, move } = payload;
 
 		if (square && square.length !== 2) return true;
@@ -358,8 +357,8 @@ export default class Chessboard {
 
 	public isEnPassant = (move: string): boolean => {
 		if (move[0] === move[2]) return false;
-		if (this.getPieceFromSquare(move.substring(2, 4))) return false;
-		const pawn = this.getPieceFromSquare(move.substring(0, 2));
+		if (this.getPieceFromSquare(<ChessSquare>move.substring(2, 4))) return false;
+		const pawn = this.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
 		if (pawn === undefined || (pawn.name !== 'wP' && pawn.name !== 'bP')) return false;
 		return true;
 	};
@@ -368,40 +367,33 @@ export default class Chessboard {
 	 * Returns square of captured pawn if the parameter is a en passant
 	 * @param move
 	 */
-	public getCapturedPawnSquareIfIsEnPassant = (move: string): string | undefined => {
+	public getCapturedPawnSquareIfIsEnPassant = (move: string): ChessSquare | undefined => {
 		if (move[0] === move[2]) return undefined;
-		if (this.getPieceFromSquare(move.substring(2, 4))) return undefined;
-		const pawn = this.getPieceFromSquare(move.substring(0, 2));
+		if (this.getPieceFromSquare(<ChessSquare>move.substring(2, 4))) return undefined;
+		const pawn = this.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
 		if (pawn === undefined || (pawn.name !== 'wP' && pawn.name !== 'bP')) return undefined;
 
-		const capturedPawn = this.getPieceFromSquare(`${move[2]}${parseInt(move[3], 10) + (pawn.name === 'wP' ? -1 : 1)}`);
+		const capturedPawn = this.getPieceFromSquare(
+			`${<ChessFile>move[2]}${<ChessRank>(parseInt(move[3], 10) + (pawn.name === 'wP' ? -1 : 1)).toString()}`
+		);
 		return capturedPawn?.square;
 	};
 
 	public isCapture = (move: string): boolean => {
-		if (this.getPieceFromSquare(move.substring(2, 4))) return true;
+		if (this.getPieceFromSquare(<ChessSquare>move.substring(2, 4))) return true;
 		return false;
 	};
 
 	public isPromotion = (move: string): boolean => {
 		if ((move[1] !== '7' || move[3] !== '8') && (move[1] !== '2' || move[3] !== '1')) return false;
-		const piece = this.getPieceFromSquare(move.substring(0, 2));
+		const piece = this.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
 		if (piece && (piece.name[1] !== 'P' || (piece.name[0] === 'w' && move[3] === '1') || (piece.name[0] === 'b' && move[3] === '8')))
 			return false;
 		return true;
 	};
 
 	public callbackExists = (
-		callback:
-			| 'getLegalMoves'
-			| 'getPreMoves'
-			| 'beforeMove'
-			| 'afterMove'
-			| 'getLastMove'
-			| 'getLastMoveSAN'
-			| 'getKingLocations'
-			| 'getInCheck'
-			| 'getWhiteToMove'
+		callback: 'getLegalMoves' | 'getPreMoves' | 'beforeMove' | 'afterMove' | 'getLastMove' | 'getInCheck' | 'getWhiteToMove'
 	) => this.state.callbacks[callback] !== undefined;
 
 	public flipBoard = (flipped?: boolean) => {

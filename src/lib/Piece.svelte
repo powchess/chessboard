@@ -4,16 +4,16 @@
 	import * as easingFuncs from 'svelte/easing';
 	import drag from './draggable';
 	import getChessPieceImage from './chessPieceSVGs';
-	import type { ChessPiece } from './chessTypes';
+	import type { ChessPiece, ChessSquare } from './chessTypes';
 	import { Color } from './enums';
 	import type MovableState from './state/movable';
 	import type { Piece } from './state';
 	import type DraggableState from './state/draggable';
 	import type LegalState from './state/legal';
 
-	export let square: string;
+	export let square: ChessSquare;
 	export let name: ChessPiece;
-	export let getGridCoordsFromSquare: (square: string) => { x: number; y: number };
+	export let getGridCoordsFromSquare: (square: ChessSquare) => { x: number; y: number };
 	export let flipped: boolean;
 	export let isGhost = false;
 
@@ -35,7 +35,7 @@
 
 	const getColorFromString = (piece: ChessPiece) => (piece[0] === 'w' ? Color.WHITE : Color.BLACK);
 
-	const reRenderPieces = (sq: string) => {
+	const reRenderPieces = (sq: ChessSquare) => {
 		const newCoords = getGridCoordsFromSquare(sq);
 
 		coords.update(() => ({ x: newCoords.x, y: newCoords.y, scale: 1 }), {

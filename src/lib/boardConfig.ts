@@ -11,7 +11,6 @@ type EasingTuple = ['backIn','backInOut','backOut','bounceIn','bounceInOut','bou
 export const EasingFuncsArray = ['backIn','backInOut','backOut','bounceIn','bounceInOut','bounceOut','circIn','circInOut','circOut','cubicIn','cubicInOut','cubicOut','elasticIn','elasticInOut','elasticOut','expoIn','expoInOut','expoOut','linear','quadIn','quadInOut','quadOut','quartIn','quartInOut','quartOut','quintIn','quintInOut','quintOut','sineIn','sineInOut','sineOut'] as const;
 
 export type EasingFuncs = TupleToUnion<EasingTuple>;
-export type KingLocations = { [Color.WHITE]: string; [Color.BLACK]: string };
 
 export type ChessboardConfig = {
 	board?: {
@@ -74,9 +73,7 @@ export type ChessboardConfig = {
 		beforeMove?: (move: string) => void;
 		afterMove?: (move: string) => void;
 		getLastMove?: () => string;
-		getLastMoveSAN?: () => string;
-		getKingLocations?: () => KingLocations;
-		getInCheck?: () => Color.WHITE | Color.BLACK | undefined;
+		getInCheck?: () => boolean;
 		getWhiteToMove?: () => boolean;
 	};
 

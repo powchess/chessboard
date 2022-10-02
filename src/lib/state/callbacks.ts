@@ -1,5 +1,4 @@
-import type { ChessboardConfig, KingLocations } from '$lib/boardConfig';
-import type { Color } from '$lib/enums';
+import type { ChessboardConfig } from '$lib/boardConfig';
 
 export default class Callbacks {
 	public getLegalMoves: (() => string[]) | undefined;
@@ -12,11 +11,7 @@ export default class Callbacks {
 
 	public getLastMove: (() => string) | undefined;
 
-	public getLastMoveSAN: (() => string) | undefined;
-
-	public getKingLocations: (() => KingLocations) | undefined;
-
-	public getInCheck: (() => Color.WHITE | Color.BLACK | undefined) | undefined;
+	public getInCheck: (() => boolean) | undefined;
 
 	public getWhiteToMove: (() => boolean) | undefined;
 
@@ -26,8 +21,6 @@ export default class Callbacks {
 		beforeMove: undefined,
 		afterMove: undefined,
 		getLastMove: undefined,
-		getLastMoveSAN: undefined,
-		getKingLocations: undefined,
 		getInCheck: undefined,
 		getWhiteToMove: undefined
 	} as const;
@@ -38,8 +31,6 @@ export default class Callbacks {
 		this.beforeMove = this.defaultState.beforeMove;
 		this.afterMove = this.defaultState.afterMove;
 		this.getLastMove = this.defaultState.getLastMove;
-		this.getLastMoveSAN = this.defaultState.getLastMoveSAN;
-		this.getKingLocations = this.defaultState.getKingLocations;
 		this.getInCheck = this.defaultState.getInCheck;
 		this.getWhiteToMove = this.defaultState.getWhiteToMove;
 
@@ -53,8 +44,6 @@ export default class Callbacks {
 			if (config.beforeMove) this.beforeMove = config.beforeMove;
 			if (config.afterMove) this.afterMove = config.afterMove;
 			if (config.getLastMove) this.getLastMove = config.getLastMove;
-			if (config.getLastMoveSAN) this.getLastMoveSAN = config.getLastMoveSAN;
-			if (config.getKingLocations) this.getKingLocations = config.getKingLocations;
 			if (config.getInCheck) this.getInCheck = config.getInCheck;
 			if (config.getWhiteToMove) this.getWhiteToMove = config.getWhiteToMove;
 		}
@@ -67,8 +56,6 @@ export default class Callbacks {
 			...(this.beforeMove && { beforeMove: this.beforeMove }),
 			...(this.afterMove && { afterMove: this.afterMove }),
 			...(this.getLastMove && { getLastMove: this.getLastMove }),
-			...(this.getLastMoveSAN && { getLastMoveSAN: this.getLastMoveSAN }),
-			...(this.getKingLocations && { getKingLocations: this.getKingLocations }),
 			...(this.getInCheck && { getInCheck: this.getInCheck }),
 			...(this.getWhiteToMove && { getWhiteToMove: this.getWhiteToMove })
 		};

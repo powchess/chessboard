@@ -1,18 +1,18 @@
-import type { ChessBoard, ChessFile, ChessIndex, ChessRank } from './chessTypes';
+import type { ChessBoard, ChessFile, ChessIndex, ChessRank, ChessSquare } from './chessTypes';
 
 const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
 const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'] as const;
 
-export function squareToSQXY(square: string) {
+export function squareToSQXY(square: ChessSquare) {
 	return { x: files.indexOf(square[0] as ChessFile), y: ranks.indexOf(square[1] as ChessRank) };
 }
 
-export function fileToIndex(file: string) {
+export function fileToIndex(file: ChessFile) {
 	const aAsciiCode = 97;
 	return (file.charCodeAt(0) - aAsciiCode) as ChessIndex;
 }
 
-export function rankToIndex(rank: string) {
+export function rankToIndex(rank: ChessRank) {
 	return (8 - parseInt(rank, 10)) as ChessIndex;
 }
 

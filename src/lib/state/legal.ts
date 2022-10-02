@@ -1,4 +1,5 @@
 import type { ChessboardConfig } from '$lib/boardConfig';
+import type { ChessSquare } from '$lib/chessTypes';
 
 export default class LegalState {
 	public enabled: boolean;
@@ -21,6 +22,8 @@ export default class LegalState {
 
 	public lastMove: string;
 
+	public checkSquare: ChessSquare | undefined;
+
 	public defaultState = {
 		enabled: false,
 		whiteToMove: true,
@@ -35,7 +38,8 @@ export default class LegalState {
 			moves: [],
 			curMove: ''
 		},
-		lastMove: ''
+		lastMove: '',
+		checkSquare: undefined
 	} as const;
 
 	constructor(config?: ChessboardConfig['legal']) {
@@ -51,6 +55,7 @@ export default class LegalState {
 		};
 
 		this.lastMove = this.defaultState.lastMove;
+		this.checkSquare = this.defaultState.checkSquare;
 
 		this.setConfigSettings(config);
 	}

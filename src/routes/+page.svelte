@@ -34,10 +34,7 @@
 					return move.from + move.to + (move.promotion ?? '');
 				}),
 			getWhiteToMove: () => chess.turn() === 'w',
-			getInCheck: () => {
-				if (!chess.inCheck()) return undefined;
-				return chess.turn() === 'w' ? Color.WHITE : Color.BLACK;
-			},
+			getInCheck: () => chess.inCheck(),
 			getLastMove: () => {
 				const lastMove = chess.history({ verbose: true }).pop() as Move;
 				if (!lastMove) return '';
@@ -65,10 +62,7 @@
 					return move.from + move.to + (move.promotion ?? '');
 				}),
 			getWhiteToMove: () => chess.turn() === 'w',
-			getInCheck: () => {
-				if (!chess.inCheck()) return undefined;
-				return chess.turn() === 'w' ? Color.WHITE : Color.BLACK;
-			},
+			getInCheck: () => chess.inCheck(),
 			getLastMove: () => {
 				const lastMove = chess.history({ verbose: true }).pop() as Move;
 				if (!lastMove) return '';
@@ -88,10 +82,7 @@
 					return move.from + move.to + (move.promotion ?? '');
 				}),
 			getWhiteToMove: () => chess.turn() === 'w',
-			getInCheck: () => {
-				if (!chess.inCheck()) return undefined;
-				return chess.turn() === 'w' ? ${Color.WHITE} : ${Color.BLACK};
-			},
+			getInCheck: () => chess.inCheck(),
 			getLastMove: () => {
 				const lastMove = chess.history({ verbose: true }).pop();
 				if (!lastMove) return '';

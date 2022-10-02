@@ -1,10 +1,10 @@
 import type { ChessboardConfig } from '$lib/boardConfig';
-import type { ArrowData } from '$lib/state/index';
+import type { ArrowTool, CircleTool } from '$lib/drawArrows';
 
 export default class DrawToolsState {
 	public enabled: boolean;
 
-	public engineArrows: ArrowData[];
+	public tools: (CircleTool | ArrowTool)[];
 
 	public settings: {
 		knightLShape: boolean;
@@ -13,7 +13,7 @@ export default class DrawToolsState {
 
 	public defaultState = {
 		enabled: true,
-		engineArrows: [],
+		tools: [],
 		settings: {
 			knightLShape: false,
 			onlyChessMove: false
@@ -23,7 +23,7 @@ export default class DrawToolsState {
 	constructor(config?: ChessboardConfig['drawTools']) {
 		this.enabled = this.defaultState.enabled;
 
-		this.engineArrows = JSON.parse(JSON.stringify(this.defaultState.engineArrows));
+		this.tools = <(CircleTool | ArrowTool)[]>JSON.parse(JSON.stringify(this.defaultState.tools));
 
 		this.settings = {
 			knightLShape: this.defaultState.settings.knightLShape,
