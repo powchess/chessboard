@@ -17,7 +17,7 @@
 	import darkBlueBoard from './assets/boards/darkBlue.svg';
 	import Resizing from './Resizing.svelte';
 	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes';
-	import { Color, SquareColor } from './enums';
+	import { Color, SquareColor, squareColorToString } from './enums';
 	import { browser } from '$app/environment';
 	import type { State, Piece as StatePiece } from './state/index';
 
@@ -47,40 +47,49 @@
 	};
 
 	export const highlightSquare = (square: ChessSquare, mode: SquareColor): void => {
+		// eslint-disable-next-line @typescript-eslint/no-use-before-define
+		if (!allowDrawHighlightSquares(squareColorToString(mode))) return;
 		chessboard.highlightSquare(square, mode);
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
 	};
 
-	const allowDrawHighlightSquares = (color?: 'legal' | 'move' | 'select' | 'check' | 'preMove' | 'nextMove') =>
-		chessboard.state.highlight.enabled && (color === undefined || chessboard.state.highlight.settings[color]);
+	const allowDrawHighlightSquares = (color?: 'legal' | 'check' | 'move' | 'nextMove' | 'preMove' | 'select' | SquareColor) =>
+		chessboard.state.highlight.enabled &&
+		(color === undefined || chessboard.state.highlight.settings[typeof color === 'string' ? color : squareColorToString(color)]);
 
 	export const selectPiece = (square: ChessSquare) => {
 		if (!chessboard.state.selectable.enabled) return;
+
 		const piece = chessboard.getPieceFromSquare(square);
 		if (piece === undefined) return;
-		clearAllSquares(SquareColor.SELECT);
+
 		chessboard.state.selectable.selectedPiece = piece;
-		if (allowDrawHighlightSquares('select')) highlightSquare(square, SquareColor.SELECT);
-		if (allowDrawHighlightSquares('legal') && chessboard.state.legal.enabled) {
-			// eslint-disable-next-line @typescript-eslint/no-use-before-define
-			if (chessboard.state.callbacks.getLegalMoves && canMove()) chessboard.state.legal.moves = chessboard.state.callbacks.getLegalMoves();
-			else chessboard.state.legal.moves.length = 0;
+		clearAllSquares(SquareColor.SELECT);
+		highlightSquare(square, SquareColor.SELECT);
+		// eslint-disable-next-line @typescript-eslint/no-use-before-define
+		if (chessboard.state.legal.enabled && canMove(piece.name)) {
 			// eslint-disable-next-line @typescript-eslint/no-use-before-define
 			highlightLegalMoves(chessboard.state.legal.moves, square);
 		}
+
+		// eslint-disable-next-line @typescript-eslint/no-use-before-define
+		if (chessboard.state.legal.preMoves.enabled && !canMove(piece.name)) {
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			highlightLegalMoves(chessboard.state.legal.preMoves.moves, square, SquareColor.PREMOVE);
+		}
 	};
 
-	export const deselect = () => {
+	export const deselect = (removeNextMove = true) => {
 		clearAllSquares(SquareColor.SELECT);
 		clearAllSquares(SquareColor.LEGAL);
 		clearAllSquares(SquareColor.PREMOVE);
 		chessboard.state.selectable.selectedPiece = undefined;
-		chessboard.state.legal.preMoves.curMove = '';
+		if (removeNextMove) chessboard.state.legal.preMoves.curMove = '';
 	};
 
 	export const setCheckSquare = (square: ChessSquare | undefined) => {
 		clearAllSquares(SquareColor.CHECK);
-		if (square && allowDrawHighlightSquares('check') && chessboard.state.legal.enabled) highlightSquare(square, SquareColor.CHECK);
+		if (square && chessboard.state.legal.enabled) highlightSquare(square, SquareColor.CHECK);
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
 	};
 
@@ -98,13 +107,15 @@
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
 	};
 
-	export const highlightMove = (move: string, color: SquareColor = SquareColor.MOVE) => {
-		if (move.length < 4) return;
+	export const highlightMove = (move: string, clear?: boolean, color: SquareColor = SquareColor.MOVE) => {
+		if (move.length < 4 || !allowDrawHighlightSquares(squareColorToString(color))) return;
+		if (clear) clearAllSquares(color);
 		highlightManySquares([<ChessSquare>move.substring(0, 2), <ChessSquare>move.substring(2, 4)], color);
 	};
 
-	export const highlightMoves = (moves: string[], color: SquareColor = SquareColor.MOVE) => {
+	export const highlightMoves = (moves: string[], clear?: boolean, color: SquareColor = SquareColor.MOVE) => {
 		const squares: ChessSquare[] = [];
+		if (clear) clearAllSquares(color);
 
 		moves.forEach((move) => {
 			if (move.length < 4) return;
@@ -125,6 +136,7 @@
 		mode: SquareColor.LEGAL | SquareColor.PREMOVE = SquareColor.LEGAL
 	) => {
 		clearAllSquares(mode);
+		if (!allowDrawHighlightSquares(squareColorToString(mode))) return;
 
 		legalMoves.forEach((move) => {
 			if (move.length < 4) return;
@@ -136,10 +148,7 @@
 
 	export const movePiece = (move: string, highlight = true) => {
 		chessboard.makeMove(move);
-		if (highlight) {
-			clearAllSquares(SquareColor.MOVE);
-			if (allowDrawHighlightSquares('move')) highlightMove(move);
-		}
+		if (highlight) highlightMove(move);
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
@@ -148,37 +157,31 @@
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
-	const getColorFromString = (name: string) => (name[0] === 'w' ? Color.WHITE : Color.BLACK);
-
 	// eslint-disable-next-line @typescript-eslint/no-use-before-define
-	const canMove = () =>
-		chessboard.state.movable.enabled &&
-		(chessboard.state.movable.color === Color.BOTH ||
-			(chessboard.state.legal.whiteToMove && chessboard.state.movable.color === getColorFromString('w')) ||
-			(!chessboard.state.legal.whiteToMove && chessboard.state.movable.color === getColorFromString('b')));
+	const canMove = (pieceName: string) =>
+		(chessboard.state.legal.whiteToMove && pieceName[0] === 'w') || (!chessboard.state.legal.whiteToMove && pieceName[0] === 'b');
 
 	const updateLegalStateIfNeeded = () => {
 		if (!chessboard.state.legal.enabled) return;
 
 		if (chessboard.state.callbacks.getWhiteToMove) chessboard.state.legal.whiteToMove = chessboard.state.callbacks.getWhiteToMove();
 
-		if (chessboard.state.callbacks.getPreMoves && !canMove() && chessboard.state.legal.preMoves.enabled)
+		if (chessboard.state.callbacks.getPreMoves && chessboard.state.legal.preMoves.enabled)
 			chessboard.state.legal.preMoves.moves = chessboard.state.callbacks.getPreMoves();
 		else chessboard.state.legal.preMoves.moves.length = 0;
 
-		if (chessboard.state.callbacks.getLegalMoves && canMove()) chessboard.state.legal.moves = chessboard.state.callbacks.getLegalMoves();
+		if (chessboard.state.callbacks.getLegalMoves && chessboard.state.legal.enabled)
+			chessboard.state.legal.moves = chessboard.state.callbacks.getLegalMoves();
 		else chessboard.state.legal.moves.length = 0;
 
 		// change preMoves to legalMoves
-		if (canMove() && chessboard.state.selectable.selectedPiece !== undefined && chessboard.state.legal.preMoves.enabled) {
+		if (
+			chessboard.state.selectable.selectedPiece !== undefined &&
+			canMove(chessboard.state.selectable.selectedPiece.name) &&
+			chessboard.state.legal.preMoves.enabled
+		) {
 			clearAllSquares(SquareColor.PREMOVE);
-			clearAllSquares(SquareColor.LEGAL);
-			if (allowDrawHighlightSquares('legal')) {
-				chessboard.state.legal.moves.forEach((move) => {
-					if (chessboard.state.selectable.selectedPiece && move.substring(0, 2) === chessboard.state.selectable.selectedPiece.square)
-						highlightSquare(<ChessSquare>move.substring(2, 4), SquareColor.LEGAL);
-				});
-			}
+			highlightLegalMoves(chessboard.state.legal.moves, chessboard.state.selectable.selectedPiece.square);
 		}
 
 		if (chessboard.state.callbacks.getInCheck && chessboard.state.callbacks.getInCheck()) {
@@ -245,8 +248,7 @@
 		if (!chessboard.state.legal.enabled || !chessboard.state.legal.preMoves.enabled || !chessboard.state.movable.enabled) return;
 
 		clearAllSquares(SquareColor.PREMOVE);
-		clearAllSquares(SquareColor.NEXTMOVE);
-		if (chessboard.state.highlight.enabled && chessboard.state.highlight.settings.nextMove) highlightMove(move, SquareColor.NEXTMOVE);
+		highlightMove(move, true, SquareColor.NEXTMOVE);
 		chessboard.state.legal.preMoves.curMove = move;
 		dispatch('nextMove', { move });
 	};
@@ -257,7 +259,6 @@
 		chessboard.makeMove(move);
 		clearAllSquares(SquareColor.LEGAL);
 		clearAllSquares(SquareColor.SELECT);
-		clearAllSquares(SquareColor.MOVE);
 		highlightMove(move);
 	};
 
@@ -295,35 +296,14 @@
 		return square;
 	};
 
-	const pieceIsMovable = (color: string) => {
-		if (!chessboard.state.movable.enabled) return false;
-
-		if (chessboard.state.legal.enabled) {
-			if (
-				chessboard.state.legal.preMoves.enabled &&
-				((chessboard.state.movable.color === getColorFromString(color) &&
-					chessboard.state.legal.whiteToMove === true &&
-					getColorFromString(color) === Color.WHITE) ||
-					(chessboard.state.legal.whiteToMove === false && getColorFromString(color) === Color.BLACK))
-			)
-				return true;
-
-			if (
-				!chessboard.state.legal.preMoves.enabled &&
-				((chessboard.state.legal.whiteToMove === true && getColorFromString(color) === Color.WHITE) ||
-					(chessboard.state.legal.whiteToMove === false && getColorFromString(color) === Color.BLACK))
-			)
-				return true;
-		} else if (chessboard.state.movable.color === Color.BOTH || chessboard.state.movable.color === getColorFromString(color)) return true;
-
-		return false;
-	};
-
 	const boardClick = (e: PointerEvent): void => {
+		if (!chessboard.state.board.mouseEvents) return;
 		if (e.button === 2) {
 			deselect();
 			return;
 		}
+		if (!chessboard.state.movable.enabled) return;
+
 		const boundingRect = boardDiv.getBoundingClientRect();
 		const x = e.clientX - boundingRect.left;
 		const y = e.clientY - boundingRect.top;
@@ -350,7 +330,22 @@
 		if (
 			chessboard.state.selectable.selectedPiece !== undefined &&
 			chessboard.state.selectable.selectedPiece.square !== square &&
-			(piece === undefined || piece.name[0] !== chessboard.state.selectable.selectedPiece.name[0])
+			!canMove(chessboard.state.selectable.selectedPiece.name)
+		) {
+			if (
+				chessboard.state.legal.preMoves.enabled &&
+				chessboard.state.legal.preMoves.moves.includes(chessboard.state.selectable.selectedPiece.square + square)
+			)
+				makeNextMove(chessboard.state.selectable.selectedPiece.square + square);
+			deselect(false);
+			return;
+		}
+
+		if (
+			chessboard.state.selectable.selectedPiece !== undefined &&
+			chessboard.state.selectable.selectedPiece.square !== square &&
+			(piece === undefined || piece.name[0] !== chessboard.state.selectable.selectedPiece.name[0]) &&
+			canMove(chessboard.state.selectable.selectedPiece.name)
 		) {
 			if (
 				chessboard.isPromotion(chessboard.state.selectable.selectedPiece.square + square) &&
@@ -359,45 +354,7 @@
 				makeMovePromotion(chessboard.state.selectable.selectedPiece.square + square);
 			else if (chessboard.state.legal.moves.includes(chessboard.state.selectable.selectedPiece.square + square))
 				makeMove(chessboard.state.selectable.selectedPiece.square + square);
-			else if (
-				chessboard.state.legal.preMoves.enabled &&
-				chessboard.state.legal.preMoves.moves.includes(chessboard.state.selectable.selectedPiece.square + square)
-			) {
-				makeNextMove(chessboard.state.selectable.selectedPiece.square + square);
-			}
 			deselect();
-			return;
-		}
-
-		if (
-			chessboard.state.selectable.selectedPiece !== piece &&
-			piece !== undefined &&
-			chessboard.state.movable.enabled &&
-			(chessboard.state.movable.color === Color.BOTH || chessboard.state.movable.color === getColorFromString(piece.name))
-		) {
-			if (allowDrawHighlightSquares('legal') && chessboard.state.legal.enabled && canMove()) {
-				clearAllSquares(SquareColor.LEGAL);
-				chessboard.state.legal.moves.forEach((move) => {
-					if (move.substring(0, 2) === square) highlightSquare(<ChessSquare>move.substring(2, 4), SquareColor.LEGAL);
-				});
-			}
-
-			if (
-				allowDrawHighlightSquares('preMove') &&
-				chessboard.state.legal.enabled &&
-				chessboard.state.legal.preMoves.enabled &&
-				chessboard.state.movable.color !== Color.BOTH &&
-				!canMove()
-			) {
-				clearAllSquares(SquareColor.PREMOVE);
-				chessboard.state.legal.preMoves.moves.forEach((move) => {
-					if (move.substring(0, 2) === square) highlightSquare(<ChessSquare>move.substring(2, 4), SquareColor.PREMOVE);
-				});
-			}
-
-			if ((chessboard.state.legal.enabled && pieceIsMovable(piece.name[0])) || !chessboard.state.legal.enabled) {
-				selectPiece(piece.square);
-			}
 		}
 	};
 
@@ -499,26 +456,18 @@
 		clearAllSquares();
 		updateLegalStateIfNeeded();
 
-		if (chessboard.state.legal.enabled && chessboard.state.legal.lastMove !== '' && allowDrawHighlightSquares('move'))
-			highlightMove(chessboard.state.legal.lastMove);
-		if (
-			chessboard.state.legal.enabled &&
-			chessboard.state.legal.preMoves.enabled &&
-			chessboard.state.legal.preMoves.curMove !== '' &&
-			allowDrawHighlightSquares('nextMove')
-		) {
-			highlightMove(chessboard.state.legal.preMoves.curMove, SquareColor.NEXTMOVE);
+		if (chessboard.state.legal.enabled && chessboard.state.legal.lastMove !== '') highlightMove(chessboard.state.legal.lastMove);
+		if (chessboard.state.legal.enabled && chessboard.state.legal.preMoves.enabled && chessboard.state.legal.preMoves.curMove !== '') {
+			highlightMove(chessboard.state.legal.preMoves.curMove, true, SquareColor.NEXTMOVE);
 		}
 		if (chessboard.state.selectable.enabled && chessboard.state.selectable.selectedPiece !== undefined) {
-			if (allowDrawHighlightSquares('select') && pieceIsMovable(chessboard.state.selectable.selectedPiece.name))
-				highlightSquare(chessboard.state.selectable.selectedPiece.square, SquareColor.SELECT);
-			if (chessboard.state.legal.enabled && chessboard.state.legal.moves.length > 0 && allowDrawHighlightSquares('legal'))
+			highlightSquare(chessboard.state.selectable.selectedPiece.square, SquareColor.SELECT);
+			if (chessboard.state.legal.enabled && canMove(chessboard.state.selectable.selectedPiece.name))
 				highlightLegalMoves(chessboard.state.legal.moves, chessboard.state.selectable.selectedPiece.square);
 			if (
 				chessboard.state.legal.enabled &&
 				chessboard.state.legal.preMoves.enabled &&
-				chessboard.state.legal.preMoves.moves.length > 0 &&
-				allowDrawHighlightSquares('preMove')
+				!canMove(chessboard.state.selectable.selectedPiece.name)
 			)
 				highlightLegalMoves(chessboard.state.legal.moves, chessboard.state.selectable.selectedPiece.square, SquareColor.PREMOVE);
 		}
@@ -534,11 +483,11 @@
 
 	export const getConfigFromState = (state: State) => state.getConfig();
 
-	const handlePieceMoving = (e: CustomEvent) => {
+	const handlePieceMoving = (e: CustomEvent, piece: StatePiece) => {
 		const bounding = boardDiv.getBoundingClientRect();
 		if (chessboard.state.legal.enabled) {
-			if (canMove()) chessboard.legalHover(getSquareFromCoords(e.detail.x - bounding.x, e.detail.y - bounding.y));
-			if (!canMove() && chessboard.state.legal.preMoves.enabled)
+			if (canMove(piece.name)) chessboard.legalHover(getSquareFromCoords(e.detail.x - bounding.x, e.detail.y - bounding.y));
+			if (!canMove(piece.name) && chessboard.state.legal.preMoves.enabled)
 				chessboard.preMoveHover(getSquareFromCoords(e.detail.x - bounding.x, e.detail.y - bounding.y));
 		}
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
@@ -547,17 +496,6 @@
 	const startDragging = (piece: StatePiece) => {
 		if (chessboard.state.draggable.ghostPiece) setGhostPiece(piece);
 		clearAllSquares(SquareColor.SELECT);
-
-		if (chessboard.state.selectable.selectedPiece === undefined) {
-			if (allowDrawHighlightSquares('legal') && chessboard.state.legal.enabled)
-				chessboard.state.legal.moves.forEach((move) => {
-					if (move.substring(0, 2) === piece.square) highlightSquare(<ChessSquare>move.substring(2, 4), SquareColor.LEGAL);
-				});
-			if (allowDrawHighlightSquares('preMove') && chessboard.state.legal.preMoves.enabled)
-				chessboard.state.legal.preMoves.moves.forEach((move) => {
-					if (move.substring(0, 2) === piece.square) highlightSquare(<ChessSquare>move.substring(2, 4), SquareColor.PREMOVE);
-				});
-		}
 	};
 
 	const handlePromotion = (e: CustomEvent) => {
@@ -593,7 +531,7 @@
 	use:drawArrows={{
 		svg: arrowsSvg,
 		flipped: chessboard.state.board.flipped,
-		enabled: chessboard.state.drawTools.enabled,
+		enabled: chessboard.state.drawTools.enabled && chessboard.state.board.mouseEvents,
 		settings: chessboard.state.drawTools.settings
 	}}
 	on:drawCircle={(e) => dispatch('drawCircle', { square: e.detail.square, color: e.detail.color })}
@@ -613,23 +551,27 @@
 				<Piece
 					square={piece.square}
 					name={piece.name}
+					mouseEvents={chessboard.state.board.mouseEvents}
 					legalState={chessboard.state.legal}
 					draggableState={chessboard.state.draggable}
-					selectedPiece={chessboard.state.selectable.selectedPiece}
+					selectableState={chessboard.state.selectable}
 					movableState={chessboard.state.movable}
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 					flipped={chessboard.state.board.flipped}
 					on:move={moveMadeFromPiece}
 					on:clicked={() => {
 						dispatch('piececlick', { piece });
+						selectPiece(piece.square);
 					}}
 					on:startMoving={() => {
 						dispatch('startDragging', { piece });
 						startDragging(piece);
 					}}
-					on:moving={handlePieceMoving}
+					on:moving={(e) => handlePieceMoving(e, piece)}
 					on:endDragging
-					on:select={() => selectPiece(piece.square)}
+					on:select={() => {
+						selectPiece(piece.square);
+					}}
 					on:deselect={() => deselect()}
 				/>
 			{/each}
@@ -644,7 +586,7 @@
 			flipped={chessboard.state.board.flipped}
 		/>
 	{/if}
-	{#if allowDrawHighlightSquares()}
+	{#if chessboard.state.highlight.enabled}
 		{#each [...chessboard.state.markedSquares] as square (square)}
 			<Square
 				on:dragenter={(e) => {
@@ -655,6 +597,7 @@
 				color={square.color}
 				getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 				flipped={chessboard.state.board.flipped}
+				mouseEvents={chessboard.state.board.mouseEvents}
 			/>
 		{/each}
 	{/if}
@@ -662,7 +605,7 @@
 		<Notation theme={chessboard.state.board.boardTheme} flipped={chessboard.state.board.flipped} />
 	{/if}
 	{#if chessboard.state.board.resizible.enabled}
-		<Resizing {chessboard} {setSize} />
+		<Resizing {chessboard} {setSize} mouseEvents={chessboard.state.board.mouseEvents} />
 	{/if}
 	{#if chessboard.state.drawTools.enabled}
 		<Arrows

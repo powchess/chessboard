@@ -10,18 +10,22 @@
 	import type { Piece } from './state';
 	import type DraggableState from './state/draggable';
 	import type LegalState from './state/legal';
+	import type SelectableState from './state/selectable';
 
 	export let square: ChessSquare;
 	export let name: ChessPiece;
+	export let mouseEvents = true;
 	export let getGridCoordsFromSquare: (square: ChessSquare) => { x: number; y: number };
 	export let flipped: boolean;
 	export let isGhost = false;
 
+	if (isGhost) mouseEvents = false;
+
+	export let selectableState: SelectableState | undefined = undefined;
 	export let draggableState: DraggableState | undefined = undefined;
 	export let legalState: LegalState | undefined = undefined;
 	export let movableState: MovableState | undefined = undefined;
 
-	export let selectedPiece: Piece | undefined = undefined;
 	let selected = false;
 
 	const dispatch = createEventDispatcher();
@@ -51,7 +55,8 @@
 		curDuration = 0;
 		if (!e.detail) dispatch('deselect');
 		if (square === e.detail) {
-			if (!selected) dispatch('select');
+			// eslint-disable-next-line @typescript-eslint/no-use-before-define
+			if (!selected && canSelect(movableState, selectableState)) dispatch('select');
 			else dispatch('deselect');
 			selected = !selected;
 		} else selected = false;
@@ -59,9 +64,7 @@
 		if (square !== e.detail && e.detail) dispatch('move', square + e.detail);
 	};
 
-	const canMove = (movable?: MovableState) => {
-		if (!movable?.enabled) return false;
-
+	const checkColor = (movable: MovableState) => {
 		if (legalState?.enabled) {
 			if (legalState.preMoves.enabled && getColorFromString(name) === movable.color) return true;
 			if (movable.color === Color.WHITE && legalState.whiteToMove && getColorFromString(name) === Color.WHITE) return true;
@@ -77,9 +80,36 @@
 		return false;
 	};
 
-	const curPieceWasDeselected = (piece: Piece | undefined) => piece === undefined || piece.name !== name || piece.square !== square;
+	const canDrag = (movable?: MovableState, draggable?: DraggableState) => {
+		if (!movable?.enabled || !draggable?.enabled || !mouseEvents) return false;
 
-	$: if (curPieceWasDeselected(selectedPiece)) selected = false;
+		return checkColor(movable);
+	};
+
+	const canSelect = (movable?: MovableState, selectable?: SelectableState) => {
+		if (!movable?.enabled || !selectable?.enabled || !mouseEvents) return false;
+		if (legalState?.enabled) {
+			if (
+				selectableState?.selectedPiece !== undefined &&
+				selectableState?.selectedPiece?.square !== square &&
+				legalState.moves.find((move) => move.endsWith(square))
+			)
+				return false;
+			if (
+				selectableState?.selectedPiece !== undefined &&
+				legalState.preMoves.enabled &&
+				getColorFromString(name) === movable.color &&
+				legalState.preMoves.moves.find((move) => move.endsWith(square))
+			)
+				return false;
+		}
+
+		return checkColor(movable);
+	};
+
+	const curPieceIsNotSelectedPiece = (piece: Piece | undefined) => piece === undefined || piece.name !== name || piece.square !== square;
+
+	$: if (curPieceIsNotSelectedPiece(selectableState?.selectedPiece)) selected = false;
 	$: flipped, reRenderPieces(square);
 	$: pieceZIndex = typeof movableState === 'boolean' ? (movableState ? 2 : 1) : movableState?.enabled ? 2 : 1;
 </script>
@@ -87,7 +117,9 @@
 <img
 	use:drag={{
 		startSquare: square,
-		onlyShow: !canMove(movableState),
+		mouseEvents,
+		canDrag: canDrag(movableState, draggableState),
+		canSelect: canSelect(movableState, selectableState),
 		boardFlipped: flipped,
 		duration: draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0,
 		easingFunc: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut'],

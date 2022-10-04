@@ -9,6 +9,7 @@
 	export let getGridCoordsFromSquare: (square: ChessSquare) => { x: number; y: number };
 	export let flipped: boolean;
 	export let theme: BoardTheme;
+	export let mouseEvents = true;
 
 	let x: number;
 	let y: number;
@@ -22,7 +23,10 @@
 	$: flipped, reRenderSquares();
 </script>
 
-<div style="left: {x * 12.5}%; bottom: {y * 12.5}%;" class="noselect {boardThemesStyles.squareStyles[theme][color]}" />
+<div
+	style="left: {x * 12.5}%; bottom: {y * 12.5}%;"
+	class="noselect {boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}"
+/>
 
 <style>
 	div {

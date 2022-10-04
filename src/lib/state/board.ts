@@ -6,6 +6,8 @@ export default class BoardState {
 
 	public piecesTheme: PiecesTheme;
 
+	public mouseEvents: boolean;
+
 	public flipped: boolean;
 
 	public notation: boolean;
@@ -24,6 +26,7 @@ export default class BoardState {
 	public defaultState = {
 		boardTheme: 'standard',
 		piecesTheme: 'standard',
+		mouseEvents: true,
 		flipped: false,
 		notation: true,
 		shadow: false,
@@ -39,6 +42,7 @@ export default class BoardState {
 	constructor(config?: ChessboardConfig['board']) {
 		this.boardTheme = this.defaultState.boardTheme;
 		this.piecesTheme = this.defaultState.piecesTheme;
+		this.mouseEvents = this.defaultState.mouseEvents;
 		this.flipped = this.defaultState.flipped;
 		this.notation = this.defaultState.notation;
 		this.startFen = this.defaultState.startFen;
@@ -54,6 +58,7 @@ export default class BoardState {
 		if (config !== undefined) {
 			if (config.boardTheme !== undefined) this.boardTheme = config.boardTheme;
 			if (config.piecesTheme !== undefined) this.piecesTheme = config.piecesTheme;
+			if (config.mouseEvents !== undefined) this.mouseEvents = config.mouseEvents;
 			if (config.flipped !== undefined) this.flipped = config.flipped;
 			if (config.notation !== undefined) this.notation = config.notation;
 			if (config.startFen !== undefined) this.startFen = config.startFen;
@@ -68,6 +73,7 @@ export default class BoardState {
 		const cfg = {
 			...(this.boardTheme !== this.defaultState.boardTheme && { boardTheme: this.boardTheme }),
 			...(this.piecesTheme !== this.defaultState.piecesTheme && { piecesTheme: this.piecesTheme }),
+			...(this.mouseEvents !== this.defaultState.mouseEvents && { mouseEvents: this.mouseEvents }),
 			...(this.flipped !== this.defaultState.flipped && { flipped: this.flipped }),
 			...(this.notation !== this.defaultState.notation && { notation: this.notation }),
 			...(this.startFen !== this.defaultState.startFen && { startFen: this.startFen }),

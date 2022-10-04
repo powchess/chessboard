@@ -48,7 +48,9 @@ function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boole
 type DragParams = {
 	startSquare: ChessSquare;
 	boardFlipped: boolean;
-	onlyShow: boolean;
+	mouseEvents: boolean;
+	canDrag: boolean;
+	canSelect: boolean;
 	duration: number;
 	easingFunc: (t: number) => number;
 	coords: Tweened<{
@@ -100,10 +102,10 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 
 	let dragging = false;
 
-	let { startSquare, boardFlipped, onlyShow, duration, easingFunc } = params;
+	let { startSquare, boardFlipped, mouseEvents, canDrag, canSelect, duration, easingFunc } = params;
 	const { coords } = params;
 
-	node.style.cursor = onlyShow ? 'default' : 'pointer';
+	node.style.cursor = !canDrag && !canSelect ? 'default' : 'pointer';
 
 	let startX = get(coords).x;
 	let startY = get(coords).y;
@@ -229,7 +231,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		y = 0;
 		globalDX = 0;
 		globalDY = 0;
-		node.style.cursor = onlyShow ? 'default' : 'pointer';
+		node.style.cursor = !canDrag && !canSelect ? 'default' : 'pointer';
 		setTimeout(() => {
 			if (!dragging) node.style.zIndex = '2';
 		}, duration);
@@ -238,7 +240,10 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	}
 
 	function pointerdown(e: PointerEvent): void {
-		if (e.button !== 0 || !e.isPrimary) return;
+		if (e.button !== 0 || !e.isPrimary || !mouseEvents) return;
+
+		if (canSelect) node.dispatchEvent(new CustomEvent('clicked'));
+		if (!canDrag) return;
 
 		startX = boardFlipped ? 7 - fileToIndex(<ChessFile>startSquare[0]) : fileToIndex(<ChessFile>startSquare[0]);
 		startY = boardFlipped ? 8 - parseInt(startSquare[1], 10) : parseInt(startSquare[1], 10) - 1;
@@ -265,8 +270,6 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 
 		dragging = true;
 
-		node.dispatchEvent(new CustomEvent('clicked'));
-
 		window.addEventListener('pointermove', movingFunc);
 		window.addEventListener('pointerup', pointerup);
 		window.addEventListener('pointercancel', pointerup);
@@ -284,7 +287,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 
 	node.addEventListener('contextmenu', contextmenu);
 	node.addEventListener('dragstart', dragstart);
-	if (!onlyShow) node.addEventListener('pointerdown', pointerdown);
+	node.addEventListener('pointerdown', pointerdown);
 
 	return {
 		destroy() {
@@ -298,16 +301,14 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 			duration = newParams.duration;
 			easingFunc = newParams.easingFunc;
 
-			if (newParams.onlyShow !== onlyShow) {
-				onlyShow = newParams.onlyShow;
-				if (onlyShow) {
-					node.removeEventListener('pointerdown', pointerdown);
-					node.style.cursor = 'default';
-				} else {
-					node.addEventListener('pointerdown', pointerdown);
-					node.style.cursor = 'pointer';
-				}
-			}
+			if (newParams.canDrag !== canDrag || newParams.canSelect !== canSelect)
+				node.style.cursor = !newParams.canDrag && !newParams.canSelect ? 'default' : 'pointer';
+
+			if (newParams.canDrag !== canDrag) canDrag = newParams.canDrag;
+
+			if (newParams.canSelect !== canSelect) canSelect = newParams.canSelect;
+
+			if (newParams.mouseEvents !== mouseEvents) mouseEvents = newParams.mouseEvents;
 
 			if (boardFlipped !== newParams.boardFlipped) circle = createTouchCircle(node, touchScale, newParams.boardFlipped);
 			boardFlipped = newParams.boardFlipped;

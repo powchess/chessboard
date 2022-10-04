@@ -184,6 +184,7 @@
 		<div class="flex flex-col gap-2 mx-auto w-60 text-gray-300 text-sm">
 			<Board
 				bind:boardTheme={state.board.boardTheme}
+				bind:mouseEvents={state.board.mouseEvents}
 				bind:notation={state.board.notation}
 				bind:flipped={state.board.flipped}
 				bind:shadow={state.board.style.shadow}

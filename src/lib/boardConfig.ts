@@ -16,6 +16,7 @@ export type ChessboardConfig = {
 	board?: {
 		boardTheme?: BoardTheme;
 		piecesTheme?: PiecesTheme;
+		mouseEvents?: boolean;
 		flipped?: boolean;
 		notation?: boolean;
 		startFen?: string;

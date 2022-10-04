@@ -1,5 +1,9 @@
-export default function resizing(node: HTMLElement, params: { minWidth: number; maxWidth: number; curWidth: number }) {
+export default function resizing(
+	node: HTMLElement,
+	params: { mouseEvents: boolean; minWidth: number; maxWidth: number; curWidth: number }
+) {
 	const { minWidth, maxWidth, curWidth } = params;
+	let { mouseEvents } = params;
 	let Width: number = curWidth;
 
 	let initialX: number;
@@ -38,6 +42,7 @@ export default function resizing(node: HTMLElement, params: { minWidth: number; 
 	}
 
 	function handleMousedown(e: MouseEvent) {
+		if (!mouseEvents) return;
 		e.stopPropagation();
 		if (e.button !== 0) return;
 
@@ -53,8 +58,9 @@ export default function resizing(node: HTMLElement, params: { minWidth: number; 
 	node.addEventListener('mousedown', handleMousedown);
 
 	return {
-		update(newParams: { minWidth: number; maxWidth: number; curWidth: number }) {
+		update(newParams: { mouseEvents: boolean; minWidth: number; maxWidth: number; curWidth: number }) {
 			Width = newParams.curWidth;
+			if (mouseEvents !== newParams.mouseEvents) mouseEvents = newParams.mouseEvents;
 		},
 		destroy() {
 			node.removeEventListener('mousedown', handleMousedown);

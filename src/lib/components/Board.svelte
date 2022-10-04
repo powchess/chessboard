@@ -5,6 +5,7 @@
 
 	export let name = 'Board';
 	export let boardTheme: BoardTheme;
+	export let mouseEvents: boolean;
 	export let notation: boolean;
 	export let flipped: boolean;
 	export let shadow: boolean;
@@ -29,6 +30,11 @@
 			{/each}
 		</select>
 		<label for="boardTheme" class="select-none">board theme</label>
+	</div>
+
+	<div class="mb-2">
+		<input id="mouseEvents" type="checkbox" bind:checked={mouseEvents} />
+		<label for="mouseEvents" class="select-none">mouseEvents</label>
 	</div>
 
 	<div class="mb-2">
