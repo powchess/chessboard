@@ -58,6 +58,7 @@ module.exports = {
 		'no-continue': 'off',
 		'no-restricted-syntax': 'off',
 		'no-underscore-dangle': 'off',
-		'import/prefer-default-export': 'off'
+		'import/prefer-default-export': 'off',
+		'@typescript-eslint/no-use-before-define': 'off'
 	}
 };

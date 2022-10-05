@@ -55,7 +55,6 @@
 		curDuration = 0;
 		if (!e.detail) dispatch('deselect');
 		if (square === e.detail) {
-			// eslint-disable-next-line @typescript-eslint/no-use-before-define
 			if (!selected && canSelect(movableState, selectableState)) dispatch('select');
 			else dispatch('deselect');
 			selected = !selected;
@@ -88,21 +87,21 @@
 
 	const canSelect = (movable?: MovableState, selectable?: SelectableState) => {
 		if (!movable?.enabled || !selectable?.enabled || !mouseEvents) return false;
-		if (legalState?.enabled) {
-			if (
-				selectableState?.selectedPiece !== undefined &&
-				selectableState?.selectedPiece?.square !== square &&
-				legalState.moves.find((move) => move.endsWith(square))
-			)
-				return false;
-			if (
-				selectableState?.selectedPiece !== undefined &&
-				legalState.preMoves.enabled &&
-				getColorFromString(name) === movable.color &&
-				legalState.preMoves.moves.find((move) => move.endsWith(square))
-			)
-				return false;
-		}
+		// if (legalState?.enabled) {
+		// 	if (
+		// 		selectableState?.selectedPiece !== undefined &&
+		// 		selectableState?.selectedPiece?.square !== square &&
+		// 		legalState.moves.find((move) => move.endsWith(square))
+		// 	)
+		// 		return false;
+		// 	if (
+		// 		selectableState?.selectedPiece !== undefined &&
+		// 		legalState.preMoves.enabled &&
+		// 		getColorFromString(name) === movable.color &&
+		// 		legalState.preMoves.moves.find((move) => move.endsWith(square))
+		// 	)
+		// 		return false;
+		// }
 
 		return checkColor(movable);
 	};
