@@ -85,4 +85,109 @@ export class State {
 		drawTools: this.drawTools.getConfig(),
 		sounds: this.sounds.getConfig()
 	});
+
+	public get legalEnabled() {
+		return this.legal.enabled;
+	}
+
+	public get preMovesEnabled() {
+		return this.legal.enabled && this.legal.preMoves.enabled;
+	}
+
+	public get legalMoves() {
+		return this.legalEnabled ? this.legal.moves : [];
+	}
+
+	public set legalMoves(moves: string[]) {
+		if (!this.legalEnabled) return;
+		this.legal.moves = moves;
+	}
+
+	public get preMoves() {
+		return this.preMovesEnabled ? this.legal.preMoves.moves : [];
+	}
+
+	public set preMoves(moves: string[]) {
+		if (!this.preMovesEnabled) return;
+		this.legal.preMoves.moves = moves;
+	}
+
+	public get flipped() {
+		return this.board.flipped;
+	}
+
+	public set flipped(flppd: boolean) {
+		this.board.flipped = flppd;
+	}
+
+	public get currentPreMove() {
+		return this.preMovesEnabled ? this.legal.preMoves.curMove : '';
+	}
+
+	public set currentPreMove(move: string) {
+		if (move.length < 4) return;
+		if (!this.preMovesEnabled) this.legal.preMoves.curMove = '';
+		else this.legal.preMoves.curMove = move;
+	}
+
+	public get selectableEnabled() {
+		return this.selectable.enabled;
+	}
+
+	public get selectedPiece() {
+		return this.selectableEnabled ? this.selectable.selectedPiece : undefined;
+	}
+
+	public set selectedPiece(piece: Piece | undefined) {
+		if (!this.selectableEnabled) this.selectable.selectedPiece = undefined;
+		else this.selectable.selectedPiece = piece;
+	}
+
+	public get whiteToMove() {
+		return this.legal.whiteToMove;
+	}
+
+	public set whiteToMove(wtmv: boolean) {
+		if (!this.legalEnabled) return;
+		this.legal.whiteToMove = wtmv;
+	}
+
+	public get lastMove() {
+		return this.legalEnabled ? this.legal.lastMove : '';
+	}
+
+	public set lastMove(move: string) {
+		if (move.length < 4) return;
+		if (!this.legalEnabled) this.legal.lastMove = '';
+		else this.legal.lastMove = move;
+	}
+
+	public get highlightEnabled() {
+		return this.highlight.enabled;
+	}
+
+	public get highlightSettings() {
+		return this.highlight.settings;
+	}
+
+	public get soundsEnabled() {
+		return this.sounds.enabled;
+	}
+
+	public get ghostPieceEnabled() {
+		return this.draggable.ghostPiece.enabled;
+	}
+
+	public get ghostPiece() {
+		return this.draggable.ghostPiece.piece;
+	}
+
+	public set ghostPiece(piece: Piece | undefined) {
+		if (!this.ghostPieceEnabled) this.draggable.ghostPiece.piece = undefined;
+		this.draggable.ghostPiece.piece = piece;
+	}
+
+	public get movableEnabled() {
+		return this.movable.enabled;
+	}
 }

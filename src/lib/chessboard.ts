@@ -404,4 +404,100 @@ export default class Chessboard {
 	public setConfigSettings = (cfg: ChessboardConfig) => {
 		this.state.setConfigSettings(cfg);
 	};
+
+	public get legalEnabled() {
+		return this.state.legalEnabled;
+	}
+
+	public get preMovesEnabled() {
+		return this.state.preMovesEnabled;
+	}
+
+	public get legalMoves() {
+		return this.state.legalMoves;
+	}
+
+	public set legalMoves(moves: string[]) {
+		this.state.legalMoves = moves;
+	}
+
+	public get preMoves() {
+		return this.state.preMoves;
+	}
+
+	public set preMoves(moves: string[]) {
+		this.state.preMoves = moves;
+	}
+
+	public get flipped() {
+		return this.state.flipped;
+	}
+
+	public set flipped(flppd: boolean) {
+		this.state.flipped = flppd;
+	}
+
+	public get currentPreMove() {
+		return this.state.currentPreMove;
+	}
+
+	public set currentPreMove(move: string) {
+		this.state.currentPreMove = move;
+	}
+
+	public get selectableEnabled() {
+		return this.state.selectableEnabled;
+	}
+
+	public get selectedPiece() {
+		return this.state.selectedPiece;
+	}
+
+	public set selectedPiece(piece: Piece | undefined) {
+		this.state.selectedPiece = piece;
+	}
+
+	public get whiteToMove() {
+		return this.state.whiteToMove;
+	}
+
+	public set whiteToMove(wtmv: boolean) {
+		this.state.whiteToMove = wtmv;
+	}
+
+	public get lastMove() {
+		return this.state.lastMove;
+	}
+
+	public set lastMove(move: string) {
+		this.state.lastMove = move;
+	}
+
+	public get highlightEnabled() {
+		return this.state.highlightEnabled;
+	}
+
+	public get highlightSettings() {
+		return this.state.highlightSettings;
+	}
+
+	public get soundsEnabled() {
+		return this.state.soundsEnabled;
+	}
+
+	public get ghostPieceEnabled() {
+		return this.state.ghostPieceEnabled;
+	}
+
+	public get ghostPiece() {
+		return this.state.ghostPiece;
+	}
+
+	public set ghostPiece(piece: Piece | undefined) {
+		this.state.ghostPiece = piece;
+	}
+
+	public get movableEnabled() {
+		return this.state.movableEnabled;
+	}
 }
