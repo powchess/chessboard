@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { Chess, type Move } from 'chess.js';
 	import Chessboard from '$lib/Chessboard.svelte';
-	import { defaultFEN, State } from '$lib/state/index';
+	import { State } from '$lib/state/index';
 	import type { ChessboardConfig } from '$lib/boardConfig';
 	import { browser } from '$app/environment';
 	import Board from '$lib/components/Board.svelte';
@@ -167,11 +167,6 @@
 	};
 
 	$: code = getConfigString(state, tsEnabled);
-	$: if (state.legal.enabled) {
-		state.board.startFen = defaultFEN;
-		chess.load(state.board.startFen);
-		if (browser && mounted) chessboard.setFEN(state.board.startFen, false);
-	}
 </script>
 
 <svelte:head>
@@ -203,7 +198,16 @@
 				bind:easing={state.draggable.transition.settings.easing}
 			/>
 			<Section name={'Selectable'} bind:enabled={state.selectable.enabled} showExpand={false} />
-			<Legal expanded={true} bind:enabled={state.legal.enabled} bind:preMovesEnabled={state.legal.preMoves.enabled} />
+			<Legal
+				on:changed={() => {
+					if (!state.legal.enabled) {
+						// for some reason it doesn't work without !state.legal.enabled, on:changed event is triggered before the change??
+						chess.reset();
+						if (browser && mounted) chessboard.setFEN(state.board.startFen, true, false);
+					}
+				}}
+				bind:enabled={state.legal.enabled}
+			/>
 			<Highlight bind:enabled={state.highlight.enabled} bind:settings={state.highlight.settings} />
 			<DrawTools
 				bind:enabled={state.drawTools.enabled}

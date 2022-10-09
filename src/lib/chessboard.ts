@@ -296,7 +296,8 @@ export default class Chessboard {
 		return getShortFenFromBoard(board);
 	}
 
-	public getPieceFromSquare(square: ChessSquare): Piece | undefined {
+	public getPieceFromSquare(square: ChessSquare | undefined): Piece | undefined {
+		if (!square) return undefined;
 		let piece: Piece | undefined;
 		this.state.pieces.forEach((element) => {
 			if (element.square === square) piece = element;
@@ -447,6 +448,10 @@ export default class Chessboard {
 
 	public get selectableEnabled() {
 		return this.state.selectableEnabled;
+	}
+
+	public get draggableEnabled() {
+		return this.state.draggableEnabled;
 	}
 
 	public get selectedPiece() {

@@ -1,5 +1,8 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import { slide } from 'svelte/transition';
+
+	const dispatch = createEventDispatcher();
 
 	export let name = 'board';
 	export let enabled: boolean | undefined = undefined;
@@ -17,7 +20,13 @@
 	>
 		<div class="flex gap-1">
 			{#if enabled !== undefined}
-				<input on:click|stopPropagation type="checkbox" bind:checked={enabled} class="mr-1" />
+				<input
+					on:change={() => dispatch('changed', enabled)}
+					on:click|stopPropagation
+					type="checkbox"
+					bind:checked={enabled}
+					class="mr-1"
+				/>
 			{/if}
 			<span class={enabled === undefined ? 'ml-[21px]' : ''}>{name}</span>
 		</div>

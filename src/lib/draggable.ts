@@ -242,8 +242,15 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	function pointerdown(e: PointerEvent): void {
 		if (e.button !== 0 || !e.isPrimary || !mouseEvents) return;
 
-		if (canSelect) node.dispatchEvent(new CustomEvent('clicked'));
-		if (!canDrag) return;
+		if (canSelect || canDrag) node.dispatchEvent(new CustomEvent('clicked'));
+		if (!canDrag) {
+			node.dispatchEvent(
+				new CustomEvent('dropped', {
+					detail: startSquare
+				})
+			);
+			return;
+		}
 
 		startX = boardFlipped ? 7 - fileToIndex(<ChessFile>startSquare[0]) : fileToIndex(<ChessFile>startSquare[0]);
 		startY = boardFlipped ? 8 - parseInt(startSquare[1], 10) : parseInt(startSquare[1], 10) - 1;

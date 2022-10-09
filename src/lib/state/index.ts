@@ -134,6 +134,10 @@ export class State {
 		return this.selectable.enabled;
 	}
 
+	public get draggableEnabled() {
+		return this.draggable.enabled;
+	}
+
 	public get selectedPiece() {
 		return this.selectableEnabled ? this.selectable.selectedPiece : undefined;
 	}
@@ -157,7 +161,7 @@ export class State {
 	}
 
 	public set lastMove(move: string) {
-		if (move.length < 4) return;
+		if (move.length < 4 && move !== '') return;
 		if (!this.legalEnabled) this.legal.lastMove = '';
 		else this.legal.lastMove = move;
 	}

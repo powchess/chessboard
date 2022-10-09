@@ -59,7 +59,7 @@
 			else dispatch('deselect');
 			selected = !selected;
 		} else selected = false;
-		dispatch('endDragging', square + e.detail);
+		if (canDrag(movableState, draggableState)) dispatch('endDragging', square + e.detail);
 		if (square !== e.detail && e.detail) dispatch('move', square + e.detail);
 	};
 
