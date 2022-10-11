@@ -35,8 +35,8 @@ type SqXY = Pair<number>;
 const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
 const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-export function removeComupterArrows(svg: SVGGElement): void {
-	svg.querySelectorAll('[sf]').forEach((element) => element.remove());
+export function removeComputerArrows(svg: SVGGElement): void {
+	svg.querySelectorAll('[fixed]').forEach((element) => element.remove());
 }
 
 function getChessSquare(square: SqXY) {
@@ -191,7 +191,7 @@ export function drawTools(svg: SVGGElement, data: (CircleTool | ArrowTool)[], kn
 
 export function removeUserArrows(svg: SVGGElement): void {
 	svg.querySelectorAll('circle,polyline').forEach((element) => {
-		if (!element.hasAttribute('sf')) element.remove();
+		if (!element.hasAttribute('fixed')) element.remove();
 	});
 }
 

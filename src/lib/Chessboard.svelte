@@ -409,14 +409,17 @@
 		chessboard.state.drawTools.tools = tools;
 	};
 
-	export const removeTools = (prop: { type?: 'arrow' | 'circle'; from?: ChessSquare; to?: ChessSquare; fixed?: boolean }) => {
-		chessboard.state.drawTools.tools = chessboard.state.drawTools.tools.filter(
-			(tool) =>
-				(prop.type && tool.type !== prop.type) ||
-				(prop.from && ((tool.type === 'arrow' && tool.from !== prop.from) || (tool.type === 'circle' && tool.square !== prop.from))) ||
-				(prop.to && tool.type === 'arrow' && tool.to !== prop.to) ||
-				(prop.fixed !== undefined && tool.fixed !== prop.fixed)
-		);
+	export const removeTools = (prop?: { type?: 'arrow' | 'circle'; from?: ChessSquare; to?: ChessSquare; fixed?: boolean }) => {
+		chessboard.state.drawTools.tools = chessboard.state.drawTools.tools.filter((tool) => {
+			if (!prop) return false;
+
+			return (
+				(!prop.type || tool.type !== prop.type) &&
+				(!prop.from || (tool.type === 'arrow' && tool.from !== prop.from) || (tool.type === 'circle' && tool.square !== prop.from)) &&
+				(!prop.to || (tool.type === 'arrow' && tool.to !== prop.to)) &&
+				(prop.fixed === undefined || tool.fixed !== prop.fixed)
+			);
+		});
 	};
 
 	export const setMovableColor = (color: Color.WHITE | Color.BLACK | boolean) => {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { drawTools, removeComupterArrows, type ArrowTool, type CircleTool } from './drawArrows';
+	import { drawTools, removeComputerArrows, type ArrowTool, type CircleTool } from './drawArrows';
 
 	export let flipped = false;
 	export let svg: SVGGElement;
@@ -11,7 +11,7 @@
 
 	function redrawTools(data: (CircleTool | ArrowTool)[]) {
 		if (!mounted) return;
-		removeComupterArrows(svg);
+		removeComputerArrows(svg);
 		drawTools(svg, data, knightLShape);
 	}
 
@@ -38,10 +38,10 @@
 				markerHeight="1"
 				orient="auto"
 			>
-				<path fill={color} d="M 5 0 Q 0 0 0 5 L 0 15 Q 0 20 5 20 Z" />
+				<path fill={color} d="M 0 5 v 10 c 0 2.8 2.2 5 5 5 L 6 20 V 0 L 5 0 C 2.2 0 0 2.2 0 5 z" />
 			</marker>
 			<marker id="end-{color[0]}" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor">
-				<path fill={color} d="M 0 4 L 10 10 L 0 16 Z" />
+				<path fill={color} d="M 9.5 9.5 l -8.7 -5 C 0.5 4.3 0 4.6 0 5 v 10 c 0 0.4 0.5 0.7 0.9 0.5 l 8.7 -5 C 9.9 10.3 9.9 9.7 9.5 9.5 z" />
 			</marker>
 		{/each}
 	</defs>
