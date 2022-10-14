@@ -174,6 +174,11 @@
 			if (chessboard.whiteToMove) setCheckSquare(chessboard.getWhiteKingSquare());
 			else setCheckSquare(chessboard.getBlackKingSquare());
 		} else removeCheckSquare();
+
+		if (chessboard.state.callbacks.getLastMove) {
+			chessboard.lastMove = chessboard.state.callbacks.getLastMove();
+			highlightMove(chessboard.lastMove);
+		} else clearAllSquares(SquareColor.MOVE);
 	};
 
 	export const playMoveSound = (moveType: MoveTypeSound) => {
