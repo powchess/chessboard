@@ -6,22 +6,30 @@
 	export let flipped: boolean;
 
 	const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+
+	let totalHeight: number;
+	$: fontSize = Math.floor(Math.log(totalHeight / 8) * 3);
 </script>
 
 <div class="files noselect">
 	{#each files as file, i}
-		<span data-file={file} style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};">
+		<span
+			data-file={file}
+			style="--font-size: {fontSize}px; color: {i % 2 === 0
+				? boardThemesStyles.colors[theme].white
+				: boardThemesStyles.colors[theme].black};"
+		>
 			{files[flipped ? Math.abs(i - 7) : i]}
 		</span>
 	{/each}
 </div>
-<div class="ranks noselect">
+<div bind:clientHeight={totalHeight} class="ranks noselect">
 	{#each files as file, i}
 		<span
 			data-file={file}
-			style="color: {i % 2 === 0 ? boardThemesStyles.colors[theme].white : boardThemesStyles.colors[theme].black};{flipped
-				? ' text-align: right;'
-				: ''}"
+			style="--font-size: {fontSize}px; color: {i % 2 === 0
+				? boardThemesStyles.colors[theme].white
+				: boardThemesStyles.colors[theme].black};{flipped ? ' text-align: right;' : ''}"
 		>
 			{flipped ? i + 1 : Math.abs(i - 8)}
 		</span>
@@ -51,13 +59,19 @@
 	}
 
 	.files span {
-		padding-left: 3px;
 		width: 12.5%;
+		padding-left: calc(var(--font-size) / 4);
+		padding-bottom: calc(var(--font-size) / 6);
 	}
 
 	.ranks span {
-		padding-top: 2px;
-		padding-right: 2px;
 		height: 12.5%;
+		padding-top: calc(var(--font-size) / 4);
+		padding-right: calc(var(--font-size) / 10);
+	}
+
+	span {
+		font-size: var(--font-size);
+		line-height: var(--font-size);
 	}
 </style>
