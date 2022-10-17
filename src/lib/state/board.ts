@@ -21,7 +21,9 @@ export default class BoardState {
 
 	public size: number;
 
-	public resizible: { enabled: boolean; min: number; max: number };
+	public scale: number;
+
+	public resizible: boolean;
 
 	public defaultState = {
 		boardTheme: 'standard',
@@ -32,11 +34,12 @@ export default class BoardState {
 		shadow: false,
 		startFen: defaultFEN,
 		size: 0,
+		scale: 70,
 		style: {
 			shadow: false,
 			borderRadius: '0rem'
 		},
-		resizible: { enabled: false, min: 256, max: 1024 }
+		resizible: false
 	} as const;
 
 	constructor(config?: ChessboardConfig['board']) {
@@ -48,8 +51,9 @@ export default class BoardState {
 		this.startFen = this.defaultState.startFen;
 
 		this.size = this.defaultState.size;
+		this.scale = this.defaultState.scale;
 		this.style = { ...this.defaultState.style };
-		this.resizible = { ...this.defaultState.resizible };
+		this.resizible = this.defaultState.resizible;
 
 		this.setConfigSettings(config);
 	}
@@ -66,6 +70,7 @@ export default class BoardState {
 				if (config.style.shadow !== undefined) this.style.shadow = config.style.shadow;
 				if (config.style.borderRadius !== undefined) this.style.borderRadius = config.style.borderRadius;
 			}
+			if (config.resizible !== undefined) this.resizible = config.resizible;
 		}
 	};
 
@@ -82,7 +87,8 @@ export default class BoardState {
 					...(this.style.shadow !== this.defaultState.style.shadow && { shadow: this.style.shadow }),
 					...(this.style.borderRadius !== this.defaultState.style.borderRadius && { borderRadius: this.style.borderRadius })
 				}
-			})
+			}),
+			...(this.resizible !== this.defaultState.resizible && { resizible: this.resizible })
 		};
 		if (Object.keys(cfg).length === 0) return undefined;
 		return cfg;
