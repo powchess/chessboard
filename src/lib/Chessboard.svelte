@@ -35,11 +35,6 @@
 	let promotionModal: PromotionModal;
 	let promotionLastMove = '';
 
-	onDestroy(() => {
-		if (browser && document.documentElement.hasAttribute('style') && chessboard.state.board.resizible)
-			document.documentElement.removeAttribute('style');
-	});
-
 	export const clearAllSquares = (mode?: SquareColor) => {
 		chessboard.clearAllSquares(mode);
 		if (mode === SquareColor.LEGAL) chessboard.clearAllSquares(SquareColor.LEGALHOVER);
@@ -405,15 +400,13 @@
 	export const setSize = (size: number) => {
 		if (!size || chessboard.state.board.size === size) return;
 		chessboard.state.board.size = size;
-		if (browser && chessboard.state.board.resizible)
-			document.documentElement.style.setProperty('--boardSize', `${chessboard.state.board.size}px`);
+		if (browser && chessboard.state.board.resizible) document.body.style.setProperty('--boardSize', `${chessboard.state.board.size}px`);
 	};
 
 	export const setScale = (scale: number) => {
 		if (!scale || chessboard.state.board.scale === scale) return;
 		chessboard.state.board.scale = scale;
-		if (browser && chessboard.state.board.resizible)
-			document.documentElement.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
+		if (browser && chessboard.state.board.resizible) document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
 	};
 
 	export const getPieceFromSquare = (square: ChessSquare) => chessboard.getPieceFromSquare(square)?.name;
@@ -542,21 +535,21 @@
 		};
 	}
 
-	// $: setScale(chessboard.state.board.scale);
 	$: teardownChessboard = setupChessboardObserver(boardWrapper);
 
 	onMount(() => {
 		updateLegalState(true);
 		if (chessboard.state.callbacks.getLastMove) highlightMove(chessboard.state.callbacks.getLastMove());
-		if (chessboard.state.board.resizible) setScale(chessboard.state.board.scale);
+		if (chessboard.state.board.resizible) document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
 	});
 
 	onDestroy(() => {
 		teardownChessboard?.();
+		if (browser && chessboard.state.board.resizible) document.body.style.removeProperty('--boardScale');
 	});
 </script>
 
-<div bind:this={boardWrapper} style="aspect-ratio: 1 / 1; width: 100%; height: 100%;">
+<div bind:this={boardWrapper} class="boardWrapper">
 	<div
 		on:pointerdown={boardClick}
 		on:contextmenu|preventDefault
@@ -670,14 +663,19 @@
 
 <style>
 	@import './boardThemes/themes.css';
+
+	.boardWrapper {
+		aspect-ratio: 1 / 1;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 	.board {
 		position: relative;
 		aspect-ratio: 1;
 		width: 100%;
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: auto;
-		margin-bottom: auto;
 		max-width: 100%;
 		max-height: 100%;
 		background-image: var(--boardTheme);
