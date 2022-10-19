@@ -13,17 +13,15 @@ function getEndSquare(
 ): ChessSquare | null | undefined {
 	if (directionX === 0 && directionY === 0) return startSquare;
 
-	const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
-	const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'] as const;
+	const files = boardFlipped ? ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'].reverse() : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+	const ranks = boardFlipped ? ['8', '7', '6', '5', '4', '3', '2', '1'].reverse() : ['8', '7', '6', '5', '4', '3', '2', '1'];
 
-	const newFile: ChessFile =
-		files[boardFlipped ? 7 - files.indexOf(<ChessFile>startSquare[0]) - directionX : files.indexOf(<ChessFile>startSquare[0]) + directionX];
-	const newRank: ChessRank =
-		ranks[boardFlipped ? 7 - ranks.indexOf(<ChessRank>startSquare[1]) - directionY : ranks.indexOf(<ChessRank>startSquare[1]) + directionY];
+	const newFile = files[files.indexOf(startSquare[0]) + directionX];
+	const newRank = ranks[ranks.indexOf(startSquare[1]) + directionY];
 
 	if (!newFile || !newRank) return undefined;
 
-	return `${newFile}${newRank}`;
+	return `${<ChessFile>newFile}${<ChessRank>newRank}`;
 }
 
 function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boolean | undefined): SVGElement {
@@ -211,6 +209,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 
 		const diffX = Math.floor((globalDX + offsetX) / node.offsetWidth);
 		const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
+
 		const targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
 
 		dragging = false;
