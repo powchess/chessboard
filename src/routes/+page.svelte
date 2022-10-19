@@ -184,9 +184,7 @@
 				bind:flipped={state.board.flipped}
 				bind:shadow={state.board.style.shadow}
 				bind:borderRadius={state.board.style.borderRadius}
-				bind:resizible={state.board.resizible.enabled}
-				bind:min={state.board.resizible.min}
-				bind:max={state.board.resizible.max}
+				bind:resizible={state.board.resizible}
 				expanded={true}
 			/>
 			<Movable bind:enabled={state.movable.enabled} bind:color={state.movable.color} expanded={true} />
@@ -216,8 +214,8 @@
 			/>
 			<Sounds bind:enabled={state.sounds.enabled} bind:settings={state.sounds.settings} />
 		</div>
-		<div class="grid grid-rows-[min-content_auto] gap-10">
-			<div class="w-full lg:w-[var(--boardSize,50rem)]">
+		<div class="grid grid-rows-[90wh_auto] gap-10">
+			<div class="w-full lg:w-[calc(70vh*(var(--boardScale,70)/100*0.7+0.3))]">
 				<Chessboard bind:this={chessboard} {config} />
 			</div>
 			<div class="row-start-2 relative">

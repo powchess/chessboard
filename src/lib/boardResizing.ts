@@ -1,44 +1,44 @@
-export default function resizing(
-	node: HTMLElement,
-	params: { mouseEvents: boolean; minWidth: number; maxWidth: number; curWidth: number }
-) {
-	const { minWidth, maxWidth, curWidth } = params;
+export default function resizing(node: HTMLElement, params: { mouseEvents: boolean; curScale: number }) {
+	// const { curScale } = params;
 	let { mouseEvents } = params;
-	let Width: number = curWidth;
+	let scale = params.curScale;
 
 	let initialX: number;
 	let initialY: number;
-	let initialWidth: number;
-	let initialHeight: number;
+	let initialScale: number;
 
-	function handleMousemove(e: MouseEvent) {
+	function handleMousemove(e: PointerEvent) {
 		e.stopPropagation();
 		node.dispatchEvent(
 			new CustomEvent('resizing', {
 				detail: {
-					size: Math.max(
-						Math.max(minWidth, Math.min(maxWidth, initialWidth + (e.pageX - initialX))),
-						Math.max(minWidth, Math.min(maxWidth, initialHeight + (e.pageY - initialY)))
+					scale: Math.round(
+						Math.min(
+							Math.max(0, Math.min(100, initialScale + (e.pageX - initialX) / 3)),
+							Math.max(0, Math.min(100, initialScale + (e.pageY - initialY) / 3))
+						)
 					)
 				}
 			})
 		);
 	}
 
-	function handleMouseup(e: MouseEvent) {
+	function handleMouseup(e: PointerEvent) {
 		e.stopPropagation();
 		node.dispatchEvent(
 			new CustomEvent('endResizing', {
 				detail: {
-					size: Math.max(
-						Math.max(minWidth, Math.min(maxWidth, initialWidth + Math.floor((e.pageX - initialX) / 8) * 8)),
-						Math.max(minWidth, Math.min(maxWidth, initialHeight + Math.floor((e.pageY - initialY) / 8) * 8))
+					scale: Math.round(
+						Math.min(
+							Math.max(0, Math.min(100, initialScale + (e.pageX - initialX) / 3)),
+							Math.max(0, Math.min(100, initialScale + (e.pageY - initialY) / 3))
+						)
 					)
 				}
 			})
 		);
-		window.removeEventListener('mousemove', handleMousemove);
-		window.removeEventListener('mouseup', handleMouseup);
+		window.removeEventListener('pointermove', handleMousemove);
+		window.removeEventListener('pointerup', handleMouseup);
 	}
 
 	function handleMousedown(e: MouseEvent) {
@@ -47,19 +47,18 @@ export default function resizing(
 		if (e.button !== 0) return;
 
 		initialX = e.pageX;
-		initialWidth = Width;
 		initialY = e.pageY;
-		initialHeight = Width;
+		initialScale = scale;
 
-		window.addEventListener('mousemove', handleMousemove);
-		window.addEventListener('mouseup', handleMouseup);
+		window.addEventListener('pointermove', handleMousemove);
+		window.addEventListener('pointerup', handleMouseup);
 	}
 
-	node.addEventListener('mousedown', handleMousedown);
+	node.addEventListener('pointerdown', handleMousedown);
 
 	return {
-		update(newParams: { mouseEvents: boolean; minWidth: number; maxWidth: number; curWidth: number }) {
-			Width = newParams.curWidth;
+		update(newParams: { mouseEvents: boolean; curScale: number }) {
+			scale = newParams.curScale;
 			if (mouseEvents !== newParams.mouseEvents) mouseEvents = newParams.mouseEvents;
 		},
 		destroy() {
