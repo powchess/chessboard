@@ -28,16 +28,12 @@
 	const dispatch = createEventDispatcher();
 
 	let boardDiv: HTMLDivElement;
+	let boardWrapper: HTMLDivElement;
 	let arrowsSvg: SVGGElement;
 	let sounds: Sounds;
 
 	let promotionModal: PromotionModal;
 	let promotionLastMove = '';
-
-	onDestroy(() => {
-		if (browser && document.documentElement.hasAttribute('style') && chessboard.state.board.resizible.enabled)
-			document.documentElement.removeAttribute('style');
-	});
 
 	export const clearAllSquares = (mode?: SquareColor) => {
 		chessboard.clearAllSquares(mode);
@@ -404,8 +400,13 @@
 	export const setSize = (size: number) => {
 		if (!size || chessboard.state.board.size === size) return;
 		chessboard.state.board.size = size;
-		if (browser && chessboard.state.board.resizible.enabled)
-			document.documentElement.style.setProperty('--boardSize', `${chessboard.state.board.size}px`);
+		if (browser && chessboard.state.board.resizible) document.body.style.setProperty('--boardSize', `${chessboard.state.board.size}px`);
+	};
+
+	export const setScale = (scale: number) => {
+		if (!scale || chessboard.state.board.scale === scale) return;
+		chessboard.state.board.scale = scale;
+		if (browser && chessboard.state.board.resizible) document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
 	};
 
 	export const getPieceFromSquare = (square: ChessSquare) => chessboard.getPieceFromSquare(square)?.name;
@@ -504,112 +505,156 @@
 		updateLegalState();
 	};
 
-	$: setSize(chessboard.state.board.size - (chessboard.state.board.size % 8));
+	function setupChessboardObserver(boardWrap: HTMLDivElement) {
+		if (!boardDiv || !boardWrap) return undefined;
+		// eslint-disable-next-line @typescript-eslint/no-use-before-define
+		teardownChessboard?.();
+
+		if (typeof window.ResizeObserver === 'undefined') {
+			throw new Error('window.ResizeObserver is missing.');
+		}
+
+		const observer = new ResizeObserver((entries) => {
+			const boundingRect = boardWrap.getBoundingClientRect();
+			// console.log(boundingRect, window.devicePixelRatio);
+			entries.forEach(() => {
+				boardDiv.style.setProperty(
+					'width',
+					`${(Math.floor((boundingRect.width * window.devicePixelRatio) / 8) * 8) / window.devicePixelRatio}px`
+				);
+				boardDiv.style.setProperty(
+					'height',
+					`${(Math.floor((boundingRect.width * window.devicePixelRatio) / 8) * 8) / window.devicePixelRatio}px`
+				);
+			});
+		});
+		observer.observe(boardWrap);
+		return () => {
+			observer.unobserve(boardWrap);
+			observer.disconnect();
+		};
+	}
+
+	$: teardownChessboard = setupChessboardObserver(boardWrapper);
 
 	onMount(() => {
 		updateLegalState(true);
 		if (chessboard.state.callbacks.getLastMove) highlightMove(chessboard.state.callbacks.getLastMove());
-		if (chessboard.state.board.resizible) setSize(chessboard.state.board.size - (chessboard.state.board.size % 8));
+		if (chessboard.state.board.resizible) document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
+	});
+
+	onDestroy(() => {
+		teardownChessboard?.();
+		if (browser && chessboard.state.board.resizible) document.body.style.removeProperty('--boardScale');
 	});
 </script>
 
-<div
-	on:pointerdown={boardClick}
-	on:contextmenu|preventDefault
-	on:drag|preventDefault
-	use:drawArrows={{
-		svg: arrowsSvg,
-		flipped: chessboard.flipped,
-		enabled: chessboard.state.drawTools.enabled && chessboard.state.board.mouseEvents,
-		settings: chessboard.state.drawTools.settings
-	}}
-	on:drawCircle={(e) => dispatch('drawCircle', { square: e.detail.square, color: e.detail.color })}
-	on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
-	bind:this={boardDiv}
-	bind:clientWidth={chessboard.state.board.size}
-	class="noselect board {chessboard.state.board.style.shadow ? 'shadow' : ''} text-sm {className}"
-	style="
-	--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});
-	{chessboard.state.board.style.borderRadius !== '0rem' && chessboard.state.board.style.borderRadius !== '0px'
-		? `border-radius: ${chessboard.state.board.style.borderRadius};`
-		: ''}"
->
-	<div style="width: 100%; height: 100%" class="noselect">
-		{#if chessboard.state.board.startFen}
-			{#each chessboard.state.pieces as piece (piece)}
-				<Piece
-					square={piece.square}
-					name={piece.name}
-					mouseEvents={chessboard.state.board.mouseEvents}
-					legalState={chessboard.state.legal}
-					draggableState={chessboard.state.draggable}
-					selectableState={chessboard.state.selectable}
-					movableState={chessboard.state.movable}
+<div bind:this={boardWrapper} class="boardWrapper">
+	<div
+		on:pointerdown={boardClick}
+		on:contextmenu|preventDefault
+		on:drag|preventDefault
+		use:drawArrows={{
+			svg: arrowsSvg,
+			flipped: chessboard.flipped,
+			enabled: chessboard.state.drawTools.enabled && chessboard.state.board.mouseEvents,
+			settings: chessboard.state.drawTools.settings
+		}}
+		on:drawCircle={(e) => dispatch('drawCircle', { square: e.detail.square, color: e.detail.color })}
+		on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
+		bind:this={boardDiv}
+		bind:clientWidth={chessboard.state.board.size}
+		class="noselect board {chessboard.state.board.style.shadow ? 'shadow' : ''} text-sm {className}"
+		style="
+		--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});
+		{chessboard.state.board.style.borderRadius !== '0rem' && chessboard.state.board.style.borderRadius !== '0px'
+			? `border-radius: ${chessboard.state.board.style.borderRadius};`
+			: ''}"
+	>
+		<div style="width: 100%; height: 100%" class="noselect">
+			{#if chessboard.state.board.startFen}
+				{#each chessboard.state.pieces as piece (piece)}
+					<Piece
+						square={piece.square}
+						name={piece.name}
+						mouseEvents={chessboard.state.board.mouseEvents}
+						legalState={chessboard.state.legal}
+						draggableState={chessboard.state.draggable}
+						selectableState={chessboard.state.selectable}
+						movableState={chessboard.state.movable}
+						getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
+						flipped={chessboard.flipped}
+						on:move={moveMadeFromPiece}
+						on:clicked={() => {
+							dispatch('piececlick', { piece });
+							selectPiece(piece.square);
+						}}
+						on:startMoving={() => {
+							dispatch('startDragging', { piece });
+							startDragging(piece);
+						}}
+						on:moving={(e) => handlePieceMoving(e, piece)}
+						on:endDragging
+						on:select={() => {
+							highlightSquare(piece.square, SquareColor.SELECT);
+							// selectPiece(piece.square);
+						}}
+						on:deselect={() => {
+							deselect();
+						}}
+					/>
+				{/each}
+			{/if}
+		</div>
+		{#if chessboard.ghostPiece}
+			<Piece
+				isGhost={true}
+				square={chessboard.ghostPiece.square}
+				name={chessboard.ghostPiece.name}
+				getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
+				flipped={chessboard.flipped}
+			/>
+		{/if}
+		{#if chessboard.highlightEnabled}
+			{#each [...chessboard.state.markedSquares] as square (square)}
+				<Square
+					on:dragenter={(e) => {
+						highlightSquare(e.detail.square, SquareColor.LEGALHOVER);
+					}}
+					theme={chessboard.state.board.boardTheme}
+					square={square.square}
+					color={square.color}
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 					flipped={chessboard.flipped}
-					on:move={moveMadeFromPiece}
-					on:clicked={() => {
-						dispatch('piececlick', { piece });
-						selectPiece(piece.square);
-					}}
-					on:startMoving={() => {
-						dispatch('startDragging', { piece });
-						startDragging(piece);
-					}}
-					on:moving={(e) => handlePieceMoving(e, piece)}
-					on:endDragging
-					on:select={() => {
-						highlightSquare(piece.square, SquareColor.SELECT);
-						// selectPiece(piece.square);
-					}}
-					on:deselect={() => {
-						deselect();
-					}}
+					mouseEvents={chessboard.state.board.mouseEvents}
 				/>
 			{/each}
 		{/if}
-	</div>
-	{#if chessboard.ghostPiece}
-		<Piece
-			isGhost={true}
-			square={chessboard.ghostPiece.square}
-			name={chessboard.ghostPiece.name}
-			getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
-			flipped={chessboard.flipped}
-		/>
-	{/if}
-	{#if chessboard.highlightEnabled}
-		{#each [...chessboard.state.markedSquares] as square (square)}
-			<Square
-				on:dragenter={(e) => {
-					highlightSquare(e.detail.square, SquareColor.LEGALHOVER);
-				}}
-				theme={chessboard.state.board.boardTheme}
-				square={square.square}
-				color={square.color}
-				getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
-				flipped={chessboard.flipped}
+		{#if chessboard.state.board.notation}
+			<Notation theme={chessboard.state.board.boardTheme} flipped={chessboard.flipped} />
+		{/if}
+		{#if chessboard.state.board.resizible}
+			<Resizing
+				{chessboard}
 				mouseEvents={chessboard.state.board.mouseEvents}
+				on:resizing={(e) => {
+					setScale(e.detail);
+					// console.log(e.detail);
+				}}
 			/>
-		{/each}
-	{/if}
-	{#if chessboard.state.board.notation}
-		<Notation theme={chessboard.state.board.boardTheme} flipped={chessboard.flipped} />
-	{/if}
-	{#if chessboard.state.board.resizible.enabled}
-		<Resizing {chessboard} {setSize} mouseEvents={chessboard.state.board.mouseEvents} />
-	{/if}
-	{#if chessboard.state.drawTools.enabled}
-		<Arrows
-			flipped={chessboard.flipped}
-			bind:svg={arrowsSvg}
-			tools={chessboard.state.drawTools.tools}
-			knightLShape={chessboard.state.drawTools.settings.knightLShape}
-		/>
-	{/if}
-	{#if chessboard.legalEnabled}
-		<PromotionModal bind:this={promotionModal} on:newPromotion={handlePromotion} />
-	{/if}
+		{/if}
+		{#if chessboard.state.drawTools.enabled}
+			<Arrows
+				flipped={chessboard.flipped}
+				bind:svg={arrowsSvg}
+				tools={chessboard.state.drawTools.tools}
+				knightLShape={chessboard.state.drawTools.settings.knightLShape}
+			/>
+		{/if}
+		{#if chessboard.legalEnabled}
+			<PromotionModal bind:this={promotionModal} on:newPromotion={handlePromotion} />
+		{/if}
+	</div>
 </div>
 
 {#if chessboard.soundsEnabled}
@@ -618,6 +663,15 @@
 
 <style>
 	@import './boardThemes/themes.css';
+
+	.boardWrapper {
+		aspect-ratio: 1 / 1;
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 	.board {
 		position: relative;
 		aspect-ratio: 1;

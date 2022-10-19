@@ -25,12 +25,7 @@ export type ChessboardConfig = {
 			shadow?: boolean;
 			borderRadius?: `${number}rem` | `${number}px`;
 		};
-		resizible?:
-			| boolean
-			| {
-					min?: number;
-					max?: number;
-			  };
+		resizible?: boolean;
 	};
 
 	/**

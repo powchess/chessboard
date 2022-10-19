@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
 	import resizing from './boardResizing';
 	import boardThemesStyles from './boardThemes/boardThemes';
 	import type Chessboard from './chessboard';
 
+	const dispatch = createEventDispatcher();
+
 	export let chessboard: Chessboard;
-	export let setSize: (size: number) => void;
 	export let mouseEvents = true;
 </script>
 
@@ -12,12 +14,10 @@
 	on:pointerdown|stopPropagation
 	use:resizing={{
 		mouseEvents,
-		minWidth: chessboard.state.board.resizible.min,
-		maxWidth: chessboard.state.board.resizible.max,
-		curWidth: chessboard.state.board.size
+		curScale: chessboard.state.board.scale
 	}}
-	on:resizing={(e) => setSize(e.detail.size)}
-	on:endResizing={(e) => setSize(e.detail.size)}
+	on:resizing={(e) => dispatch('resizing', e.detail.scale)}
+	on:endResizing={(e) => dispatch('endResizing', e.detail.scale)}
 	style="color: {boardThemesStyles.colors[chessboard.state.board.boardTheme].black};"
 	class={mouseEvents ? 'cursor-nwse-resize' : ''}
 >
@@ -36,6 +36,10 @@
 		width: 3.125%;
 		height: 3.125%;
 		z-index: 4;
+	}
+
+	.cursor-nwse-resize {
+		cursor: nwse-resize;
 	}
 
 	@media (min-width: 1024px) {

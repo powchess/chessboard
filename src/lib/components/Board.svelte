@@ -11,8 +11,6 @@
 	export let shadow: boolean;
 	export let borderRadius: `${number}rem` | `${number}px` = '0px';
 	export let resizible = false;
-	export let min = 0;
-	export let max = 0;
 
 	export let expanded = false;
 
@@ -67,18 +65,6 @@
 		<input id="resizibleEnabled" type="checkbox" bind:checked={resizible} />
 		<label for="resizibleEnabled" class="select-none">resizible</label>
 	</div>
-	{#if resizible}
-		<div class="pl-2 pr-4 flex-col" transition:slide|local>
-			<div class="flex gap-2 mb-2">
-				<input id="resizibleMin" type="number" class="w-16" bind:value={min} />
-				<label for="resizibleMin" class="select-none">min</label>
-			</div>
-			<div class="flex gap-2">
-				<input id="resizibleMax" type="number" class="w-16" bind:value={max} />
-				<label for="resizibleMax" class="select-none">max</label>
-			</div>
-		</div>
-	{/if}
 </Section>
 
 <style>
