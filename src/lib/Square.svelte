@@ -2,7 +2,7 @@
 	import type { BoardTheme } from './boardConfig';
 	import boardThemesStyles from './boardThemes/boardThemes';
 	import type { ChessSquare } from './chessTypes';
-	import type { SquareColor } from './enums';
+	import { SquareColor } from './enums';
 
 	export let square: ChessSquare;
 	export let color: SquareColor;
@@ -25,7 +25,12 @@
 
 <div
 	style="left: {x * 12.5}%; bottom: {y * 12.5}%;"
-	class="noselect {boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}"
+	class="noselect {boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}{color === SquareColor.LEGAL ||
+	color === SquareColor.LEGALHOVER ||
+	color === SquareColor.PREMOVE ||
+	color === SquareColor.PREMOVEHOVER
+		? ' legal'
+		: ''}"
 />
 
 <style>
@@ -33,5 +38,9 @@
 		position: absolute;
 		width: 12.5%;
 		height: 12.5%;
+	}
+
+	.legal {
+		z-index: 2;
 	}
 </style>
