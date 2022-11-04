@@ -135,8 +135,7 @@
 		bottom: {$coords.y * 12.5}%; 
 		scale: {$coords.scale};
 		z-Index: {isGhost ? 0 : pieceZIndex}; 
-		opacity: {isGhost ? 0.3 : 1}; 
-		cursor: pointer;"
+		opacity: {isGhost ? 0.3 : 1};"
 	class="noselect"
 	src={getChessPieceImage(name)}
 	alt={name}

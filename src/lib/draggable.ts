@@ -103,7 +103,8 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	let { startSquare, boardFlipped, mouseEvents, canDrag, canSelect, duration, easingFunc } = params;
 	const { coords } = params;
 
-	node.style.cursor = !canDrag && !canSelect ? 'default' : 'pointer';
+	if (!canDrag && !canSelect) node.style.removeProperty('cursor');
+	else node.style.cursor = 'pointer';
 
 	let startX = get(coords).x;
 	let startY = get(coords).y;
@@ -230,7 +231,8 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		y = 0;
 		globalDX = 0;
 		globalDY = 0;
-		node.style.cursor = !canDrag && !canSelect ? 'default' : 'pointer';
+		if (!canDrag && !canSelect) node.style.removeProperty('cursor');
+		else node.style.cursor = 'pointer';
 		setTimeout(() => {
 			if (!dragging) node.style.zIndex = '2';
 		}, duration);
@@ -307,8 +309,10 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 			duration = newParams.duration;
 			easingFunc = newParams.easingFunc;
 
-			if (newParams.canDrag !== canDrag || newParams.canSelect !== canSelect)
-				node.style.cursor = !newParams.canDrag && !newParams.canSelect ? 'default' : 'pointer';
+			if (newParams.canDrag !== canDrag || newParams.canSelect !== canSelect) {
+				if (!newParams.canDrag && !newParams.canSelect) node.style.removeProperty('cursor');
+				else node.style.cursor = 'pointer';
+			}
 
 			if (newParams.canDrag !== canDrag) canDrag = newParams.canDrag;
 

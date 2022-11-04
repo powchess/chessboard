@@ -143,6 +143,10 @@
 
 	export const removePiece = (square: ChessSquare): void => {
 		chessboard.removePiece(square);
+		if (chessboard.ghostPieceEnabled && chessboard.ghostPiece?.square === square) {
+			chessboard.removeGhostPiece();
+			chessboard.ghostPiece = chessboard.ghostPiece;
+		}
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
