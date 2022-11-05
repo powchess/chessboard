@@ -198,7 +198,7 @@
 	export const makeMove = (move: string): void => {
 		if (move.substring(0, 2) === move.substring(2, 4)) return;
 		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(move);
-		deselect();
+		deselect(false);
 
 		const rookMove = chessboard.getRookMoveIfIsCastling(move);
 		const capturedPawnSquare = chessboard.getCapturedPawnSquareIfIsEnPassant(move);
@@ -220,16 +220,13 @@
 		updateLegalState();
 
 		if (chessboard.legalEnabled && chessboard.preMovesEnabled && chessboard.currentPreMove !== '') {
-			if (
-				chessboard.legalMoves.includes(chessboard.state.legal.preMoves.curMove) ||
-				chessboard.legalMoves.includes(`${chessboard.state.legal.preMoves.curMove}q`)
-			) {
-				const tmp = chessboard.currentPreMove;
-				chessboard.currentPreMove = '';
+			if (chessboard.legalMoves.includes(chessboard.currentPreMove) || chessboard.legalMoves.includes(`${chessboard.currentPreMove}q`)) {
+				const nextMove = chessboard.currentPreMove;
 				tick().then(() => {
-					makeMove(tmp);
+					makeMove(nextMove);
 				});
 			}
+			chessboard.currentPreMove = '';
 			clearAllSquares(SquareColor.NEXTMOVE);
 		}
 	};
@@ -314,12 +311,7 @@
 		}
 
 		if (chessboard.selectedPiece && chessboard.selectedPiece.square !== square && !canMove(chessboard.selectedPiece.name)) {
-			if (
-				chessboard.preMovesEnabled &&
-				chessboard.preMoves.includes(chessboard.selectedPiece.square + square) &&
-				piece !== undefined &&
-				piece.name[0] !== chessboard.selectedPiece.name[0]
-			) {
+			if (chessboard.preMovesEnabled && chessboard.preMoves.includes(chessboard.selectedPiece.square + square)) {
 				makeNextMove(chessboard.selectedPiece.square + square);
 			}
 			deselect(false);
@@ -520,7 +512,6 @@
 
 		const observer = new ResizeObserver((entries) => {
 			const boundingRect = boardWrap.getBoundingClientRect();
-			// console.log(boundingRect, window.devicePixelRatio);
 			entries.forEach(() => {
 				boardDiv.style.setProperty(
 					'width',
@@ -643,7 +634,6 @@
 				mouseEvents={chessboard.state.board.mouseEvents}
 				on:resizing={(e) => {
 					setScale(e.detail);
-					// console.log(e.detail);
 				}}
 			/>
 		{/if}
