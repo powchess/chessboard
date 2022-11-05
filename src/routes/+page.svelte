@@ -42,10 +42,6 @@
 			}
 		},
 		board: {
-			style: {
-				shadow: true,
-				borderRadius: '0.25rem'
-			},
 			resizible: true
 		}
 	};
@@ -154,7 +150,7 @@
 	const config${ts ? ': ChessboardConfig' : ''} = ${configString};
 <\/script>
 
-<Chessboard {config} />`;
+<Chessboard {config} className="rounded-md" />`;
 
 		if (!ts) {
 			resultString = resultString
@@ -182,8 +178,6 @@
 				bind:mouseEvents={state.board.mouseEvents}
 				bind:notation={state.board.notation}
 				bind:flipped={state.board.flipped}
-				bind:shadow={state.board.style.shadow}
-				bind:borderRadius={state.board.style.borderRadius}
 				bind:resizible={state.board.resizible}
 				expanded={true}
 			/>
@@ -216,7 +210,7 @@
 		</div>
 		<div class="grid grid-rows-[90wh_auto] gap-10">
 			<div class="w-full lg:w-[calc(70vh*(var(--boardScale,70)/100*0.7+0.3))]">
-				<Chessboard bind:this={chessboard} {config} />
+				<Chessboard bind:this={chessboard} {config} className="rounded-md" />
 			</div>
 			<div class="row-start-2 relative">
 				<div class="shadow-lg rounded ">

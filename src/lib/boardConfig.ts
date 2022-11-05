@@ -21,10 +21,6 @@ export type ChessboardConfig = {
 		notation?: boolean;
 		startFen?: string;
 		startSize?: number;
-		style?: {
-			shadow?: boolean;
-			borderRadius?: `${number}rem` | `${number}px`;
-		};
 		resizible?: boolean;
 	};
 

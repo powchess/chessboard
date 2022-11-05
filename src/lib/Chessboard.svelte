@@ -241,7 +241,10 @@
 	};
 
 	export const makeMovePromotion = (move: string): void => {
-		promotionModal.openPromotionModal(true);
+		const piece = chessboard.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
+		if (!piece) return;
+		const color = piece.name[0] === 'w' ? Color.WHITE : Color.BLACK;
+		promotionModal.openPromotionModal(color === Color.WHITE);
 		promotionLastMove = move;
 		chessboard.makeMove(move);
 		clearAllSquares(SquareColor.LEGAL);
@@ -559,12 +562,9 @@
 		on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 		bind:this={boardDiv}
 		bind:clientWidth={chessboard.state.board.size}
-		class="noselect board {chessboard.state.board.style.shadow ? 'shadow' : ''} text-sm {className}"
+		class="noselect board text-sm {className}"
 		style="
-		--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});
-		{chessboard.state.board.style.borderRadius !== '0rem' && chessboard.state.board.style.borderRadius !== '0px'
-			? `border-radius: ${chessboard.state.board.style.borderRadius};`
-			: ''}"
+		--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 	>
 		<div style="width: 100%; height: 100%" class="noselect">
 			{#if chessboard.state.board.startFen}
@@ -622,6 +622,15 @@
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 					flipped={chessboard.flipped}
 					mouseEvents={chessboard.state.board.mouseEvents}
+					corner={square.square === 'a8'
+						? 'top-left'
+						: square.square === 'h8'
+						? 'top-right'
+						: square.square === 'a1'
+						? 'bottom-left'
+						: square.square === 'h1'
+						? 'bottom-right'
+						: ''}
 				/>
 			{/each}
 		{/if}

@@ -11,6 +11,8 @@
 	export let theme: BoardTheme;
 	export let mouseEvents = true;
 
+	export let corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | '' = '';
+
 	let x: number;
 	let y: number;
 
@@ -24,7 +26,7 @@
 </script>
 
 <div
-	style="left: {x * 12.5}%; bottom: {y * 12.5}%;"
+	style="left: {x * 12.5}%; bottom: {y * 12.5}%;{corner ? ` border-${corner}-radius: inherit;` : ''}"
 	class="noselect {boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}{color === SquareColor.LEGAL ||
 	color === SquareColor.LEGALHOVER ||
 	color === SquareColor.PREMOVE ||

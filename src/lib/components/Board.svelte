@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { slide } from 'svelte/transition';
 	import { BoardThemes, type BoardTheme } from '$lib/boardConfig';
 	import Section from './Section.svelte';
 
@@ -8,16 +7,9 @@
 	export let mouseEvents: boolean;
 	export let notation: boolean;
 	export let flipped: boolean;
-	export let shadow: boolean;
-	export let borderRadius: `${number}rem` | `${number}px` = '0px';
 	export let resizible = false;
 
 	export let expanded = false;
-
-	let style = true;
-	let bR: number = parseFloat(borderRadius.endsWith('px') ? borderRadius.slice(0, -2) : borderRadius.slice(0, -3));
-
-	$: borderRadius = `${bR ?? 0}rem` as `${number}rem`;
 </script>
 
 <Section {name} {expanded}>
@@ -45,22 +37,6 @@
 		<label for="flipped" class="select-none">flipped</label>
 	</div>
 
-	<div>
-		<input id="styleEnabled" type="checkbox" bind:checked={style} />
-		<label for="styleEnabled" class="select-none">style</label>
-	</div>
-	{#if style}
-		<div class="pl-2 pr-4 flex-col" transition:slide|local>
-			<div class="flex gap-2 mb-2">
-				<input id="shadow" type="checkbox" bind:checked={shadow} />
-				<label for="shadow" class="select-none">shadow</label>
-			</div>
-			<div class="flex gap-2 mb-2">
-				<input id="borderRadius" type="number" class="w-16" min={0} max={1} bind:value={bR} />
-				<label for="borderRadius" class="select-none whitespace-nowrap">border-radius (rem)</label>
-			</div>
-		</div>
-	{/if}
 	<div class="mt-2 mb-1">
 		<input id="resizibleEnabled" type="checkbox" bind:checked={resizible} />
 		<label for="resizibleEnabled" class="select-none">resizible</label>

@@ -12,11 +12,6 @@ export default class BoardState {
 
 	public notation: boolean;
 
-	public style: {
-		shadow: boolean;
-		borderRadius: `${number}rem` | `${number}px`;
-	};
-
 	public startFen: string;
 
 	public size: number;
@@ -35,10 +30,6 @@ export default class BoardState {
 		startFen: defaultFEN,
 		size: 0,
 		scale: 70,
-		style: {
-			shadow: false,
-			borderRadius: '0rem'
-		},
 		resizible: false
 	} as const;
 
@@ -52,7 +43,6 @@ export default class BoardState {
 
 		this.size = this.defaultState.size;
 		this.scale = this.defaultState.scale;
-		this.style = { ...this.defaultState.style };
 		this.resizible = this.defaultState.resizible;
 
 		this.setConfigSettings(config);
@@ -66,10 +56,6 @@ export default class BoardState {
 			if (config.flipped !== undefined) this.flipped = config.flipped;
 			if (config.notation !== undefined) this.notation = config.notation;
 			if (config.startFen !== undefined) this.startFen = config.startFen;
-			if (config.style !== undefined) {
-				if (config.style.shadow !== undefined) this.style.shadow = config.style.shadow;
-				if (config.style.borderRadius !== undefined) this.style.borderRadius = config.style.borderRadius;
-			}
 			if (config.resizible !== undefined) this.resizible = config.resizible;
 		}
 	};
@@ -82,12 +68,6 @@ export default class BoardState {
 			...(this.flipped !== this.defaultState.flipped && { flipped: this.flipped }),
 			...(this.notation !== this.defaultState.notation && { notation: this.notation }),
 			...(this.startFen !== this.defaultState.startFen && { startFen: this.startFen }),
-			...((this.style.shadow !== this.defaultState.style.shadow || this.style.borderRadius !== this.defaultState.style.borderRadius) && {
-				style: {
-					...(this.style.shadow !== this.defaultState.style.shadow && { shadow: this.style.shadow }),
-					...(this.style.borderRadius !== this.defaultState.style.borderRadius && { borderRadius: this.style.borderRadius })
-				}
-			}),
 			...(this.resizible !== this.defaultState.resizible && { resizible: this.resizible })
 		};
 		if (Object.keys(cfg).length === 0) return undefined;
