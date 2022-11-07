@@ -129,7 +129,8 @@
 			return false;
 		}
 
-		return true;
+		if (selectableState?.selectedPiece !== undefined && selectableState?.selectedPiece?.square !== square) return true;
+		return false;
 	};
 
 	const curPieceIsNotSelectedPiece = (piece: Piece | undefined) => piece === undefined || piece.name !== name || piece.square !== square;
