@@ -106,6 +106,32 @@
 		return checkColor(movable);
 	};
 
+	const canCapture = (legal?: LegalState, movable?: MovableState, selectable?: SelectableState) => {
+		if (!movable?.enabled || !selectable?.enabled || !mouseEvents) return false;
+
+		if (legal?.enabled) {
+			if (
+				selectableState?.selectedPiece !== undefined &&
+				selectableState?.selectedPiece?.square !== square &&
+				(legal.moves.includes(selectableState.selectedPiece.square + square) ||
+					legal.moves.includes(`${selectableState.selectedPiece.square + square}q`))
+			) {
+				return true;
+			}
+			if (
+				selectableState?.selectedPiece !== undefined &&
+				legal.preMoves.enabled &&
+				getColorFromString(selectableState?.selectedPiece.name) === movable.color &&
+				(legal.preMoves.moves.includes(selectableState.selectedPiece.square + square) ||
+					legal.preMoves.moves.includes(`${selectableState.selectedPiece.square + square}q`))
+			)
+				return true;
+			return false;
+		}
+
+		return true;
+	};
+
 	const curPieceIsNotSelectedPiece = (piece: Piece | undefined) => piece === undefined || piece.name !== name || piece.square !== square;
 
 	$: if (curPieceIsNotSelectedPiece(selectableState?.selectedPiece)) selected = false;
@@ -119,6 +145,7 @@
 		mouseEvents,
 		canDrag: canDrag(movableState, draggableState),
 		canSelect: canSelect(movableState, selectableState),
+		canCapture: canCapture(legalState, movableState, selectableState),
 		boardFlipped: flipped,
 		duration: draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0,
 		easingFunc: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut'],
@@ -128,6 +155,7 @@
 	on:clicked
 	on:startMoving
 	on:animationEnded
+	on:captured
 	on:moving={(e) => {
 		dispatch('moving', e.detail);
 	}}

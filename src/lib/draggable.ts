@@ -49,6 +49,7 @@ type DragParams = {
 	mouseEvents: boolean;
 	canDrag: boolean;
 	canSelect: boolean;
+	canCapture: boolean;
 	duration: number;
 	easingFunc: (t: number) => number;
 	coords: Tweened<{
@@ -100,10 +101,10 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 
 	let dragging = false;
 
-	let { startSquare, boardFlipped, mouseEvents, canDrag, canSelect, duration, easingFunc } = params;
+	let { startSquare, boardFlipped, mouseEvents, canDrag, canSelect, canCapture, duration, easingFunc } = params;
 	const { coords } = params;
 
-	if (!canDrag && !canSelect) node.style.removeProperty('cursor');
+	if (!canDrag && !canSelect && !canCapture) node.style.removeProperty('cursor');
 	else node.style.cursor = 'pointer';
 
 	let startX = get(coords).x;
@@ -231,7 +232,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		y = 0;
 		globalDX = 0;
 		globalDY = 0;
-		if (!canDrag && !canSelect) node.style.removeProperty('cursor');
+		if (!canDrag && !canSelect && !canCapture) node.style.removeProperty('cursor');
 		else node.style.cursor = 'pointer';
 		setTimeout(() => {
 			if (!dragging) node.style.zIndex = '2';
@@ -243,6 +244,10 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	function pointerdown(e: PointerEvent): void {
 		if (e.button !== 0 || !e.isPrimary || !mouseEvents) return;
 
+		if (canCapture) {
+			node.dispatchEvent(new CustomEvent('captured'));
+			return;
+		}
 		if (canSelect || canDrag) node.dispatchEvent(new CustomEvent('clicked'));
 		if (!canDrag) {
 			node.dispatchEvent(
@@ -309,14 +314,16 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 			duration = newParams.duration;
 			easingFunc = newParams.easingFunc;
 
-			if (newParams.canDrag !== canDrag || newParams.canSelect !== canSelect) {
-				if (!newParams.canDrag && !newParams.canSelect) node.style.removeProperty('cursor');
+			if (newParams.canDrag !== canDrag || newParams.canSelect !== canSelect || newParams.canCapture !== canCapture) {
+				if (!newParams.canDrag && !newParams.canSelect && !newParams.canCapture) node.style.removeProperty('cursor');
 				else node.style.cursor = 'pointer';
 			}
 
 			if (newParams.canDrag !== canDrag) canDrag = newParams.canDrag;
 
 			if (newParams.canSelect !== canSelect) canSelect = newParams.canSelect;
+
+			if (newParams.canCapture !== canCapture) canCapture = newParams.canCapture;
 
 			if (newParams.mouseEvents !== mouseEvents) mouseEvents = newParams.mouseEvents;
 

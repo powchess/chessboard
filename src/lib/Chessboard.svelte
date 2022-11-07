@@ -369,7 +369,9 @@
 
 	export const setFEN = (fen: string, deselectPiece = true, sound: MoveTypeSound | false = 'MOVE') => {
 		chessboard.updatePiecesWithFen(fen);
-		if (deselectPiece) deselect();
+		if (deselectPiece) {
+			deselect();
+		}
 
 		clearAllSquares();
 		removeGhostPiece();
@@ -504,6 +506,28 @@
 		updateLegalState();
 	};
 
+	const handleCaptured = (square: ChessSquare) => {
+		if (!chessboard.selectedPiece) return;
+		const move = chessboard.selectedPiece.square + square;
+
+		if (chessboard.legalEnabled) {
+			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(`${move}q`)) makeMovePromotion(move);
+			else if (chessboard.legalMoves.includes(move)) makeMove(move);
+			else if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) makeNextMove(move);
+			else {
+				deselect();
+			}
+		} else makeMove(move);
+
+		deselect(false);
+	};
+
+	const handleSelect = (piece: StatePiece) => {
+		const tmp = chessboard.getPieceFromSquare(piece.square);
+		if (tmp && tmp.square === piece.square && tmp.name === piece.name) highlightSquare(piece.square, SquareColor.SELECT);
+		// selectPiece(piece.square);
+	};
+
 	function setupChessboardObserver(boardWrap: HTMLDivElement) {
 		if (!boardDiv || !boardWrap) return undefined;
 		// eslint-disable-next-line @typescript-eslint/no-use-before-define
@@ -590,13 +614,11 @@
 						}}
 						on:moving={(e) => handlePieceMoving(e, piece)}
 						on:endDragging
-						on:select={() => {
-							highlightSquare(piece.square, SquareColor.SELECT);
-							// selectPiece(piece.square);
-						}}
+						on:select={() => handleSelect(piece)}
 						on:deselect={() => {
 							deselect();
 						}}
+						on:captured={() => handleCaptured(piece.square)}
 					/>
 				{/each}
 			{/if}
