@@ -298,11 +298,7 @@ export default class Chessboard {
 
 	public getPieceFromSquare(square: ChessSquare | undefined): Piece | undefined {
 		if (!square) return undefined;
-		let piece: Piece | undefined;
-		this.state.pieces.forEach((element) => {
-			if (element.square === square) piece = element;
-		});
-		return piece;
+		return this.state.pieces.find((piece) => piece.square === square);
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -325,15 +321,10 @@ export default class Chessboard {
 
 	// eslint-disable-next-line class-methods-use-this
 	public isCastling = (move: string): boolean => {
-		switch (move) {
-			case 'e1g1':
-			case 'e1c1':
-			case 'e8g8':
-			case 'e8c8':
-				return true;
-			default:
-				return false;
-		}
+		const startSquare = move.slice(0, 2) as ChessSquare;
+		const movingPiece = this.getPieceFromSquare(startSquare);
+		if (!movingPiece || movingPiece.name[1] !== 'K') return false;
+		return move === 'e1g1' || move === 'e1c1' || move === 'e8g8' || move === 'e8c8';
 	};
 
 	/**
@@ -341,7 +332,8 @@ export default class Chessboard {
 	 * @param move
 	 */
 	// eslint-disable-next-line class-methods-use-this
-	public getRookMoveIfIsCastling = (move: string): 'h1f1' | 'a1d1' | 'h8f8' | 'a8d8' | undefined => {
+	public getRookMoveIfIsCastling = (move: string): 'h1f1' | 'a1d1' | 'h8f8' | 'a8d8' | null => {
+		if (!this.isCastling(move)) return null;
 		switch (move) {
 			case 'e1g1':
 				return 'h1f1';
@@ -352,7 +344,7 @@ export default class Chessboard {
 			case 'e8c8':
 				return 'a8d8';
 			default:
-				return undefined;
+				return null;
 		}
 	};
 
