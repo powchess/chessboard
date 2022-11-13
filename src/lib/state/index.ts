@@ -125,7 +125,7 @@ export class State {
 	}
 
 	public set currentPreMove(move: string) {
-		if (move.length < 4 && move !== '') return;
+		if (move === '') return;
 		if (!this.preMovesEnabled) this.legal.preMoves.curMove = '';
 		else this.legal.preMoves.curMove = move;
 	}

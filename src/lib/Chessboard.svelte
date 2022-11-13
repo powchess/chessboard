@@ -220,7 +220,7 @@
 		updateLegalState();
 
 		if (chessboard.legalEnabled && chessboard.preMovesEnabled && chessboard.currentPreMove !== '') {
-			if (chessboard.legalMoves.includes(chessboard.currentPreMove) || chessboard.legalMoves.includes(`${chessboard.currentPreMove}q`)) {
+			if (chessboard.legalMoves.includes(chessboard.currentPreMove)) {
 				const nextMove = chessboard.currentPreMove;
 				tick().then(() => {
 					makeMove(nextMove);
@@ -307,32 +307,28 @@
 			return;
 		}
 
-		if (chessboard.selectedPiece && chessboard.selectedPiece.square !== square && !chessboard.legalEnabled) {
-			makeMove(chessboard.selectedPiece.square + square);
+		if (!chessboard.selectedPiece) return;
+		if (chessboard.selectedPiece.square === square) return;
+		const move = chessboard.selectedPiece.square + square;
+
+		if (!chessboard.legalEnabled) {
+			makeMove(move);
 			deselect();
 			return;
 		}
 
-		if (chessboard.selectedPiece && chessboard.selectedPiece.square !== square && !canMove(chessboard.selectedPiece.name)) {
-			if (chessboard.preMovesEnabled && chessboard.preMoves.includes(chessboard.selectedPiece.square + square)) {
-				makeNextMove(chessboard.selectedPiece.square + square);
+		if (!canMove(chessboard.selectedPiece.name)) {
+			if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) {
+				if (chessboard.isPromotion(move)) makeNextMove(`${move}q`);
+				else makeNextMove(move);
 			}
 			deselect(false);
 			return;
 		}
 
-		if (
-			chessboard.selectedPiece &&
-			chessboard.selectedPiece.square !== square &&
-			(piece === undefined || piece.name[0] !== chessboard.selectedPiece.name[0]) &&
-			canMove(chessboard.selectedPiece.name)
-		) {
-			if (
-				chessboard.isPromotion(chessboard.selectedPiece.square + square) &&
-				chessboard.legalMoves.includes(`${chessboard.selectedPiece.square + square}q`)
-			)
-				makeMovePromotion(chessboard.selectedPiece.square + square);
-			else if (chessboard.legalMoves.includes(chessboard.selectedPiece.square + square)) makeMove(chessboard.selectedPiece.square + square);
+		if ((piece === undefined || piece.name[0] !== chessboard.selectedPiece.name[0]) && canMove(chessboard.selectedPiece.name)) {
+			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(move)) makeMovePromotion(move);
+			else if (chessboard.legalMoves.includes(move)) makeMove(move);
 			deselect();
 		}
 	};
@@ -343,8 +339,10 @@
 		if (chessboard.legalEnabled) {
 			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(`${move}q`)) makeMovePromotion(move);
 			else if (chessboard.legalMoves.includes(move)) makeMove(move);
-			else if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) makeNextMove(move);
-			else {
+			else if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) {
+				if (chessboard.isPromotion(move)) makeNextMove(`${move}q`);
+				else makeNextMove(move);
+			} else {
 				deselect();
 			}
 		} else makeMove(move);
@@ -513,8 +511,10 @@
 		if (chessboard.legalEnabled) {
 			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(`${move}q`)) makeMovePromotion(move);
 			else if (chessboard.legalMoves.includes(move)) makeMove(move);
-			else if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) makeNextMove(move);
-			else {
+			else if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) {
+				if (chessboard.isPromotion(move)) makeNextMove(`${move}q`);
+				else makeNextMove(move);
+			} else {
 				deselect();
 			}
 		} else makeMove(move);
