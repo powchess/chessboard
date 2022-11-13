@@ -557,6 +557,14 @@
 		};
 	}
 
+	const getRoundedSquareCorner = (square: ChessSquare) => {
+		if (square === 'a1') return chessboard.flipped ? 'top-right' : 'bottom-left';
+		if (square === 'a8') return chessboard.flipped ? 'bottom-right' : 'top-left';
+		if (square === 'h1') return chessboard.flipped ? 'top-left' : 'bottom-right';
+		if (square === 'h8') return chessboard.flipped ? 'bottom-left' : 'top-right';
+		return '';
+	};
+
 	$: teardownChessboard = setupChessboardObserver(boardWrapper);
 
 	onMount(() => {
@@ -644,15 +652,7 @@
 					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 					flipped={chessboard.flipped}
 					mouseEvents={chessboard.state.board.mouseEvents}
-					corner={square.square === 'a8'
-						? 'top-left'
-						: square.square === 'h8'
-						? 'top-right'
-						: square.square === 'a1'
-						? 'bottom-left'
-						: square.square === 'h1'
-						? 'bottom-right'
-						: ''}
+					corner={getRoundedSquareCorner(square.square)}
 				/>
 			{/each}
 		{/if}
