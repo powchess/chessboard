@@ -593,7 +593,7 @@
 		style="
 		--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 	>
-		<div style="width: 100%; height: 100%" class="noselect">
+		<div style="width: 100%; height: 100%" class="noselect{chessboard.whiteToMove ? ' w' : ' b'}">
 			{#if chessboard.state.board.startFen}
 				{#each chessboard.state.pieces as piece (piece)}
 					<Piece
@@ -693,6 +693,14 @@
 
 <style>
 	@import './boardThemes/themes.css';
+
+	:global(.w .white) {
+		cursor: pointer;
+	}
+
+	:global(.b .black) {
+		cursor: pointer;
+	}
 
 	.boardWrapper {
 		aspect-ratio: 1 / 1;

@@ -61,32 +61,6 @@ type DragParams = {
 };
 
 export default function drag(node: HTMLDivElement, params: DragParams) {
-	// let waitingArgs: unknown[] | null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	// function throttle(callback: (...args: any[]) => unknown, delay = 1000) {
-	// 	let shouldWait = false;
-
-	// 	const timeoutFunction = () => {
-	// 		if (waitingArgs == null) shouldWait = false;
-	// 		else {
-	// 			callback(...waitingArgs);
-	// 			waitingArgs = null;
-	// 			setTimeout(timeoutFunction, delay);
-	// 		}
-	// 	};
-
-	// 	return (...args: unknown[]) => {
-	// 		if (shouldWait) {
-	// 			waitingArgs = args;
-	// 			return;
-	// 		}
-
-	// 		callback(...args);
-	// 		shouldWait = true;
-	// 		setTimeout(timeoutFunction, delay);
-	// 	};
-	// }
-
 	let x: number;
 	let y: number;
 	let offsetX: number;
@@ -105,16 +79,11 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 	let { startSquare, boardSize, boardFlipped, mouseEvents, canDrag, canSelect, canCapture, duration, easingFunc } = params;
 	const { coords } = params;
 
-	if (!canDrag && !canSelect && !canCapture) node.classList.remove('canMove');
-	else node.classList.add('canMove');
-
 	let startX = get(coords).x;
 	let startY = get(coords).y;
 
 	const touchScale = 1.6;
 	let circle = createTouchCircle(node, touchScale, boardFlipped);
-	// node.style.transform = `translate(${(startX * boardSize) / 8}px, ${(startY * boardSize) / 8}px)`;
-	// node.draggable = false;
 
 	function pointermove(e: PointerEvent) {
 		const dx = e.clientX - x;
@@ -182,8 +151,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		);
 	}
 
-	// const movingFunc = throttle(pointermove, 10);
-
 	function scrolling(): void {
 		const dx = window.scrollX - scrollX;
 		const dy = window.scrollY - scrollY;
@@ -208,8 +175,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		document.body.removeEventListener('pointerleave', pointerup);
 		window.removeEventListener('scroll', scrolling);
 
-		// waitingArgs = null;
-
 		const diffX = Math.floor((globalDX + offsetX) / node.offsetWidth);
 		const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
 
@@ -233,11 +198,11 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		y = 0;
 		globalDX = 0;
 		globalDY = 0;
-		if (!canDrag && !canSelect && !canCapture) node.classList.remove('canMove');
-		else node.classList.add('canMove');
+
 		setTimeout(() => {
 			if (!dragging) node.classList.remove('dragging');
 		}, duration);
+
 		nodeCentered = false;
 		circle.remove();
 	}
@@ -313,18 +278,10 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		update(newParams: DragParams) {
 			startSquare = newParams.startSquare;
 
-			if (newParams.boardSize !== boardSize) {
-				boardSize = newParams.boardSize;
-				// node.style.transform = `translate(${(startX * boardSize) / 8}px, ${(startY * boardSize) / 8}px)`;
-			}
+			if (newParams.boardSize !== boardSize) boardSize = newParams.boardSize;
 
 			duration = newParams.duration;
 			easingFunc = newParams.easingFunc;
-
-			if (newParams.canDrag !== canDrag || newParams.canSelect !== canSelect || newParams.canCapture !== canCapture) {
-				if (!newParams.canDrag && !newParams.canSelect && !newParams.canCapture) node.classList.remove('canMove');
-				else node.classList.add('canMove');
-			}
 
 			if (newParams.canDrag !== canDrag) canDrag = newParams.canDrag;
 

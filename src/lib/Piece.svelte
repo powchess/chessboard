@@ -172,13 +172,30 @@
 		dispatch('moving', e.detail);
 	}}
 	style="transform: translate({($coords.x * boardSize) / 8}px, {((7 - $coords.y) * boardSize) / 8}px);"
-	class="piece {name}{isGhost ? ' ghost' : ''}{!movableState?.enabled && !isGhost ? ' static' : ''}{!mounted
-		? ' opacity-0'
-		: ''}{canDragVar || canSelectVar || canCaptureVar ? ' canMove' : ''}"
-	alt={name}
+	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost ? ' ghost' : ''}{!movableState?.enabled && !isGhost
+		? ' static'
+		: ''}{!mounted ? ' opacity-0' : ''}{canCaptureVar ? ' capture' : ''}"
 />
 
 <style>
+	div {
+		-webkit-touch-callout: none; /* iOS Safari */
+		-webkit-user-select: none; /* Safari */
+		-khtml-user-select: none; /* Konqueror HTML */
+		-moz-user-select: none; /* Old versions of Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
+		user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+		touch-action: none;
+		position: absolute;
+		left: 0;
+		top: 0;
+		aspect-ratio: 1;
+		width: 12.5%;
+		height: 12.5%;
+		background-size: 100% 100% !important;
+		will-change: transform;
+		z-index: 2;
+	}
 	.ghost {
 		opacity: 0.3;
 		z-index: 0 !important;
@@ -189,7 +206,7 @@
 	}
 
 	.canMove,
-	.canCapture {
+	.capture {
 		cursor: pointer;
 	}
 

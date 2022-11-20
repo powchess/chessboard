@@ -8,25 +8,6 @@
 	touch-action: none;
 }
 
-.piece {
-	-webkit-touch-callout: none; /* iOS Safari */
-	-webkit-user-select: none; /* Safari */
-	-khtml-user-select: none; /* Konqueror HTML */
-	-moz-user-select: none; /* Old versions of Firefox */
-	-ms-user-select: none; /* Internet Explorer/Edge */
-	user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
-	touch-action: none;
-	position: absolute;
-	left: 0;
-	top: 0;
-	aspect-ratio: 1;
-	width: 12.5%;
-	height: 12.5%;
-	background-size: 100% 100% !important;
-	will-change: transform;
-	z-index: 2;
-}
-
 .bP {
 	background: url('/images/pieces/bP.svg');
 }
