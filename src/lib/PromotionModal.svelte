@@ -44,6 +44,7 @@
 		justify-content: space-evenly;
 		align-items: center;
 		width: 70%;
+		height: 19%;
 		background: rgb(51, 65, 85);
 		border-radius: 1vmin;
 	}

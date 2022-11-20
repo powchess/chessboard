@@ -45,6 +45,7 @@ function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boole
 
 type DragParams = {
 	startSquare: ChessSquare;
+	boardSize: number;
 	boardFlipped: boolean;
 	mouseEvents: boolean;
 	canDrag: boolean;
@@ -59,33 +60,7 @@ type DragParams = {
 	}>;
 };
 
-export default function drag(node: HTMLImageElement, params: DragParams) {
-	let waitingArgs: unknown[] | null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	function throttle(callback: (...args: any[]) => unknown, delay = 1000) {
-		let shouldWait = false;
-
-		const timeoutFunction = () => {
-			if (waitingArgs == null) shouldWait = false;
-			else {
-				callback(...waitingArgs);
-				waitingArgs = null;
-				setTimeout(timeoutFunction, delay);
-			}
-		};
-
-		return (...args: unknown[]) => {
-			if (shouldWait) {
-				waitingArgs = args;
-				return;
-			}
-
-			callback(...args);
-			shouldWait = true;
-			setTimeout(timeoutFunction, delay);
-		};
-	}
-
+export default function drag(node: HTMLDivElement, params: DragParams) {
 	let x: number;
 	let y: number;
 	let offsetX: number;
@@ -101,18 +76,14 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 
 	let dragging = false;
 
-	let { startSquare, boardFlipped, mouseEvents, canDrag, canSelect, canCapture, duration, easingFunc } = params;
+	let { startSquare, boardSize, boardFlipped, mouseEvents, canDrag, canSelect, canCapture, duration, easingFunc } = params;
 	const { coords } = params;
-
-	if (!canDrag && !canSelect && !canCapture) node.style.removeProperty('cursor');
-	else node.style.cursor = 'pointer';
 
 	let startX = get(coords).x;
 	let startY = get(coords).y;
 
 	const touchScale = 1.6;
 	let circle = createTouchCircle(node, touchScale, boardFlipped);
-	node.draggable = false;
 
 	function pointermove(e: PointerEvent) {
 		const dx = e.clientX - x;
@@ -137,8 +108,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 					{ duration, easing: easingFunc }
 				);
 				nodeCentered = true;
-				node.style.zIndex = '30';
-				node.style.cursor = 'grabbing';
+				node.classList.add('dragging');
 
 				node.dispatchEvent(new CustomEvent('startMoving'));
 			}
@@ -181,8 +151,6 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		);
 	}
 
-	const movingFunc = throttle(pointermove, 10);
-
 	function scrolling(): void {
 		const dx = window.scrollX - scrollX;
 		const dy = window.scrollY - scrollY;
@@ -201,13 +169,11 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 	}
 
 	function pointerup() {
-		window.removeEventListener('pointermove', movingFunc);
+		window.removeEventListener('pointermove', pointermove);
 		window.removeEventListener('pointerup', pointerup);
 		window.removeEventListener('pointercancel', pointerup);
 		document.body.removeEventListener('pointerleave', pointerup);
 		window.removeEventListener('scroll', scrolling);
-
-		waitingArgs = null;
 
 		const diffX = Math.floor((globalDX + offsetX) / node.offsetWidth);
 		const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
@@ -225,18 +191,18 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 			.update(() => ({ x: startX, y: startY, scale: 1 }), { duration, easing: easingFunc })
 			.then(() => {
 				if (!dragging) node.dispatchEvent(new CustomEvent('animationEnded'));
-				if (!dragging) node.style.zIndex = '2';
+				if (!dragging) node.classList.remove('dragging');
 			});
 
 		x = 0;
 		y = 0;
 		globalDX = 0;
 		globalDY = 0;
-		if (!canDrag && !canSelect && !canCapture) node.style.removeProperty('cursor');
-		else node.style.cursor = 'pointer';
+
 		setTimeout(() => {
-			if (!dragging) node.style.zIndex = '2';
+			if (!dragging) node.classList.remove('dragging');
 		}, duration);
+
 		nodeCentered = false;
 		circle.remove();
 	}
@@ -283,7 +249,7 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 
 		dragging = true;
 
-		window.addEventListener('pointermove', movingFunc);
+		window.addEventListener('pointermove', pointermove);
 		window.addEventListener('pointerup', pointerup);
 		window.addEventListener('pointercancel', pointerup);
 		document.body.addEventListener('pointerleave', pointerup);
@@ -311,13 +277,11 @@ export default function drag(node: HTMLImageElement, params: DragParams) {
 		},
 		update(newParams: DragParams) {
 			startSquare = newParams.startSquare;
+
+			if (newParams.boardSize !== boardSize) boardSize = newParams.boardSize;
+
 			duration = newParams.duration;
 			easingFunc = newParams.easingFunc;
-
-			if (newParams.canDrag !== canDrag || newParams.canSelect !== canSelect || newParams.canCapture !== canCapture) {
-				if (!newParams.canDrag && !newParams.canSelect && !newParams.canCapture) node.style.removeProperty('cursor');
-				else node.style.cursor = 'pointer';
-			}
 
 			if (newParams.canDrag !== canDrag) canDrag = newParams.canDrag;
 

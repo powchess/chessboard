@@ -35,6 +35,8 @@
 	let promotionModal: PromotionModal;
 	let promotionLastMove = '';
 
+	let mounted = false;
+
 	export const clearAllSquares = (mode?: SquareColor) => {
 		chessboard.clearAllSquares(mode);
 		if (mode === SquareColor.LEGAL) chessboard.clearAllSquares(SquareColor.LEGALHOVER);
@@ -540,6 +542,7 @@
 		const observer = new ResizeObserver((entries) => {
 			const boundingRect = boardWrap.getBoundingClientRect();
 			entries.forEach(() => {
+				chessboard.state.board.size = (Math.floor((boundingRect.width * window.devicePixelRatio) / 8) * 8) / window.devicePixelRatio;
 				boardDiv.style.setProperty(
 					'width',
 					`${(Math.floor((boundingRect.width * window.devicePixelRatio) / 8) * 8) / window.devicePixelRatio}px`
@@ -568,6 +571,7 @@
 	$: teardownChessboard = setupChessboardObserver(boardWrapper);
 
 	onMount(() => {
+		mounted = true;
 		updateLegalState(true);
 		if (chessboard.state.callbacks.getLastMove) highlightMove(chessboard.state.callbacks.getLastMove());
 		if (chessboard.state.board.resizible) document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
@@ -593,17 +597,17 @@
 		on:drawCircle={(e) => dispatch('drawCircle', { square: e.detail.square, color: e.detail.color })}
 		on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 		bind:this={boardDiv}
-		bind:clientWidth={chessboard.state.board.size}
 		class="noselect board text-sm {className}{!chessboard.legalEnabled && chessboard.selectedPiece ? ' pointer' : ''}"
 		style="
 		--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 	>
-		<div style="width: 100%; height: 100%" class="noselect">
+		<div style="width: 100%; height: 100%" class="noselect{chessboard.whiteToMove ? ' w' : ' b'}">
 			{#if chessboard.state.board.startFen}
 				{#each chessboard.state.pieces as piece (piece)}
 					<Piece
 						square={piece.square}
 						name={piece.name}
+						boardSize={chessboard.state.board.size}
 						mouseEvents={chessboard.state.board.mouseEvents}
 						legalState={chessboard.state.legal}
 						draggableState={chessboard.state.draggable}
@@ -634,6 +638,7 @@
 		{#if chessboard.ghostPiece}
 			<Piece
 				isGhost={true}
+				boardSize={chessboard.state.board.size}
 				square={chessboard.ghostPiece.square}
 				name={chessboard.ghostPiece.name}
 				getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
@@ -656,10 +661,10 @@
 				/>
 			{/each}
 		{/if}
-		{#if chessboard.state.board.notation}
+		{#if chessboard.state.board.notation && mounted}
 			<Notation theme={chessboard.state.board.boardTheme} flipped={chessboard.flipped} />
 		{/if}
-		{#if chessboard.state.board.resizible}
+		{#if chessboard.state.board.resizible && mounted}
 			<Resizing
 				{chessboard}
 				mouseEvents={chessboard.state.board.mouseEvents}
@@ -688,6 +693,14 @@
 
 <style>
 	@import './boardThemes/themes.css';
+
+	:global(.w .white) {
+		cursor: pointer;
+	}
+
+	:global(.b .black) {
+		cursor: pointer;
+	}
 
 	.boardWrapper {
 		aspect-ratio: 1 / 1;

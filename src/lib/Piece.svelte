@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import * as easingFuncs from 'svelte/easing';
 	import drag from './draggable';
-	import getChessPieceImage from './chessPieceSVGs';
+	// import getChessPieceImage from './chessPieceSVGs';
 	import type { ChessPiece, ChessSquare } from './chessTypes';
 	import { Color } from './enums';
 	import type MovableState from './state/movable';
@@ -19,6 +19,8 @@
 	export let flipped: boolean;
 	export let isGhost = false;
 
+	export let boardSize: number;
+
 	if (isGhost) mouseEvents = false;
 
 	export let selectableState: SelectableState | undefined = undefined;
@@ -27,6 +29,9 @@
 	export let movableState: MovableState | undefined = undefined;
 
 	let selected = false;
+	let canDragVar = false;
+	let canSelectVar = false;
+	let canCaptureVar = false;
 
 	const dispatch = createEventDispatcher();
 	let curDuration = draggableState?.transition?.enabled ? draggableState.transition.settings.duration : 0;
@@ -35,7 +40,7 @@
 		{ duration: curDuration, easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut'] }
 	);
 
-	let initialized = false;
+	let mounted = false;
 
 	const getColorFromString = (piece: ChessPiece) => (piece[0] === 'w' ? Color.WHITE : Color.BLACK);
 
@@ -43,11 +48,10 @@
 		const newCoords = getGridCoordsFromSquare(sq);
 
 		coords.update(() => ({ x: newCoords.x, y: newCoords.y, scale: 1 }), {
-			duration: initialized ? curDuration : 0,
+			duration: mounted ? curDuration : 0,
 			easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut']
 		});
 
-		if (!initialized) initialized = true;
 		curDuration = draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0;
 	};
 
@@ -135,18 +139,25 @@
 
 	const curPieceIsNotSelectedPiece = (piece: Piece | undefined) => piece === undefined || piece.name !== name || piece.square !== square;
 
+	onMount(() => {
+		mounted = true;
+	});
+
+	$: canDragVar = canDrag(movableState, draggableState);
+	$: canSelectVar = canSelect(movableState, selectableState);
+	$: canCaptureVar = canCapture(legalState, movableState, selectableState);
 	$: if (curPieceIsNotSelectedPiece(selectableState?.selectedPiece)) selected = false;
 	$: flipped, reRenderPieces(square);
-	$: pieceZIndex = typeof movableState === 'boolean' ? (movableState ? 2 : 1) : movableState?.enabled ? 2 : 1;
 </script>
 
-<img
+<div
 	use:drag={{
 		startSquare: square,
+		boardSize,
 		mouseEvents,
-		canDrag: canDrag(movableState, draggableState),
-		canSelect: canSelect(movableState, selectableState),
-		canCapture: canCapture(legalState, movableState, selectableState),
+		canDrag: canDragVar,
+		canSelect: canSelectVar,
+		canCapture: canCaptureVar,
 		boardFlipped: flipped,
 		duration: draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0,
 		easingFunc: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut'],
@@ -160,20 +171,47 @@
 	on:moving={(e) => {
 		dispatch('moving', e.detail);
 	}}
-	style="left: {$coords.x * 12.5}%; 
-		bottom: {$coords.y * 12.5}%; 
-		scale: {$coords.scale};
-		z-Index: {isGhost ? 0 : pieceZIndex}; 
-		opacity: {isGhost ? 0.3 : 1};"
-	class="noselect"
-	src={getChessPieceImage(name)}
-	alt={name}
+	style="transform: translate({($coords.x * boardSize) / 8}px, {((7 - $coords.y) * boardSize) / 8}px);"
+	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost ? ' ghost' : ''}{!movableState?.enabled && !isGhost
+		? ' static'
+		: ''}{!mounted ? ' opacity-0' : ''}{canCaptureVar ? ' capture' : ''}"
 />
 
 <style>
-	img {
+	div {
+		-webkit-touch-callout: none; /* iOS Safari */
+		-webkit-user-select: none; /* Safari */
+		-khtml-user-select: none; /* Konqueror HTML */
+		-moz-user-select: none; /* Old versions of Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
+		user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+		touch-action: none;
 		position: absolute;
+		left: 0;
+		top: 0;
 		aspect-ratio: 1;
 		width: 12.5%;
+		height: 12.5%;
+		background-size: 100% 100% !important;
+		will-change: transform;
+		z-index: 2;
+	}
+	.ghost {
+		opacity: 0.3;
+		z-index: 0 !important;
+	}
+
+	.static {
+		z-index: 1;
+	}
+
+	.canMove,
+	.capture {
+		cursor: pointer;
+	}
+
+	.dragging {
+		cursor: grabbing;
+		z-index: 30;
 	}
 </style>
