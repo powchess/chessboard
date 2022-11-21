@@ -171,7 +171,7 @@
 	on:moving={(e) => {
 		dispatch('moving', e.detail);
 	}}
-	style="transform: translate({($coords.x * boardSize) / 8}px, {((7 - $coords.y) * boardSize) / 8}px);"
+	style="translate: {($coords.x * boardSize) / 8}px {((7 - $coords.y) * boardSize) / 8}px;"
 	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost ? ' ghost' : ''}{!movableState?.enabled && !isGhost
 		? ' static'
 		: ''}{!mounted ? ' opacity-0' : ''}{canCaptureVar ? ' capture' : ''}"

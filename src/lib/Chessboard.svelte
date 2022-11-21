@@ -200,6 +200,7 @@
 	export const makeMove = (move: string): void => {
 		if (move.substring(0, 2) === move.substring(2, 4)) return;
 		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(move);
+		const prevSelectedPiece = chessboard.selectedPiece ? { ...chessboard.selectedPiece } : undefined;
 		deselect(false);
 
 		const rookMove = chessboard.getRookMoveIfIsCastling(move);
@@ -219,7 +220,19 @@
 		movePiece(move);
 
 		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(move);
-		updateLegalState();
+
+		updateLegalState(false);
+
+		const curSelectedPiece = chessboard.getPieceFromSquare(prevSelectedPiece?.square);
+		if (
+			curSelectedPiece &&
+			prevSelectedPiece &&
+			curSelectedPiece.square === prevSelectedPiece.square &&
+			curSelectedPiece.name === prevSelectedPiece?.name
+		)
+			chessboard.selectedPiece = curSelectedPiece;
+		else chessboard.selectedPiece = undefined;
+		if (chessboard.selectedPiece !== undefined) updateSelectedPieceHighlight();
 
 		if (chessboard.legalEnabled && chessboard.preMovesEnabled && chessboard.currentPreMove !== '') {
 			if (chessboard.legalMoves.includes(chessboard.currentPreMove)) {
@@ -568,6 +581,14 @@
 		return '';
 	};
 
+	const whoCanMove = (whiteToMove: boolean) => {
+		if (!chessboard.legalEnabled) return 'wb';
+		if (chessboard.state.movable.color === Color.BOTH) return whiteToMove ? 'w' : 'b';
+		if (chessboard.state.movable.color === Color.WHITE && (whiteToMove || (!whiteToMove && chessboard.preMovesEnabled))) return 'w';
+		if (chessboard.state.movable.color === Color.BLACK && (!whiteToMove || (whiteToMove && chessboard.preMovesEnabled))) return 'b';
+		return '';
+	};
+
 	$: teardownChessboard = setupChessboardObserver(boardWrapper);
 
 	onMount(() => {
@@ -601,7 +622,7 @@
 		style="
 		--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 	>
-		<div style="width: 100%; height: 100%" class="noselect{chessboard.whiteToMove ? ' w' : ' b'}">
+		<div style="width: 100%; height: 100%" class="noselect {whoCanMove(chessboard.whiteToMove)}">
 			{#if chessboard.state.board.startFen}
 				{#each chessboard.state.pieces as piece (piece)}
 					<Piece
@@ -694,11 +715,7 @@
 <style>
 	@import './boardThemes/themes.css';
 
-	:global(.w .white) {
-		cursor: pointer;
-	}
-
-	:global(.b .black) {
+	:global(.w .white, .b .black, .wb .black, .wb .white) {
 		cursor: pointer;
 	}
 
