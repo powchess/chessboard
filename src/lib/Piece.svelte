@@ -47,12 +47,20 @@
 	const reRenderPieces = (sq: ChessSquare) => {
 		const newCoords = getGridCoordsFromSquare(sq);
 
-		coords.update(() => ({ x: newCoords.x, y: newCoords.y, scale: 1 }), {
+		coords.update(() => ({ x: (newCoords.x * boardSize) / 8, y: ((7 - newCoords.y) * boardSize) / 8, scale: 1 }), {
 			duration: mounted ? curDuration : 0,
 			easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut']
 		});
 
 		curDuration = draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0;
+	};
+
+	const changeSize = (size: number) => {
+		const newCoords = getGridCoordsFromSquare(square);
+
+		coords.update(() => ({ x: (newCoords.x * size) / 8, y: ((7 - newCoords.y) * size) / 8, scale: 1 }), {
+			duration: 0
+		});
 	};
 
 	const dropped = (e: CustomEvent) => {
@@ -91,21 +99,6 @@
 
 	const canSelect = (movable?: MovableState, selectable?: SelectableState) => {
 		if (!movable?.enabled || !selectable?.enabled || !mouseEvents) return false;
-		// if (legalState?.enabled) {
-		// 	if (
-		// 		selectableState?.selectedPiece !== undefined &&
-		// 		selectableState?.selectedPiece?.square !== square &&
-		// 		legalState.moves.find((move) => move.endsWith(square))
-		// 	)
-		// 		return false;
-		// 	if (
-		// 		selectableState?.selectedPiece !== undefined &&
-		// 		legalState.preMoves.enabled &&
-		// 		getColorFromString(name) === movable.color &&
-		// 		legalState.preMoves.moves.find((move) => move.endsWith(square))
-		// 	)
-		// 		return false;
-		// }
 
 		return checkColor(movable);
 	};
@@ -148,12 +141,12 @@
 	$: canCaptureVar = canCapture(legalState, movableState, selectableState);
 	$: if (curPieceIsNotSelectedPiece(selectableState?.selectedPiece)) selected = false;
 	$: flipped, reRenderPieces(square);
+	$: changeSize(boardSize);
 </script>
 
 <div
 	use:drag={{
 		startSquare: square,
-		boardSize,
 		mouseEvents,
 		canDrag: canDragVar,
 		canSelect: canSelectVar,
@@ -171,7 +164,7 @@
 	on:moving={(e) => {
 		dispatch('moving', e.detail);
 	}}
-	style="translate: {($coords.x * boardSize) / 8}px {((7 - $coords.y) * boardSize) / 8}px;"
+	style="translate: {$coords.x}px {$coords.y}px; scale: {$coords.scale}"
 	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost ? ' ghost' : ''}{!movableState?.enabled && !isGhost
 		? ' static'
 		: ''}{!mounted ? ' opacity-0' : ''}{canCaptureVar ? ' capture' : ''}"
@@ -189,9 +182,8 @@
 		position: absolute;
 		left: 0;
 		top: 0;
-		aspect-ratio: 1;
+		aspect-ratio: 1 / 1;
 		width: 12.5%;
-		height: 12.5%;
 		background-size: 100% 100% !important;
 		will-change: transform;
 		z-index: 2;
@@ -211,7 +203,7 @@
 	}
 
 	.dragging {
-		cursor: grabbing;
+		cursor: grabbing !important;
 		z-index: 30;
 	}
 </style>

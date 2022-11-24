@@ -51,33 +51,21 @@ export default class Chessboard {
 		this.state.markedSquares.add(newSquare);
 	};
 
-	public legalHover = (sqr: ChessSquare) => {
+	public legalHover = (sqr: ChessSquare | undefined, color: SquareColor.LEGAL | SquareColor.PREMOVE = SquareColor.LEGAL) => {
+		if (sqr === undefined) return;
 		this.state.markedSquares.forEach((square) => {
-			if (square.square === sqr && square.color === SquareColor.LEGAL) square.color = SquareColor.LEGALHOVER;
-			else if (square.square !== sqr && square.color === SquareColor.LEGALHOVER) {
+			if (square.square === sqr && square.color === color)
+				square.color = color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
+			else if (
+				square.square !== sqr &&
+				square.color === (color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER)
+			) {
 				let pieceExist = false;
 				this.state.pieces.forEach((piece) => {
 					if (piece.square === square.square) pieceExist = true;
 				});
 				if (!pieceExist) {
-					square.color = SquareColor.LEGAL;
-				}
-			}
-		});
-	};
-
-	public preMoveHover = (sqr: ChessSquare) => {
-		this.state.markedSquares.forEach((square) => {
-			if (square.square === sqr && square.color === SquareColor.PREMOVE) square.color = SquareColor.PREMOVEHOVER;
-			else if (square.square !== sqr && square.color === SquareColor.PREMOVEHOVER) {
-				let pieceExist = false;
-				this.state.pieces.forEach((piece) => {
-					if (piece.square === square.square) {
-						pieceExist = true;
-					}
-				});
-				if (!pieceExist) {
-					square.color = SquareColor.PREMOVE;
+					square.color = color;
 				}
 			}
 		});

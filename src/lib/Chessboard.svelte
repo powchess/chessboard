@@ -290,15 +290,19 @@
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
-	export const getSquareFromCoords = (x: number, y: number): ChessSquare => {
+	export const getSquareFromCoords = (x: number, y: number): ChessSquare | undefined => {
 		const coordX = Math.floor((x / chessboard.state.board.size) * 8);
 		const coordY = Math.floor((y / chessboard.state.board.size) * 8);
 
-		const adjX = chessboard.flipped ? Math.abs(coordX - 7) : coordX;
-		const adjY = chessboard.flipped ? coordY : Math.abs(coordY - 7);
+		const adjX = chessboard.flipped ? 7 - coordX : coordX;
+		const adjY = chessboard.flipped ? coordY : 7 - coordY;
 
-		const square: ChessSquare = `${<ChessFile>Object.keys(chessboard.letters)[adjX]}${<ChessRank>(adjY + 1).toString()}`;
-		return square;
+		if (adjX < 0 || adjX > 7 || adjY < 0 || adjY > 7) return undefined;
+
+		const file = Object.keys(chessboard.letters)[adjX];
+		const rank = (adjY + 1).toString();
+
+		return `${<ChessFile>file}${<ChessRank>rank}`;
 	};
 
 	const boardClick = (e: PointerEvent): void => {
@@ -314,6 +318,7 @@
 		const y = e.clientY - boundingRect.top;
 
 		const square = getSquareFromCoords(x, y);
+		if (!square) return;
 		const piece = chessboard.getPieceFromSquare(square);
 		dispatch('squareClick', { square, piece: piece ? piece.name : undefined });
 
@@ -490,9 +495,13 @@
 	const handlePieceMoving = (e: CustomEvent, piece: StatePiece) => {
 		const bounding = boardDiv.getBoundingClientRect();
 		if (chessboard.legalEnabled) {
-			if (canMove(piece.name)) chessboard.legalHover(getSquareFromCoords(e.detail.x - bounding.x, e.detail.y - bounding.y));
+			if (canMove(piece.name))
+				chessboard.legalHover(getSquareFromCoords(e.detail.x - bounding.x - window.screenX, e.detail.y - bounding.y - window.scrollY)); // TODO: fix this
 			if (!canMove(piece.name) && chessboard.preMovesEnabled)
-				chessboard.preMoveHover(getSquareFromCoords(e.detail.x - bounding.x, e.detail.y - bounding.y));
+				chessboard.legalHover(
+					getSquareFromCoords(e.detail.x - bounding.x - window.screenX, e.detail.y - bounding.y - window.scrollY),
+					SquareColor.PREMOVE
+				);
 		}
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
 	};
@@ -582,6 +591,12 @@
 	};
 
 	const whoCanMove = (whiteToMove: boolean) => {
+		if (
+			!chessboard.movableEnabled ||
+			!chessboard.state.board.mouseEvents ||
+			(!chessboard.draggableEnabled && !chessboard.selectableEnabled)
+		)
+			return '';
 		if (!chessboard.legalEnabled) return 'wb';
 		if (chessboard.state.movable.color === Color.BOTH) return whiteToMove ? 'w' : 'b';
 		if (chessboard.state.movable.color === Color.WHITE && (whiteToMove || (!whiteToMove && chessboard.preMovesEnabled))) return 'w';
@@ -618,11 +633,11 @@
 		on:drawCircle={(e) => dispatch('drawCircle', { square: e.detail.square, color: e.detail.color })}
 		on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 		bind:this={boardDiv}
-		class="noselect board text-sm {className}{!chessboard.legalEnabled && chessboard.selectedPiece ? ' pointer' : ''}"
+		class="board text-sm {className}{!chessboard.legalEnabled && chessboard.selectedPiece ? ' pointer' : ''}"
 		style="
 		--boardTheme: url({chessboard.state.board.boardTheme === 'standard' ? standardBoard : darkBlueBoard});"
 	>
-		<div style="width: 100%; height: 100%" class="noselect {whoCanMove(chessboard.whiteToMove)}">
+		<div style="width: 100%; height: 100%" class={whoCanMove(chessboard.whiteToMove)}>
 			{#if chessboard.state.board.startFen}
 				{#each chessboard.state.pieces as piece (piece)}
 					<Piece
@@ -672,6 +687,7 @@
 					on:dragenter={(e) => {
 						highlightSquare(e.detail.square, SquareColor.LEGALHOVER);
 					}}
+					boardSize={chessboard.state.board.size}
 					theme={chessboard.state.board.boardTheme}
 					square={square.square}
 					color={square.color}
@@ -728,6 +744,13 @@
 		justify-content: center;
 	}
 	.board {
+		-webkit-touch-callout: none; /* iOS Safari */
+		-webkit-user-select: none; /* Safari */
+		-khtml-user-select: none; /* Konqueror HTML */
+		-moz-user-select: none; /* Old versions of Firefox */
+		-ms-user-select: none; /* Internet Explorer/Edge */
+		user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+		touch-action: none;
 		position: relative;
 		aspect-ratio: 1;
 		width: 100%;

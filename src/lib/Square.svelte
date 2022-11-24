@@ -10,6 +10,7 @@
 	export let flipped: boolean;
 	export let theme: BoardTheme;
 	export let mouseEvents = true;
+	export let boardSize: number;
 
 	export let corner: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | '' = '';
 
@@ -26,8 +27,8 @@
 </script>
 
 <div
-	style="left: {x * 12.5}%; bottom: {y * 12.5}%;{corner ? ` border-${corner}-radius: inherit;` : ''}"
-	class="noselect {boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}"
+	style="translate: {(x * boardSize) / 8}px {((7 - y) * boardSize) / 8}px;{corner ? ` border-${corner}-radius: inherit;` : ''}"
+	class="{boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}"
 />
 
 <style>
@@ -35,5 +36,7 @@
 		position: absolute;
 		width: 12.5%;
 		height: 12.5%;
+		left: 0;
+		top: 0;
 	}
 </style>

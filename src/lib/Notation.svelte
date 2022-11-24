@@ -11,7 +11,7 @@
 	$: fontSize = Math.floor(Math.log(totalHeight / 8) * 3);
 </script>
 
-<div class="files noselect">
+<div class="files">
 	{#each files as file, i}
 		<span
 			data-file={file}
@@ -23,7 +23,7 @@
 		</span>
 	{/each}
 </div>
-<div bind:clientHeight={totalHeight} class="ranks noselect">
+<div bind:clientHeight={totalHeight} class="ranks">
 	{#each files as file, i}
 		<span
 			data-file={file}

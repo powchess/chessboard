@@ -1,7 +1,7 @@
 {
 	"name": "@powchess/chessboard",
 	"private": false,
-	"version": "1.0.29",
+	"version": "1.0.30",
 	"description": "Chessboard UI Package for PowChess.com",
 	"repository": {
 		"type": "git",
@@ -24,6 +24,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "vite dev --port 3000",
+		"dev:host": "vite dev --port 3000 --host",
 		"build": "vite build",
 		"preview": "vite preview --port 3000",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
