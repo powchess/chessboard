@@ -26,6 +26,3 @@ declare namespace svelte.JSX {
 		ondrawArrow?: (e: CustomEvent) => void;
 	}
 }
-
-type TupleToUnion<T extends unknown[]> = T[number];
-type IndicesTo<T extends number, I extends number[] = []> = I['length'] extends T ? I : IndicesTo<T, [...I, I['length']]>;

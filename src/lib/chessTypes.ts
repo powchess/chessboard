@@ -1,3 +1,6 @@
+type IndicesTo<T extends number, I extends number[] = []> = I['length'] extends T ? I : IndicesTo<T, [...I, I['length']]>;
+type TupleToUnion<T extends unknown[]> = T[number];
+
 export type ChessFile = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
 export type ChessRank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
 export type ChessSquare = `${ChessFile}${ChessRank}`;
