@@ -24,12 +24,12 @@
     "src": "src/lib/assets/sounds/undo.mp3"
   },
   "node_modules/@sveltejs/kit/src/runtime/client/start.js": {
-    "file": "_app/immutable/start-ff323b58.js",
+    "file": "_app/immutable/start-7ce0da90.js",
     "src": "node_modules/@sveltejs/kit/src/runtime/client/start.js",
     "isEntry": true,
     "imports": [
       "_index-e8cb9686.js",
-      "_singletons-873e29a6.js"
+      "_singletons-9f0d9b90.js"
     ],
     "dynamicImports": [
       ".svelte-kit/generated/nodes/0.js",
@@ -49,12 +49,12 @@
     ]
   },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
-    "file": "_app/immutable/components/error.svelte-f88da16a.js",
+    "file": "_app/immutable/components/error.svelte-952b1c87.js",
     "src": "node_modules/@sveltejs/kit/src/runtime/components/error.svelte",
     "isEntry": true,
     "imports": [
       "_index-e8cb9686.js",
-      "_singletons-873e29a6.js"
+      "_singletons-9f0d9b90.js"
     ]
   },
   "src/routes/+page.svelte": {
@@ -77,8 +77,8 @@
       "_app/immutable/assets/darkBlue-02863507.svg"
     ]
   },
-  "_singletons-873e29a6.js": {
-    "file": "_app/immutable/chunks/singletons-873e29a6.js",
+  "_singletons-9f0d9b90.js": {
+    "file": "_app/immutable/chunks/singletons-9f0d9b90.js",
     "imports": [
       "_index-2b094520.js"
     ]
@@ -101,7 +101,7 @@
     ]
   },
   ".svelte-kit/generated/nodes/1.js": {
-    "file": "_app/immutable/chunks/1-a57f06ef.js",
+    "file": "_app/immutable/chunks/1-ee6bd777.js",
     "src": ".svelte-kit/generated/nodes/1.js",
     "isDynamicEntry": true,
     "imports": [
@@ -116,12 +116,12 @@
       "src/routes/+page.svelte"
     ]
   },
-  "src/routes/+layout.css": {
-    "file": "_app/immutable/assets/_layout-a7751722.css",
-    "src": "src/routes/+layout.css"
-  },
   "src/routes/+page.css": {
     "file": "_app/immutable/assets/_page-a5b0061f.css",
     "src": "src/routes/+page.css"
+  },
+  "src/routes/+layout.css": {
+    "file": "_app/immutable/assets/_layout-a7751722.css",
+    "src": "src/routes/+layout.css"
   }
 }
