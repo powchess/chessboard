@@ -61,7 +61,8 @@ export default class HighlightState {
 
 		if (this.enabled && this.defaultState.enabled) {
 			highlightKeys.forEach((key) => {
-				if (this.settings[key] !== this.defaultState.settings[key]) highlight[key] = this.settings[key];
+				if (this.settings[key] !== this.defaultState.settings[key])
+					highlight[key] = this.settings[key];
 			});
 
 			if (Object.keys(highlight).length !== 0) return highlight;

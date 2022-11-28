@@ -143,8 +143,14 @@
 		/* eslint-disable no-useless-escape */
 		let resultString = `\
 <script${ts ? ' lang="ts"' : ''}>
-	import Chessboard from '@powchess/chessboard';${ts ? importConfig : ''}${needColorImport() && ts ? importColor : ''}${
-			state.legal.enabled ? (ts ? "\n\timport { Chess, type Move } from 'chess.js';" : "\n\timport { Chess } from 'chess.js';") : ''
+	import Chessboard from '@powchess/chessboard';${ts ? importConfig : ''}${
+			needColorImport() && ts ? importColor : ''
+		}${
+			state.legal.enabled
+				? ts
+					? "\n\timport { Chess, type Move } from 'chess.js';"
+					: "\n\timport { Chess } from 'chess.js';"
+				: ''
 		}${state.legal.enabled ? '\n\n\tconst chess = new Chess();' : ''}
 
 	const config${ts ? ': ChessboardConfig' : ''} = ${configString};
@@ -181,7 +187,11 @@
 				bind:resizible={state.board.resizible}
 				expanded={true}
 			/>
-			<Movable bind:enabled={state.movable.enabled} bind:color={state.movable.color} expanded={true} />
+			<Movable
+				bind:enabled={state.movable.enabled}
+				bind:color={state.movable.color}
+				expanded={true}
+			/>
 			<Draggable
 				bind:enabled={state.draggable.enabled}
 				bind:ghostPiece={state.draggable.ghostPiece.enabled}
@@ -193,7 +203,8 @@
 			<Legal
 				on:changed={() => {
 					if (!state.legal.enabled) {
-						// for some reason it doesn't work without !state.legal.enabled, on:changed event is triggered before the change??
+						// for some reason it doesn't work without !state.legal.enabled,
+						// on:changed event is triggered before the change??
 						chess.reset();
 						if (browser && mounted) chessboard.setFEN(state.board.startFen, true, false);
 					}

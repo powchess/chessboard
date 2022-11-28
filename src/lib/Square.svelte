@@ -27,7 +27,9 @@
 </script>
 
 <div
-	style="translate: {(x * boardSize) / 8}px {((7 - y) * boardSize) / 8}px;{corner ? ` border-${corner}-radius: inherit;` : ''}"
+	style="translate: {(x * boardSize) / 8}px {((7 - y) * boardSize) / 8}px;{corner
+		? ` border-${corner}-radius: inherit;`
+		: ''}"
 	class="{boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}"
 />
 

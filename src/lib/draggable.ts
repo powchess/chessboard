@@ -13,8 +13,12 @@ function getEndSquare(
 ): ChessSquare | null | undefined {
 	if (directionX === 0 && directionY === 0) return startSquare;
 
-	const files = boardFlipped ? ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'] : ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-	const ranks = boardFlipped ? ['1', '2', '3', '4', '5', '6', '7', '8'] : ['8', '7', '6', '5', '4', '3', '2', '1'];
+	const files = boardFlipped
+		? ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']
+		: ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+	const ranks = boardFlipped
+		? ['1', '2', '3', '4', '5', '6', '7', '8']
+		: ['8', '7', '6', '5', '4', '3', '2', '1'];
 
 	const newFile = files[files.indexOf(startSquare[0]) + directionX];
 	const newRank = ranks[ranks.indexOf(startSquare[1]) + directionY];
@@ -24,7 +28,11 @@ function getEndSquare(
 	return `${<ChessFile>newFile}${<ChessRank>newRank}`;
 }
 
-function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boolean | undefined): SVGElement {
+function createTouchCircle(
+	node: HTMLElement,
+	scale: number,
+	boardFlipped: boolean | undefined
+): SVGElement {
 	const newScale = scale * 1.15;
 	const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 	const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
@@ -32,7 +40,9 @@ function createTouchCircle(node: HTMLElement, scale: number, boardFlipped: boole
 	svg.setAttribute('height', `${node.offsetHeight * newScale}`);
 	svg.style.position = 'absolute';
 	svg.style.zIndex = '100';
-	svg.style.translate = `${boardFlipped ? '' : '-'}${(25 * newScale) / 2}% -${(25 * newScale) / 2}%`;
+	svg.style.translate = `${boardFlipped ? '' : '-'}${(25 * newScale) / 2}% -${
+		(25 * newScale) / 2
+	}%`;
 	svg.style.opacity = '0.2';
 	svg.style.pointerEvents = 'none';
 	circle.setAttribute('r', `${(node.offsetWidth * newScale) / 2}`);
@@ -78,7 +88,16 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 	let dragging = false;
 	let isMobile = false;
 
-	let { startSquare, boardFlipped, mouseEvents, canDrag, canSelect, canCapture, duration, easingFunc } = params;
+	let {
+		startSquare,
+		boardFlipped,
+		mouseEvents,
+		canDrag,
+		canSelect,
+		canCapture,
+		duration,
+		easingFunc
+	} = params;
 	const { coords } = params;
 
 	let startX = get(coords).x;
@@ -110,12 +129,16 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 				circle.setAttribute('cx', `${(node.offsetWidth * touchScale * 1.15) / 2}`);
 				circle.setAttribute('cy', `${(node.offsetHeight * touchScale * 1.15) / 2}`);
 				const squareX =
-					(boardFlipped ? ((7 - square.x) * boardDiv.clientWidth) / 8 : (square.x * boardDiv.clientWidth) / 8) -
+					(boardFlipped
+						? ((7 - square.x) * boardDiv.clientWidth) / 8
+						: (square.x * boardDiv.clientWidth) / 8) -
 					(node.offsetWidth * touchScale * 1.15) / 2 +
 					node.offsetWidth / 2;
 
 				const squareY =
-					(boardFlipped ? ((7 - square.y) * boardDiv.clientWidth) / 8 : (square.y * boardDiv.clientWidth) / 8) -
+					(boardFlipped
+						? ((7 - square.y) * boardDiv.clientWidth) / 8
+						: (square.y * boardDiv.clientWidth) / 8) -
 					(node.offsetWidth * touchScale * 1.15) / 2 +
 					node.offsetWidth / 2;
 
@@ -240,11 +263,15 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		}
 
 		startX =
-			((boardFlipped ? 7 - fileToIndex(<ChessFile>startSquare[0]) : fileToIndex(<ChessFile>startSquare[0])) * boardDiv.clientWidth) / 8;
-		startY = ((boardFlipped ? parseInt(startSquare[1], 10) - 1 : 8 - parseInt(startSquare[1], 10)) * boardDiv.clientWidth) / 8;
-
-		// startX = get(coords).x;
-		// startY = get(coords).y;
+			((boardFlipped
+				? 7 - fileToIndex(<ChessFile>startSquare[0])
+				: fileToIndex(<ChessFile>startSquare[0])) *
+				boardDiv.clientWidth) /
+			8;
+		startY =
+			((boardFlipped ? parseInt(startSquare[1], 10) - 1 : 8 - parseInt(startSquare[1], 10)) *
+				boardDiv.clientWidth) /
+			8;
 
 		currentSquare = startSquare;
 		const bcr = (<HTMLElement>e.target).getBoundingClientRect();
@@ -335,7 +362,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 
 			if (newParams.mouseEvents !== mouseEvents) mouseEvents = newParams.mouseEvents;
 
-			// if (boardFlipped !== newParams.boardFlipped) circle = createTouchCircle(node, touchScale, newParams.boardFlipped);
 			boardFlipped = newParams.boardFlipped;
 		}
 	};

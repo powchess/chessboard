@@ -62,8 +62,10 @@ export default class SoundsState {
 
 		if (this.enabled && this.defaultState.enabled) {
 			if (this.settings.MOVE !== this.defaultState.settings.MOVE) sounds.MOVE = this.settings.MOVE;
-			if (this.settings.CAPTURE !== this.defaultState.settings.CAPTURE) sounds.CAPTURE = this.settings.CAPTURE;
-			if (this.settings.CASTLE !== this.defaultState.settings.CASTLE) sounds.CASTLE = this.settings.CASTLE;
+			if (this.settings.CAPTURE !== this.defaultState.settings.CAPTURE)
+				sounds.CAPTURE = this.settings.CAPTURE;
+			if (this.settings.CASTLE !== this.defaultState.settings.CASTLE)
+				sounds.CASTLE = this.settings.CASTLE;
 			if (this.settings.UNDO !== this.defaultState.settings.UNDO) sounds.UNDO = this.settings.UNDO;
 
 			if (Object.keys(sounds).length !== 0) return sounds;

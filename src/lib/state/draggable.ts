@@ -57,8 +57,10 @@ export default class DraggableState {
 					else if (config?.transition === false) this.transition.enabled = false;
 					else {
 						this.transition.enabled = true;
-						if (config?.transition?.duration) this.transition.settings.duration = config?.transition?.duration;
-						if (config?.transition?.easing) this.transition.settings.easing = config?.transition?.easing;
+						if (config?.transition?.duration)
+							this.transition.settings.duration = config?.transition?.duration;
+						if (config?.transition?.easing)
+							this.transition.settings.easing = config?.transition?.easing;
 					}
 				}
 			}
@@ -82,7 +84,8 @@ export default class DraggableState {
 		} = {};
 
 		if (this.enabled && this.defaultState.enabled) {
-			if (this.ghostPiece.enabled !== this.defaultState.ghostPiece.enabled) draggable.ghostPiece = this.ghostPiece.enabled;
+			if (this.ghostPiece.enabled !== this.defaultState.ghostPiece.enabled)
+				draggable.ghostPiece = this.ghostPiece.enabled;
 			if (this.transition.enabled && this.defaultState.transition.enabled) {
 				if (this.transition.settings.duration !== this.defaultState.transition.settings.duration)
 					transition.duration = this.transition.settings.duration;
@@ -91,7 +94,8 @@ export default class DraggableState {
 
 				if (Object.keys(transition).length !== 0) draggable.transition = transition;
 			}
-			if (!this.transition.enabled && this.defaultState.transition.enabled) draggable.transition = false;
+			if (!this.transition.enabled && this.defaultState.transition.enabled)
+				draggable.transition = false;
 
 			if (Object.keys(draggable).length !== 0) return draggable;
 		}

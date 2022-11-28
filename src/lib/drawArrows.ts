@@ -70,17 +70,20 @@ function changeExistArrow(
 	let end: SqXY;
 	let angle;
 	if (isKnightMove(startSquare, endSquare) && knightLShape) {
-		if (Math.abs(endSquare.x - startSquare.x) === 2) midPoint = { x: endSquare.x, y: startSquare.y };
+		if (Math.abs(endSquare.x - startSquare.x) === 2)
+			midPoint = { x: endSquare.x, y: startSquare.y };
 		else midPoint = { x: startSquare.x, y: endSquare.y };
 
-		if (midPoint.y - startSquare.y < 0) angle = Math.PI + Math.atan((midPoint.x - startSquare.x) / (midPoint.y - startSquare.y));
+		if (midPoint.y - startSquare.y < 0)
+			angle = Math.PI + Math.atan((midPoint.x - startSquare.x) / (midPoint.y - startSquare.y));
 		else angle = Math.atan((midPoint.x - startSquare.x) / Math.abs(midPoint.y - startSquare.y));
 		end = {
 			x: endSquare.x - Math.sign(endSquare.x - midPoint.x) * (midPoint.x !== endSquare.x ? 0.4 : 0),
 			y: endSquare.y - Math.sign(endSquare.y - midPoint.y) * (midPoint.y !== endSquare.y ? 0.4 : 0)
 		};
 	} else {
-		if (endSquare.y - startSquare.y < 0) angle = Math.PI + Math.atan((endSquare.x - startSquare.x) / (endSquare.y - startSquare.y));
+		if (endSquare.y - startSquare.y < 0)
+			angle = Math.PI + Math.atan((endSquare.x - startSquare.x) / (endSquare.y - startSquare.y));
 		else angle = Math.atan((endSquare.x - startSquare.x) / Math.abs(endSquare.y - startSquare.y));
 		end = {
 			x: endSquare.x - Math.sin(angle) * 0.4,
@@ -96,7 +99,9 @@ function changeExistArrow(
 	arrow.setAttribute(
 		'points',
 		`${start.x + 0.5},${start.y + 0.5} ${
-			midPoint.x !== -1 && midPoint.y !== -1 && knightLShape ? `${midPoint.x + 0.5},${midPoint.y + 0.5} ` : ''
+			midPoint.x !== -1 && midPoint.y !== -1 && knightLShape
+				? `${midPoint.x + 0.5},${midPoint.y + 0.5} `
+				: ''
 		}${end.x + 0.5},${end.y + 0.5}`
 	);
 	arrow.setAttribute('data-sqID', `${getChessMove(startSquare, endSquare)}`);
@@ -124,32 +129,43 @@ function changeColor(
 		else if (altKey) drawingSVG.setAttribute('stroke', 'blue');
 		else drawingSVG.setAttribute('stroke', 'green');
 
-		svg.querySelectorAll(`сircle[cx="${startSquare.x + 0.5}"][cy="${startSquare.y + 0.5}"]`).forEach((element) => {
-			if (drawingSVG !== undefined && element !== drawingSVG) {
-				if (element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')) drawingSVG.setAttribute('remove', '');
-				else if (drawingSVG.hasAttribute('remove')) drawingSVG.removeAttribute('remove');
-			}
-		});
+		svg
+			.querySelectorAll(`сircle[cx="${startSquare.x + 0.5}"][cy="${startSquare.y + 0.5}"]`)
+			.forEach((element) => {
+				if (drawingSVG !== undefined && element !== drawingSVG) {
+					if (element.getAttribute('stroke') === drawingSVG.getAttribute('stroke'))
+						drawingSVG.setAttribute('remove', '');
+					else if (drawingSVG.hasAttribute('remove')) drawingSVG.removeAttribute('remove');
+				}
+			});
 	} else if (drawingSVG.tagName === 'polyline') {
 		const color = shiftKey ? 'red' : ctrlKey ? 'orange' : altKey ? 'blue' : 'green';
 		drawingSVG.setAttribute('stroke', `${color}`);
 		drawingSVG.setAttribute('marker-start', `url(#start-${color[0]})`);
 		drawingSVG.setAttribute('marker-end', `url(#end-${color[0]})`);
 
-		svg.querySelectorAll(`polyline[data-sqID="${drawingSVG.getAttribute('data-sqID')}"]`).forEach((element) => {
-			if (!(drawingSVG instanceof SVGPolylineElement)) return;
-			if (element !== drawingSVG) {
-				if (element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')) {
-					drawingSVG.setAttribute('remove', '');
-				} else if (drawingSVG.hasAttribute('remove')) {
-					drawingSVG.removeAttribute('remove');
+		svg
+			.querySelectorAll(`polyline[data-sqID="${drawingSVG.getAttribute('data-sqID')}"]`)
+			.forEach((element) => {
+				if (!(drawingSVG instanceof SVGPolylineElement)) return;
+				if (element !== drawingSVG) {
+					if (element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')) {
+						drawingSVG.setAttribute('remove', '');
+					} else if (drawingSVG.hasAttribute('remove')) {
+						drawingSVG.removeAttribute('remove');
+					}
 				}
-			}
-		});
+			});
 	}
 }
 
-function createArrow(startSquare: SqXY, endSquare: SqXY, knightLShape?: boolean, color?: string, opacity?: number) {
+function createArrow(
+	startSquare: SqXY,
+	endSquare: SqXY,
+	knightLShape?: boolean,
+	color?: string,
+	opacity?: number
+) {
 	const drawingSVG = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
 	changeExistArrow(drawingSVG, startSquare, endSquare, knightLShape, color, opacity);
 
@@ -175,14 +191,24 @@ function createCircle(square: SqXY, color?: string, opacity?: number | string) {
 	return circleSVG;
 }
 
-export function drawTools(svg: SVGGElement, data: (CircleTool | ArrowTool)[], knightLShape?: boolean): void {
+export function drawTools(
+	svg: SVGGElement,
+	data: (CircleTool | ArrowTool)[],
+	knightLShape?: boolean
+): void {
 	data.forEach((element) => {
 		if (element.type === 'circle') {
 			const square = squareToSQXY(element.square);
 			const circle = createCircle(square, element.color, element.opacity);
 			svg.appendChild(circle);
 		} else if (element.type === 'arrow') {
-			const arrow = createArrow(squareToSQXY(element.from), squareToSQXY(element.to), knightLShape, element.color, element.opacity);
+			const arrow = createArrow(
+				squareToSQXY(element.from),
+				squareToSQXY(element.to),
+				knightLShape,
+				element.color,
+				element.opacity
+			);
 			arrow.setAttribute('fixed', '');
 			svg.appendChild(arrow);
 		}
@@ -228,32 +254,44 @@ export default function drawArrows(node: HTMLDivElement, params: Props) {
 		if (startSquare.x === endSquare.x && startSquare.y === endSquare.y) {
 			getChessMove(startSquare, endSquare);
 			if (drawingSVG instanceof SVGPolylineElement) {
-				drawingSVG.remove(); // remove from DOM
+				drawingSVG.remove();
 				drawingSVG = createCircle(endSquare);
 			}
 
 			changeColor(svg, drawingSVG, startSquare, e.shiftKey, e.ctrlKey, e.altKey);
 			svg.appendChild(drawingSVG);
 
-			svg.querySelectorAll(`circle[cx="${startSquare.x + 0.5}"][cy="${startSquare.y + 0.5}"]`).forEach((element) => {
-				if (element === drawingSVG) return;
-				toBeRemoved = element;
-				if (drawingSVG !== undefined && element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')) {
-					drawingSVG.setAttribute('remove', '');
-				}
-			});
+			svg
+				.querySelectorAll(`circle[cx="${startSquare.x + 0.5}"][cy="${startSquare.y + 0.5}"]`)
+				.forEach((element) => {
+					if (element === drawingSVG) return;
+					toBeRemoved = element;
+					if (
+						drawingSVG !== undefined &&
+						element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')
+					) {
+						drawingSVG.setAttribute('remove', '');
+					}
+				});
 		} else {
 			if (drawingSVG instanceof SVGCircleElement) drawingSVG.remove();
 
 			toBeRemoved = undefined;
 
-			svg.querySelectorAll(`polyline[data-sqID="${getChessMove(startSquare, endSquare)}"]`).forEach((element) => {
-				if (drawingSVG === undefined || (startSquare.x === -1 && startSquare.y === -1) || element === drawingSVG) return;
-				toBeRemoved = element;
-				if (element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')) {
-					drawingSVG.setAttribute('remove', '');
-				}
-			});
+			svg
+				.querySelectorAll(`polyline[data-sqID="${getChessMove(startSquare, endSquare)}"]`)
+				.forEach((element) => {
+					if (
+						drawingSVG === undefined ||
+						(startSquare.x === -1 && startSquare.y === -1) ||
+						element === drawingSVG
+					)
+						return;
+					toBeRemoved = element;
+					if (element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')) {
+						drawingSVG.setAttribute('remove', '');
+					}
+				});
 			if (drawingSVG instanceof SVGCircleElement) {
 				drawingSVG = createArrow(startSquare, endSquare, settings.knightLShape);
 				changeColor(svg, drawingSVG, startSquare, e.shiftKey, e.ctrlKey, e.altKey);
@@ -327,12 +365,17 @@ export default function drawArrows(node: HTMLDivElement, params: Props) {
 
 			toBeRemoved = undefined;
 
-			svg.querySelectorAll(`circle[cx="${square.x + 0.5}"][cy="${square.y + 0.5}"]`).forEach((element) => {
-				toBeRemoved = element;
-				if (drawingSVG !== undefined && element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')) {
-					drawingSVG.setAttribute('remove', '');
-				}
-			});
+			svg
+				.querySelectorAll(`circle[cx="${square.x + 0.5}"][cy="${square.y + 0.5}"]`)
+				.forEach((element) => {
+					toBeRemoved = element;
+					if (
+						drawingSVG !== undefined &&
+						element.getAttribute('stroke') === drawingSVG.getAttribute('stroke')
+					) {
+						drawingSVG.setAttribute('remove', '');
+					}
+				});
 
 			if (drawingSVG) svg.appendChild(drawingSVG);
 

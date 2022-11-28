@@ -3,7 +3,6 @@
 	import { tweened } from 'svelte/motion';
 	import * as easingFuncs from 'svelte/easing';
 	import drag from './draggable';
-	// import getChessPieceImage from './chessPieceSVGs';
 	import type { ChessPiece, ChessSquare } from './chessTypes';
 	import { Color } from './enums';
 	import type MovableState from './state/movable';
@@ -34,10 +33,15 @@
 	let canCaptureVar = false;
 
 	const dispatch = createEventDispatcher();
-	let curDuration = draggableState?.transition?.enabled ? draggableState.transition.settings.duration : 0;
+	let curDuration = draggableState?.transition?.enabled
+		? draggableState.transition.settings.duration
+		: 0;
 	const coords = tweened(
 		{ x: 0, y: 0, scale: 1 },
-		{ duration: curDuration, easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut'] }
+		{
+			duration: curDuration,
+			easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut']
+		}
 	);
 
 	let mounted = false;
@@ -47,20 +51,32 @@
 	const reRenderPieces = (sq: ChessSquare) => {
 		const newCoords = getGridCoordsFromSquare(sq);
 
-		coords.update(() => ({ x: (newCoords.x * boardSize) / 8, y: ((7 - newCoords.y) * boardSize) / 8, scale: 1 }), {
-			duration: mounted ? curDuration : 0,
-			easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut']
-		});
+		coords.update(
+			() => ({
+				x: (newCoords.x * boardSize) / 8,
+				y: ((7 - newCoords.y) * boardSize) / 8,
+				scale: 1
+			}),
+			{
+				duration: mounted ? curDuration : 0,
+				easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut']
+			}
+		);
 
-		curDuration = draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0;
+		curDuration = draggableState?.transition.enabled
+			? draggableState.transition.settings.duration
+			: 0;
 	};
 
 	const changeSize = (size: number) => {
 		const newCoords = getGridCoordsFromSquare(square);
 
-		coords.update(() => ({ x: (newCoords.x * size) / 8, y: ((7 - newCoords.y) * size) / 8, scale: 1 }), {
-			duration: 0
-		});
+		coords.update(
+			() => ({ x: (newCoords.x * size) / 8, y: ((7 - newCoords.y) * size) / 8, scale: 1 }),
+			{
+				duration: 0
+			}
+		);
 	};
 
 	const dropped = (e: CustomEvent) => {
@@ -78,8 +94,18 @@
 	const checkColor = (movable: MovableState) => {
 		if (legalState?.enabled) {
 			if (legalState.preMoves.enabled && getColorFromString(name) === movable.color) return true;
-			if (movable.color === Color.WHITE && legalState.whiteToMove && getColorFromString(name) === Color.WHITE) return true;
-			if (movable.color === Color.BLACK && !legalState.whiteToMove && getColorFromString(name) === Color.BLACK) return true;
+			if (
+				movable.color === Color.WHITE &&
+				legalState.whiteToMove &&
+				getColorFromString(name) === Color.WHITE
+			)
+				return true;
+			if (
+				movable.color === Color.BLACK &&
+				!legalState.whiteToMove &&
+				getColorFromString(name) === Color.BLACK
+			)
+				return true;
 			if (movable.color === Color.BOTH) {
 				if (getColorFromString(name) === Color.WHITE && legalState.whiteToMove) return true;
 				if (getColorFromString(name) === Color.BLACK && !legalState.whiteToMove) return true;
@@ -126,11 +152,16 @@
 			return false;
 		}
 
-		if (selectableState?.selectedPiece !== undefined && selectableState?.selectedPiece?.square !== square) return true;
+		if (
+			selectableState?.selectedPiece !== undefined &&
+			selectableState?.selectedPiece?.square !== square
+		)
+			return true;
 		return false;
 	};
 
-	const curPieceIsNotSelectedPiece = (piece: Piece | undefined) => piece === undefined || piece.name !== name || piece.square !== square;
+	const curPieceIsNotSelectedPiece = (piece: Piece | undefined) =>
+		piece === undefined || piece.name !== name || piece.square !== square;
 
 	onMount(() => {
 		mounted = true;
@@ -165,9 +196,11 @@
 		dispatch('moving', e.detail);
 	}}
 	style="translate: {$coords.x}px {$coords.y}px; scale: {$coords.scale}"
-	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost ? ' ghost' : ''}{!movableState?.enabled && !isGhost
-		? ' static'
-		: ''}{!mounted ? ' opacity-0' : ''}{canCaptureVar ? ' capture' : ''}"
+	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost
+		? ' ghost'
+		: ''}{!movableState?.enabled && !isGhost ? ' static' : ''}{!mounted
+		? ' opacity-0'
+		: ''}{canCaptureVar ? ' capture' : ''}"
 />
 
 <style>

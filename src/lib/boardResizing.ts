@@ -1,5 +1,7 @@
-export default function resizing(node: HTMLElement, params: { mouseEvents: boolean; curScale: number }) {
-	// const { curScale } = params;
+export default function resizing(
+	node: HTMLElement,
+	params: { mouseEvents: boolean; curScale: number }
+) {
 	let { mouseEvents } = params;
 	let scale = params.curScale;
 

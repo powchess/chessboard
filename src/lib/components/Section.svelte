@@ -15,7 +15,9 @@
 		on:click={() => {
 			expanded = !expanded;
 		}}
-		class="flex justify-between px-4 py-2 {showExpand ? 'transition hover:bg-slate-800/40' : ''} rounded"
+		class="flex justify-between px-4 py-2 {showExpand
+			? 'transition hover:bg-slate-800/40'
+			: ''} rounded"
 		disabled={!showExpand}
 	>
 		<div class="flex gap-1">

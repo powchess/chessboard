@@ -67,9 +67,12 @@ export default class LegalState {
 			else {
 				this.enabled = true;
 				if (config.settings) {
-					if (config.settings.allowCastling !== undefined) this.settings.allowCastling = config.settings.allowCastling;
-					if (config.settings.allowEnPassant !== undefined) this.settings.allowEnPassant = config.settings.allowEnPassant;
-					if (config.settings.allowPromotion !== undefined) this.settings.allowPromotion = config.settings.allowPromotion;
+					if (config.settings.allowCastling !== undefined)
+						this.settings.allowCastling = config.settings.allowCastling;
+					if (config.settings.allowEnPassant !== undefined)
+						this.settings.allowEnPassant = config.settings.allowEnPassant;
+					if (config.settings.allowPromotion !== undefined)
+						this.settings.allowPromotion = config.settings.allowPromotion;
 				}
 				if (config.preMoves !== undefined) this.preMoves.enabled = config.preMoves;
 			}
@@ -78,10 +81,12 @@ export default class LegalState {
 
 	public getConfig = () => {
 		if (this.enabled && this.defaultState.enabled) {
-			if (this.preMoves.enabled !== this.defaultState.preMoves.enabled) return { preMoves: this.preMoves.enabled };
+			if (this.preMoves.enabled !== this.defaultState.preMoves.enabled)
+				return { preMoves: this.preMoves.enabled };
 		}
 		if (this.enabled !== this.defaultState.enabled) {
-			if (this.preMoves.enabled !== this.defaultState.preMoves.enabled) return { preMoves: this.preMoves.enabled };
+			if (this.preMoves.enabled !== this.defaultState.preMoves.enabled)
+				return { preMoves: this.preMoves.enabled };
 			return this.enabled;
 		}
 		return undefined;

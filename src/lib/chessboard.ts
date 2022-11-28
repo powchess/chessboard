@@ -19,7 +19,6 @@ export default class Chessboard {
 		h: 7
 	};
 
-	// Public
 	public state: State;
 
 	constructor(cfg?: ChessboardConfig | undefined) {
@@ -32,7 +31,8 @@ export default class Chessboard {
 
 		this.state.pieces.forEach((piece: Piece) => {
 			if (piece.square === newSquare.square)
-				newSquare.color = newSquare.color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
+				newSquare.color =
+					newSquare.color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
 		});
 	};
 
@@ -43,7 +43,11 @@ export default class Chessboard {
 		};
 
 		this.state.markedSquares.forEach((element: Square) => {
-			if (element.square === square && element.color !== SquareColor.MOVE && element.color !== SquareColor.CHECK)
+			if (
+				element.square === square &&
+				element.color !== SquareColor.MOVE &&
+				element.color !== SquareColor.CHECK
+			)
 				this.state.markedSquares.delete(element);
 		});
 
@@ -51,14 +55,19 @@ export default class Chessboard {
 		this.state.markedSquares.add(newSquare);
 	};
 
-	public legalHover = (sqr: ChessSquare | undefined, color: SquareColor.LEGAL | SquareColor.PREMOVE = SquareColor.LEGAL) => {
+	public legalHover = (
+		sqr: ChessSquare | undefined,
+		color: SquareColor.LEGAL | SquareColor.PREMOVE = SquareColor.LEGAL
+	) => {
 		if (sqr === undefined) return;
 		this.state.markedSquares.forEach((square) => {
 			if (square.square === sqr && square.color === color)
-				square.color = color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
+				square.color =
+					color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
 			else if (
 				square.square !== sqr &&
-				square.color === (color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER)
+				square.color ===
+					(color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER)
 			) {
 				let pieceExist = false;
 				this.state.pieces.forEach((piece) => {
@@ -108,7 +117,8 @@ export default class Chessboard {
 		}
 
 		this.state.markedSquares.forEach((element) => {
-			if (element.square === square && (element.color === mode || mode === undefined)) this.state.markedSquares.delete(element);
+			if (element.square === square && (element.color === mode || mode === undefined))
+				this.state.markedSquares.delete(element);
 		});
 	};
 
@@ -278,7 +288,8 @@ export default class Chessboard {
 		const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
 
 		this.state.pieces.forEach((piece) => {
-			board[rankToIndex(<ChessRank>piece.square[1])][fileToIndex(<ChessFile>piece.square[0])] = piece.name;
+			board[rankToIndex(<ChessRank>piece.square[1])][fileToIndex(<ChessFile>piece.square[0])] =
+				piece.name;
 		});
 
 		return getShortFenFromBoard(board);
@@ -290,7 +301,11 @@ export default class Chessboard {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	private notValidThing = (payload: { square?: ChessSquare; piece?: string; move?: string }): boolean => {
+	private notValidThing = (payload: {
+		square?: ChessSquare;
+		piece?: string;
+		move?: string;
+	}): boolean => {
 		const { square, piece, move } = payload;
 
 		if (square && square.length !== 2) return true;
@@ -355,7 +370,9 @@ export default class Chessboard {
 		if (pawn === undefined || (pawn.name !== 'wP' && pawn.name !== 'bP')) return undefined;
 
 		const capturedPawn = this.getPieceFromSquare(
-			`${<ChessFile>move[2]}${<ChessRank>(parseInt(move[3], 10) + (pawn.name === 'wP' ? -1 : 1)).toString()}`
+			`${<ChessFile>move[2]}${<ChessRank>(
+				(parseInt(move[3], 10) + (pawn.name === 'wP' ? -1 : 1)).toString()
+			)}`
 		);
 		return capturedPawn?.square;
 	};
@@ -368,13 +385,25 @@ export default class Chessboard {
 	public isPromotion = (move: string): boolean => {
 		if ((move[1] !== '7' || move[3] !== '8') && (move[1] !== '2' || move[3] !== '1')) return false;
 		const piece = this.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
-		if (piece && (piece.name[1] !== 'P' || (piece.name[0] === 'w' && move[3] === '1') || (piece.name[0] === 'b' && move[3] === '8')))
+		if (
+			piece &&
+			(piece.name[1] !== 'P' ||
+				(piece.name[0] === 'w' && move[3] === '1') ||
+				(piece.name[0] === 'b' && move[3] === '8'))
+		)
 			return false;
 		return true;
 	};
 
 	public callbackExists = (
-		callback: 'getLegalMoves' | 'getPreMoves' | 'beforeMove' | 'afterMove' | 'getLastMove' | 'getInCheck' | 'getWhiteToMove'
+		callback:
+			| 'getLegalMoves'
+			| 'getPreMoves'
+			| 'beforeMove'
+			| 'afterMove'
+			| 'getLastMove'
+			| 'getInCheck'
+			| 'getWhiteToMove'
 	) => this.state.callbacks[callback] !== undefined;
 
 	public flipBoard = (flipped?: boolean) => {

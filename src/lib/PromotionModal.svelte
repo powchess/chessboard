@@ -15,7 +15,11 @@
 
 {#if showModal}
 	<div class="modal {className}">
-		<div in:fly={{ x: 100, duration: 300 }} out:fly={{ x: -200, duration: 100 }} class="modal-content">
+		<div
+			in:fly={{ x: 100, duration: 300 }}
+			out:fly={{ x: -200, duration: 100 }}
+			class="modal-content"
+		>
 			{#each ['q', 'r', 'b', 'n'] as piece}
 				<PromotionPiece {piece} bind:isWhite bind:showModal on:newPromotion />
 			{/each}

@@ -41,7 +41,8 @@ export default class MovableState {
 	};
 
 	public getConfig = (): undefined | Color.WHITE | Color.BLACK | Color.BOTH | boolean => {
-		if (this.enabled && this.defaultState.enabled && this.color !== this.defaultState.color) return this.color;
+		if (this.enabled && this.defaultState.enabled && this.color !== this.defaultState.color)
+			return this.color;
 		if (this.enabled && !this.defaultState.enabled) return this.color;
 		if (!this.enabled && this.defaultState.enabled) return false;
 		return undefined;

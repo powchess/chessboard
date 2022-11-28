@@ -52,8 +52,10 @@ export default class DrawToolsState {
 		} = {};
 
 		if (this.enabled && this.defaultState.enabled) {
-			if (this.settings.knightLShape !== this.defaultState.settings.knightLShape) drawTools.knightLShape = this.settings.knightLShape;
-			if (this.settings.onlyChessMove !== this.defaultState.settings.onlyChessMove) drawTools.onlyChessMove = this.settings.onlyChessMove;
+			if (this.settings.knightLShape !== this.defaultState.settings.knightLShape)
+				drawTools.knightLShape = this.settings.knightLShape;
+			if (this.settings.onlyChessMove !== this.defaultState.settings.onlyChessMove)
+				drawTools.onlyChessMove = this.settings.onlyChessMove;
 
 			if (Object.keys(drawTools).length !== 0) return drawTools;
 		}
