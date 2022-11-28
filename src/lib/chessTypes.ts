@@ -9,10 +9,6 @@ type ChessColor = 'w' | 'b';
 type Piece = 'K' | 'Q' | 'R' | 'B' | 'N' | 'P';
 export type ChessPiece = `${ChessColor}${Piece}`;
 
-type StartSquare<Move> = Move extends `${infer Start extends ChessSquare}${infer End extends ChessSquare}` ? [Start, End] : never;
-
-type Test = StartSquare<'e2e4'>;
-
 type BoardRank<T extends number = 8, Rank extends (ChessPiece | null)[] = []> = Rank['length'] extends T
 	? Rank
 	: BoardRank<T, [...Rank, ChessPiece | null]>;
