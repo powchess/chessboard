@@ -179,7 +179,10 @@ pre[class*='language-'] {
 	color: hsl(286, 60%, 67%);
 }
 
-.language-javascript .token.template-string > .token.interpolation > .token.interpolation-punctuation.punctuation {
+.language-javascript
+	.token.template-string
+	> .token.interpolation
+	> .token.interpolation-punctuation.punctuation {
 	color: hsl(5, 48%, 51%);
 }
 
