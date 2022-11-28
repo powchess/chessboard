@@ -18,7 +18,6 @@
 	import Resizing from './Resizing.svelte';
 	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes';
 	import { Color, SquareColor, squareColorToString } from './enums';
-	import { browser } from '$app/environment';
 	import type { State, Piece as StatePiece } from './state/index';
 
 	export let config: ChessboardConfig;
@@ -419,13 +418,13 @@
 	export const setSize = (size: number) => {
 		if (!size || chessboard.state.board.size === size) return;
 		chessboard.state.board.size = size;
-		if (browser && chessboard.state.board.resizible) document.body.style.setProperty('--boardSize', `${chessboard.state.board.size}px`);
+		if (mounted && chessboard.state.board.resizible) document.body.style.setProperty('--boardSize', `${chessboard.state.board.size}px`);
 	};
 
 	export const setScale = (scale: number) => {
 		if (!scale || chessboard.state.board.scale === scale) return;
 		chessboard.state.board.scale = scale;
-		if (browser && chessboard.state.board.resizible) document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
+		if (mounted && chessboard.state.board.resizible) document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
 	};
 
 	export const getPieceFromSquare = (square: ChessSquare) => chessboard.getPieceFromSquare(square)?.name;
@@ -615,7 +614,7 @@
 
 	onDestroy(() => {
 		teardownChessboard?.();
-		if (browser && chessboard.state.board.resizible) document.body.style.removeProperty('--boardScale');
+		if (mounted && chessboard.state.board.resizible) document.body.style.removeProperty('--boardScale');
 	});
 </script>
 
