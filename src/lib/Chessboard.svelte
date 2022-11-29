@@ -807,8 +807,6 @@
 {/if}
 
 <style>
-	@import './assets/style.css';
-
 	:global(.w .white, .b .black, .wb .black, .wb .white) {
 		cursor: pointer;
 	}

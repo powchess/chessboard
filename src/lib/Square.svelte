@@ -41,4 +41,108 @@
 		left: 0;
 		top: 0;
 	}
+
+	.highlightMove {
+		background: radial-gradient(
+			ellipse at center,
+			rgba(0, 0, 0, 0) 0,
+			rgba(219, 141, 31, 0.7) 100%
+		);
+	}
+
+	.highlightMove-darkBlue {
+		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(26, 61, 131, 0.7) 100%);
+	}
+
+	.checkSQ {
+		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(172, 4, 4, 0.6) 100%);
+	}
+
+	.selectedSQ {
+		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(103, 73, 15, 0.4) 100%);
+	}
+
+	.selectedSQ-darkBlue {
+		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(15, 56, 103, 0.4) 100%);
+	}
+
+	.nextMove {
+		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(27, 38, 187, 0.8) 100%);
+	}
+
+	.legalSQ,
+	.legalSQ_hover,
+	.preMoveSQ,
+	.preMoveSQ_hover {
+		position: absolute;
+		overflow: hidden;
+	}
+
+	.legalSQ::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		background-color: rgba(83, 139, 19, 0.6);
+		box-shadow: inset 0px 0px 1.5vmin 0px rgba(83, 139, 19, 0.9);
+		transform: scale(0.4);
+		transition: all 100ms ease-in-out;
+	}
+
+	.legalSQ:hover::before,
+	.legalSQ:focus::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 0;
+		transform: scale(1);
+		background-color: rgba(83, 139, 19, 0.1);
+		box-shadow: inset 0px 0px 1.5vmin 0px rgba(83, 139, 19, 0.8);
+	}
+
+	.preMoveSQ::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		background-color: rgba(54, 52, 48, 0.8);
+		box-shadow: inset 0px 0px 1.5vmin 0px rgba(54, 52, 48, 1);
+		transform: scale(0.4);
+		transition: all 100ms ease-in-out;
+	}
+
+	.preMoveSQ:hover::before,
+	.preMoveSQ:focus::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 0;
+		transform: scale(1);
+		background-color: rgba(54, 52, 48, 0.1);
+		box-shadow: inset 0px 0px 1.5vmin 0px rgba(54, 52, 48, 0.8);
+	}
+
+	.preMoveSQ_hover::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(54, 52, 48, 0.1);
+		box-shadow: inset 0px 0px 1.5vmin 0px rgba(54, 52, 48, 0.8);
+		transition: all 100ms ease-in-out;
+	}
+
+	.legalSQ_hover::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(83, 139, 19, 0.1);
+		box-shadow: inset 0px 0px 1.5vmin 0px rgba(83, 139, 19, 0.8);
+		transition: all 100ms ease-in-out;
+	}
 </style>

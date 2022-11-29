@@ -28,7 +28,7 @@
 	div {
 		height: 100%;
 		width: 100%;
-		background-size: cover;
+		background-size: 100% 100% !important;
 	}
 
 	button {
@@ -41,5 +41,53 @@
 		button:hover {
 			border-color: rgb(2 132 199 / 1);
 		}
+	}
+
+	.bP {
+		background: url('/images/pieces/bP.svg');
+	}
+
+	.wP {
+		background: url('/images/pieces/wP.svg');
+	}
+
+	.bR {
+		background: url('/images/pieces/bR.svg');
+	}
+
+	.wR {
+		background: url('/images/pieces/wR.svg');
+	}
+
+	.bN {
+		background: url('/images/pieces/bN.svg');
+	}
+
+	.wN {
+		background: url('/images/pieces/wN.svg');
+	}
+
+	.bB {
+		background: url('/images/pieces/bB.svg');
+	}
+
+	.wB {
+		background: url('/images/pieces/wB.svg');
+	}
+
+	.bQ {
+		background: url('/images/pieces/bQ.svg');
+	}
+
+	.wQ {
+		background: url('/images/pieces/wQ.svg');
+	}
+
+	.bK {
+		background: url('/images/pieces/bK.svg');
+	}
+
+	.wK {
+		background: url('/images/pieces/wK.svg');
 	}
 </style>
