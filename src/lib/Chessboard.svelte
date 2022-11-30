@@ -33,6 +33,7 @@
 
 	let promotionModal: PromotionModal;
 	let promotionLastMove = '';
+	let promotionIsCapture = false;
 
 	let mounted = false;
 
@@ -285,6 +286,7 @@
 		const color = piece.name[0] === 'w' ? Color.WHITE : Color.BLACK;
 		promotionModal.openPromotionModal(color === Color.WHITE);
 		promotionLastMove = move;
+		promotionIsCapture = chessboard.isCapture(move);
 		chessboard.makeMove(move);
 		clearAllSquares(SquareColor.LEGAL);
 		clearAllSquares(SquareColor.SELECT);
@@ -575,7 +577,7 @@
 
 		chessboard.setPiece(piece.square, newPiece);
 		chessboard.state.pieces = chessboard.state.pieces;
-		playMoveSound('MOVE');
+		playMoveSound(promotionIsCapture ? 'CAPTURE' : 'MOVE');
 
 		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(newMove);
 		updateLegalState();
