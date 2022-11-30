@@ -195,7 +195,9 @@
 	on:moving={(e) => {
 		dispatch('moving', e.detail);
 	}}
-	style="translate: {$coords.x}px {$coords.y}px; scale: {$coords.scale}"
+	style="translate: {$coords.x}px {$coords.y}px;{$coords.scale !== 1
+		? ` scale: ${$coords.scale}`
+		: ''}"
 	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost
 		? ' ghost'
 		: ''}{!movableState?.enabled && !isGhost ? ' static' : ''}{!mounted
@@ -204,6 +206,8 @@
 />
 
 <style>
+	@import url('./assets/pieces.css');
+
 	div {
 		-webkit-touch-callout: none; /* iOS Safari */
 		-webkit-user-select: none; /* Safari */
@@ -238,53 +242,5 @@
 	.dragging {
 		cursor: grabbing !important;
 		z-index: 30;
-	}
-
-	.bP {
-		background: url('/images/pieces/bP.svg');
-	}
-
-	.wP {
-		background: url('/images/pieces/wP.svg');
-	}
-
-	.bR {
-		background: url('/images/pieces/bR.svg');
-	}
-
-	.wR {
-		background: url('/images/pieces/wR.svg');
-	}
-
-	.bN {
-		background: url('/images/pieces/bN.svg');
-	}
-
-	.wN {
-		background: url('/images/pieces/wN.svg');
-	}
-
-	.bB {
-		background: url('/images/pieces/bB.svg');
-	}
-
-	.wB {
-		background: url('/images/pieces/wB.svg');
-	}
-
-	.bQ {
-		background: url('/images/pieces/bQ.svg');
-	}
-
-	.wQ {
-		background: url('/images/pieces/wQ.svg');
-	}
-
-	.bK {
-		background: url('/images/pieces/bK.svg');
-	}
-
-	.wK {
-		background: url('/images/pieces/wK.svg');
 	}
 </style>
