@@ -202,7 +202,7 @@
 	};
 
 	export const playMoveSound = (moveType: MoveTypeSound) => {
-		if (chessboard.soundsEnabled && sounds) sounds.playMoveSound(moveType);
+		if (chessboard.soundsEnabled && sounds) sounds.playMoveSound?.(moveType);
 	};
 
 	const setGhostPiece = (piece: StatePiece) => {
@@ -284,7 +284,7 @@
 		const piece = chessboard.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
 		if (!piece) return;
 		const color = piece.name[0] === 'w' ? Color.WHITE : Color.BLACK;
-		promotionModal.openPromotionModal(color === Color.WHITE);
+		promotionModal.openPromotionModal?.(color === Color.WHITE);
 		promotionLastMove = move;
 		promotionIsCapture = chessboard.isCapture(move);
 		chessboard.makeMove(move);
@@ -548,7 +548,7 @@
 						e.detail.x - bounding.x - window.screenX,
 						e.detail.y - bounding.y - window.scrollY
 					)
-				); // TODO: fix this
+				);
 			if (!canMove(piece.name) && chessboard.preMovesEnabled)
 				chessboard.legalHover(
 					getSquareFromCoords(

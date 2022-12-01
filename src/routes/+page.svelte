@@ -94,7 +94,7 @@
 
 	onMount(() => {
 		mounted = true;
-		state = chessboard.getState();
+		state = chessboard.getState?.() as State;
 	});
 
 	const getConfigString = (newState: State, ts: boolean) => {
@@ -103,7 +103,7 @@
 		const importConfig = `\n\timport type { ChessboardConfig } from '@powchess/chessboard/boardConfig';`;
 
 		if (browser && mounted) {
-			chessboard.setState(newState);
+			chessboard.setState?.(newState);
 		}
 
 		let configString = JSON.stringify(
@@ -206,7 +206,7 @@
 						// for some reason it doesn't work without !state.legal.enabled,
 						// on:changed event is triggered before the change??
 						chess.reset();
-						if (browser && mounted) chessboard.setFEN(state.board.startFen, true, false);
+						if (browser && mounted) chessboard.setFEN?.(state.board.startFen, true, false);
 					}
 				}}
 				bind:enabled={state.legal.enabled}

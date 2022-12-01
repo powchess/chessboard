@@ -1,7 +1,7 @@
 {
 	"name": "@powchess/chessboard",
 	"private": false,
-	"version": "1.0.35",
+	"version": "1.0.36",
 	"description": "Chessboard UI Package for PowChess.com",
 	"repository": {
 		"type": "git",
@@ -53,7 +53,7 @@
 		"postcss-load-config": "^4.0.1",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
-		"svelte-check": "^2.9.1",
+		"svelte-check": "^2.10.0",
 		"svelte-preprocess": "^4.10.7",
 		"svelte-prism": "^1.1.6",
 		"tailwindcss": "^3.2.4",
