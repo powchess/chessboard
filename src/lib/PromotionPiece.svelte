@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import type { ChessPiece } from './chessTypes';
+	import './assets/pieces.css';
 
 	export let piece: string;
 	export let isWhite: boolean;
@@ -20,8 +21,6 @@
 </button>
 
 <style>
-	@import url('./assets/pieces.css');
-
 	button {
 		position: relative;
 		height: 100%;

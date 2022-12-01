@@ -10,6 +10,7 @@
 	import type DraggableState from './state/draggable';
 	import type LegalState from './state/legal';
 	import type SelectableState from './state/selectable';
+	import './assets/pieces.css';
 
 	export let square: ChessSquare;
 	export let name: ChessPiece;
@@ -206,8 +207,6 @@
 />
 
 <style>
-	@import url('./assets/pieces.css');
-
 	div {
 		-webkit-touch-callout: none; /* iOS Safari */
 		-webkit-user-select: none; /* Safari */
