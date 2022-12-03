@@ -193,6 +193,7 @@
 	on:startMoving
 	on:animationEnded
 	on:captured
+	on:canceled
 	on:moving={(e) => {
 		dispatch('moving', e.detail);
 	}}

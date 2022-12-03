@@ -15,6 +15,7 @@ declare namespace svelte.JSX {
 		oncaptured?: (e: CustomEvent) => void;
 		ondropped?: (e: CustomEvent) => void;
 		onclicked?: (e: CustomEvent) => void;
+		oncanceled?: (e: CustomEvent) => void;
 		onmovemadeUndo?: (e: CustomEvent) => void;
 		onpieceCaptured?: (e: CustomEvent) => void;
 		onmovemadeSilent?: (e: CustomEvent) => void;

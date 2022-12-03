@@ -743,9 +743,8 @@
 						on:moving={(e) => handlePieceMoving(e, piece)}
 						on:endDragging
 						on:select={() => handleSelect(piece)}
-						on:deselect={() => {
-							deselect();
-						}}
+						on:canceled={() => deselect()}
+						on:deselect={() => deselect()}
 						on:captured={() => handleCaptured(piece.square)}
 					/>
 				{/each}

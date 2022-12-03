@@ -106,6 +106,65 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 	const touchScale = 1.6;
 	const circle = createTouchCircle(node, touchScale, boardFlipped);
 
+	function pointerdown(e: PointerEvent): void {
+		if (e.button !== 0 || !e.isPrimary || !mouseEvents) return;
+		if (e.pointerType === 'touch') isMobile = true;
+		else isMobile = false;
+
+		if (canCapture) {
+			node.dispatchEvent(new CustomEvent('captured'));
+			return;
+		}
+		if (canSelect || canDrag) node.dispatchEvent(new CustomEvent('clicked'));
+		if (!canDrag) {
+			node.dispatchEvent(
+				new CustomEvent('dropped', {
+					detail: startSquare
+				})
+			);
+			return;
+		}
+
+		startX =
+			((boardFlipped
+				? 7 - fileToIndex(<ChessFile>startSquare[0])
+				: fileToIndex(<ChessFile>startSquare[0])) *
+				boardDiv.clientWidth) /
+			8;
+		startY =
+			((boardFlipped ? parseInt(startSquare[1], 10) - 1 : 8 - parseInt(startSquare[1], 10)) *
+				boardDiv.clientWidth) /
+			8;
+
+		currentSquare = startSquare;
+		const bcr = (<HTMLElement>e.target).getBoundingClientRect();
+
+		if (e.pointerType === 'touch') {
+			x = e.clientX;
+			y = e.clientY;
+			offsetX = e.clientX - bcr.x;
+			offsetY = e.clientY - bcr.y;
+		} else {
+			x = e.clientX;
+			y = e.clientY;
+			offsetX = e.offsetX;
+			offsetY = e.offsetY;
+		}
+
+		globalDX = 0;
+		globalDY = 0;
+		scrollX = window.scrollX;
+		scrollY = window.scrollY;
+
+		dragging = true;
+
+		window.addEventListener('pointermove', pointermove);
+		window.addEventListener('pointerup', pointerup);
+		window.addEventListener('pointercancel', pointercancel);
+		document.body.addEventListener('pointerleave', pointercancel);
+		window.addEventListener('scroll', scrolling);
+	}
+
 	function pointermove(e: PointerEvent) {
 		const dx = e.clientX - x;
 		const dy = e.clientY - y;
@@ -202,23 +261,31 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 	}
 
 	function pointerup() {
-		window.removeEventListener('pointermove', pointermove);
-		window.removeEventListener('pointerup', pointerup);
-		window.removeEventListener('pointercancel', pointerup);
-		document.body.removeEventListener('pointerleave', pointerup);
-		window.removeEventListener('scroll', scrolling);
-
 		const diffX = Math.floor((globalDX + offsetX) / node.offsetWidth);
 		const diffY = Math.floor((globalDY + offsetY) / node.offsetHeight);
 		const targetSquare = getEndSquare(startSquare, diffX, diffY, boardFlipped);
-
-		dragging = false;
 
 		node.dispatchEvent(
 			new CustomEvent('dropped', {
 				detail: targetSquare
 			})
 		);
+
+		dragging = false;
+
+		pointercancel();
+	}
+
+	function pointercancel() {
+		window.removeEventListener('pointermove', pointermove);
+		window.removeEventListener('pointerup', pointerup);
+		window.removeEventListener('pointercancel', pointerup);
+		document.body.removeEventListener('pointerleave', pointerup);
+		window.removeEventListener('scroll', scrolling);
+
+		if (dragging) node.dispatchEvent(new CustomEvent('canceled'));
+		dragging = false;
+
 		coords
 			.update(() => ({ x: startX, y: startY, scale: 1 }), {
 				duration,
@@ -241,65 +308,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		nodeCentered = false;
 		circle.remove();
 		circleAdded = false;
-	}
-
-	function pointerdown(e: PointerEvent): void {
-		if (e.button !== 0 || !e.isPrimary || !mouseEvents) return;
-		if (e.pointerType === 'touch') isMobile = true;
-		else isMobile = false;
-
-		if (canCapture) {
-			node.dispatchEvent(new CustomEvent('captured'));
-			return;
-		}
-		if (canSelect || canDrag) node.dispatchEvent(new CustomEvent('clicked'));
-		if (!canDrag) {
-			node.dispatchEvent(
-				new CustomEvent('dropped', {
-					detail: startSquare
-				})
-			);
-			return;
-		}
-
-		startX =
-			((boardFlipped
-				? 7 - fileToIndex(<ChessFile>startSquare[0])
-				: fileToIndex(<ChessFile>startSquare[0])) *
-				boardDiv.clientWidth) /
-			8;
-		startY =
-			((boardFlipped ? parseInt(startSquare[1], 10) - 1 : 8 - parseInt(startSquare[1], 10)) *
-				boardDiv.clientWidth) /
-			8;
-
-		currentSquare = startSquare;
-		const bcr = (<HTMLElement>e.target).getBoundingClientRect();
-
-		if (e.pointerType === 'touch') {
-			x = e.clientX;
-			y = e.clientY;
-			offsetX = e.clientX - bcr.x;
-			offsetY = e.clientY - bcr.y;
-		} else {
-			x = e.clientX;
-			y = e.clientY;
-			offsetX = e.offsetX;
-			offsetY = e.offsetY;
-		}
-
-		globalDX = 0;
-		globalDY = 0;
-		scrollX = window.scrollX;
-		scrollY = window.scrollY;
-
-		dragging = true;
-
-		window.addEventListener('pointermove', pointermove);
-		window.addEventListener('pointerup', pointerup);
-		window.addEventListener('pointercancel', pointerup);
-		document.body.addEventListener('pointerleave', pointerup);
-		window.addEventListener('scroll', scrolling);
 	}
 
 	function centerNode(isTouch = false): void {
@@ -330,6 +338,7 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 	}
 
 	function contextmenu(e: Event): void {
+		if (dragging) pointercancel();
 		e.preventDefault();
 	}
 
