@@ -279,8 +279,8 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 	function pointercancel() {
 		window.removeEventListener('pointermove', pointermove);
 		window.removeEventListener('pointerup', pointerup);
-		window.removeEventListener('pointercancel', pointerup);
-		document.body.removeEventListener('pointerleave', pointerup);
+		window.removeEventListener('pointercancel', pointercancel);
+		document.body.removeEventListener('pointerleave', pointercancel);
 		window.removeEventListener('scroll', scrolling);
 
 		if (dragging) node.dispatchEvent(new CustomEvent('canceled'));
