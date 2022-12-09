@@ -36,13 +36,14 @@
 <style>
 	div {
 		position: absolute;
+		overflow: hidden;
 		width: 12.5%;
 		height: 12.5%;
 		left: 0;
 		top: 0;
 	}
 
-	.highlightMove {
+	.move {
 		background: radial-gradient(
 			ellipse at center,
 			rgba(0, 0, 0, 0) 0,
@@ -50,19 +51,19 @@
 		);
 	}
 
-	.highlightMove-darkBlue {
+	.move-db {
 		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(26, 61, 131, 0.7) 100%);
 	}
 
-	.checkSQ {
+	.check {
 		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(172, 4, 4, 0.6) 100%);
 	}
 
-	.selectedSQ {
+	.select {
 		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(103, 73, 15, 0.4) 100%);
 	}
 
-	.selectedSQ-darkBlue {
+	.select-db {
 		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(15, 56, 103, 0.4) 100%);
 	}
 
@@ -70,15 +71,7 @@
 		background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 0, rgba(27, 38, 187, 0.8) 100%);
 	}
 
-	.legalSQ,
-	.legalSQ_hover,
-	.preMoveSQ,
-	.preMoveSQ_hover {
-		position: absolute;
-		overflow: hidden;
-	}
-
-	.legalSQ::before {
+	.legal::before {
 		content: '';
 		position: absolute;
 		width: 100%;
@@ -90,8 +83,8 @@
 		transition: all 100ms ease-in-out;
 	}
 
-	.legalSQ:hover::before,
-	.legalSQ:focus::before {
+	.legal:hover::before,
+	.legal:focus::before {
 		content: '';
 		position: absolute;
 		width: 100%;
@@ -102,7 +95,7 @@
 		box-shadow: inset 0px 0px 1.5vmin 0px rgba(83, 139, 19, 0.8);
 	}
 
-	.preMoveSQ::before {
+	.preMove::before {
 		content: '';
 		position: absolute;
 		width: 100%;
@@ -114,8 +107,8 @@
 		transition: all 100ms ease-in-out;
 	}
 
-	.preMoveSQ:hover::before,
-	.preMoveSQ:focus::before {
+	.preMove:hover::before,
+	.preMove:focus::before {
 		content: '';
 		position: absolute;
 		width: 100%;
@@ -126,7 +119,7 @@
 		box-shadow: inset 0px 0px 1.5vmin 0px rgba(54, 52, 48, 0.8);
 	}
 
-	.preMoveSQ_hover::before {
+	.preMove-h::before {
 		content: '';
 		position: absolute;
 		width: 100%;
@@ -136,7 +129,7 @@
 		transition: all 100ms ease-in-out;
 	}
 
-	.legalSQ_hover::before {
+	.legal-h::before {
 		content: '';
 		position: absolute;
 		width: 100%;

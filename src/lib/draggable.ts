@@ -10,7 +10,7 @@ function getEndSquare(
 	directionX: number,
 	directionY: number,
 	boardFlipped: boolean | undefined
-): ChessSquare | null | undefined {
+): ChessSquare | undefined {
 	if (directionX === 0 && directionY === 0) return startSquare;
 
 	const files = boardFlipped
@@ -219,14 +219,8 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 			}),
 			{ duration: 0 }
 		);
-		node.dispatchEvent(
-			new CustomEvent('moving', {
-				detail: {
-					x: e.clientX + scrollX,
-					y: e.clientY + scrollY
-				}
-			})
-		);
+
+		currentSquare = getNewCurrentSquare();
 	}
 
 	function scrolling(): void {
@@ -250,14 +244,28 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 			}),
 			{ duration: 0 }
 		);
-		node.dispatchEvent(
-			new CustomEvent('moving', {
-				detail: {
-					x: x + window.scrollX,
-					y: y + window.scrollY
-				}
-			})
+
+		currentSquare = getNewCurrentSquare();
+	}
+
+	function getNewCurrentSquare(): ChessSquare | undefined {
+		const tmpCurrentSquare = getEndSquare(
+			startSquare,
+			Math.floor((globalDX + offsetX) / node.offsetWidth),
+			Math.floor((globalDY + offsetY) / node.offsetHeight),
+			boardFlipped
 		);
+
+		if (tmpCurrentSquare !== currentSquare)
+			node.dispatchEvent(
+				new CustomEvent('squareover', {
+					detail: {
+						square: tmpCurrentSquare
+					}
+				})
+			);
+
+		return tmpCurrentSquare;
 	}
 
 	function pointerup() {

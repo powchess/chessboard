@@ -10,7 +10,7 @@ declare namespace svelte.JSX {
 	// eslint-disable-next-line
 	interface HTMLProps<T> {
 		onstartMoving?: (e: CustomEvent) => void;
-		onmoving?: (e: CustomEvent) => void;
+		onsquareover?: (e: CustomEvent) => void;
 		onanimationEnded?: (e: CustomEvent) => void;
 		oncaptured?: (e: CustomEvent) => void;
 		ondropped?: (e: CustomEvent) => void;

@@ -274,7 +274,7 @@
 		if (!chessboard.legalEnabled || !chessboard.preMovesEnabled || !chessboard.movableEnabled)
 			return;
 
-		clearAllSquares(SquareColor.PREMOVE);
+		deselect(false);
 		highlightMove(move, true, SquareColor.NEXTMOVE);
 		chessboard.currentPreMove = move;
 		dispatch('nextMove', { move });
@@ -539,24 +539,11 @@
 
 	export const getConfigFromState = (state: State) => state.getConfig();
 
-	const handlePieceMoving = (e: CustomEvent, piece: StatePiece) => {
-		const bounding = boardDiv.getBoundingClientRect();
+	const handleSquareOver = (e: CustomEvent, piece: StatePiece) => {
 		if (chessboard.legalEnabled) {
-			if (canMove(piece.name))
-				chessboard.legalHover(
-					getSquareFromCoords(
-						e.detail.x - bounding.x - window.screenX,
-						e.detail.y - bounding.y - window.scrollY
-					)
-				);
+			if (canMove(piece.name)) chessboard.legalHover(e.detail.square);
 			if (!canMove(piece.name) && chessboard.preMovesEnabled)
-				chessboard.legalHover(
-					getSquareFromCoords(
-						e.detail.x - bounding.x - window.screenX,
-						e.detail.y - bounding.y - window.scrollY
-					),
-					SquareColor.PREMOVE
-				);
+				chessboard.legalHover(e.detail.square, SquareColor.PREMOVE);
 		}
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
 	};
@@ -740,7 +727,7 @@
 							dispatch('startDragging', { piece });
 							startDragging(piece);
 						}}
-						on:moving={(e) => handlePieceMoving(e, piece)}
+						on:squareover={(e) => handleSquareOver(e, piece)}
 						on:endDragging
 						on:select={() => handleSelect(piece)}
 						on:canceled={() => deselect()}
