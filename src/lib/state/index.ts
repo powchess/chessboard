@@ -121,13 +121,11 @@ export class State {
 	}
 
 	public get currentPreMove() {
-		return this.preMovesEnabled ? this.legal.preMoves.curMove : '';
+		return this.legal.preMoves.curMove;
 	}
 
 	public set currentPreMove(move: string) {
-		if (move === '') return;
-		if (!this.preMovesEnabled) this.legal.preMoves.curMove = '';
-		else this.legal.preMoves.curMove = move;
+		this.legal.preMoves.curMove = move;
 	}
 
 	public get selectableEnabled() {

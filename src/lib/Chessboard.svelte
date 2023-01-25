@@ -159,7 +159,8 @@
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
-	export const removePiece = (square: ChessSquare): void => {
+	export const removePiece = (square: ChessSquare | undefined): void => {
+		if (!square) return;
 		chessboard.removePiece(square);
 		if (chessboard.ghostPieceEnabled && chessboard.ghostPiece?.square === square) {
 			chessboard.removeGhostPiece();
@@ -467,7 +468,7 @@
 			document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
 	};
 
-	export const getPieceFromSquare = (square: ChessSquare) =>
+	export const getPieceNameFromSquare = (square: ChessSquare | undefined): ChessPiece | undefined =>
 		chessboard.getPieceFromSquare(square)?.name;
 
 	export const setTools = (tools: (CircleTool | ArrowTool)[]) => {
