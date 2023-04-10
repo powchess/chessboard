@@ -1,7 +1,7 @@
 {
 	"name": "@powchess/chessboard",
 	"private": false,
-	"version": "1.0.40",
+	"version": "1.1.0",
 	"description": "Chessboard UI Package for PowChess.com",
 	"repository": {
 		"type": "git",
@@ -31,42 +31,43 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "eslint . --fix",
 		"format": "prettier --ignore-path .gitignore --write .",
-		"package": "npx @sveltejs/package"
+		"package": "npx @sveltejs/package && cp package.json dist/package.json && cp README.md dist/README.md && cp LICENSE dist/LICENSE"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^2.0.1",
-		"@sveltejs/kit": "1.9.2",
+		"@sveltejs/kit": "1.15.2",
 		"@sveltejs/package": "^2.0.2",
 		"@types/chess.js": "^0.13.3",
-		"@typescript-eslint/eslint-plugin": "^5.54.0",
-		"@typescript-eslint/parser": "^5.54.0",
-		"autoprefixer": "^10.4.12",
-		"chess.js": "^1.0.0-beta.3",
-		"cooltipz-css": "^2.1.1",
-		"eslint": "^8.35.0",
+		"@typescript-eslint/eslint-plugin": "^5.58.0",
+		"@typescript-eslint/parser": "^5.58.0",
+		"autoprefixer": "^10.4.14",
+		"chess.js": "^1.0.0-beta.4",
+		"cooltipz-css": "^2.2.2",
+		"eslint": "^8.38.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-airbnb-typescript": "^17.0.0",
-		"eslint-config-prettier": "^8.6.0",
+		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-prettier": "^4.2.1",
-		"eslint-plugin-svelte": "^2.19.2",
+		"eslint-plugin-svelte": "^2.26.0",
 		"postcss": "^8.4.21",
 		"postcss-load-config": "^4.0.1",
-		"prettier": "^2.8.4",
-		"prettier-plugin-svelte": "^2.9.0",
-		"svelte-check": "^3.0.4",
-		"svelte-preprocess": "^5.0.1",
+		"prettier": "^2.8.7",
+		"prettier-plugin-svelte": "^2.10.0",
+		"svelte-check": "^3.2.0",
+		"svelte-preprocess": "^5.0.3",
 		"svelte-prism": "^1.1.6",
-		"tailwindcss": "^3.2.7",
-		"tslib": "^2.5.0",
-		"typescript": "^4.9.5",
-		"vite": "4.1.4"
+		"tailwindcss": "^3.3.1",
+		"typescript": "^5.0.4",
+		"vite": "4.2.1"
 	},
 	"exports": {
-		".": "./Chessboard.svelte"
+		"./Chessboard.svelte": {
+			"types": "./types/Chessboard.svelte.d.ts",
+			"svelte": "./src/lib/Chessboard.svelte",
+			"default": "./src/lib/Chessboard.svelte"
+		}
 	},
-	"main": "./Chessboard.svelte",
-	"types": "./Chessboard.svelte.d.ts",
 	"dependencies": {
-		"svelte": "^3.55.1"
+		"svelte": "^3.58.0"
 	}
 }

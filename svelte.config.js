@@ -8,13 +8,8 @@ const config = {
 			postcss: true
 		})
 	],
-
 	kit: {
 		adapter: adapter()
-	},
-
-	package: {
-		files: (filepath) => !filepath.includes('components')
 	}
 };
 
