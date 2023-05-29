@@ -34,31 +34,31 @@
 		"package": "npx @sveltejs/package && cp package.json dist/package.json && cp README.md dist/README.md && cp LICENSE dist/LICENSE"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-static": "^2.0.1",
-		"@sveltejs/kit": "1.15.2",
+		"@sveltejs/adapter-static": "^2.0.2",
+		"@sveltejs/kit": "1.20.0",
 		"@sveltejs/package": "^2.0.2",
 		"@types/chess.js": "^0.13.3",
-		"@typescript-eslint/eslint-plugin": "^5.58.0",
-		"@typescript-eslint/parser": "^5.58.0",
+		"@typescript-eslint/eslint-plugin": "^5.59.8",
+		"@typescript-eslint/parser": "^5.59.8",
 		"autoprefixer": "^10.4.14",
-		"chess.js": "^1.0.0-beta.4",
+		"chess.js": "^1.0.0-beta.6",
 		"cooltipz-css": "^2.2.2",
-		"eslint": "^8.38.0",
+		"eslint": "^8.41.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"eslint-config-airbnb-typescript": "^17.0.0",
 		"eslint-config-prettier": "^8.8.0",
 		"eslint-plugin-prettier": "^4.2.1",
-		"eslint-plugin-svelte": "^2.26.0",
-		"postcss": "^8.4.21",
+		"eslint-plugin-svelte": "^2.29.0",
+		"postcss": "^8.4.24",
 		"postcss-load-config": "^4.0.1",
-		"prettier": "^2.8.7",
-		"prettier-plugin-svelte": "^2.10.0",
-		"svelte-check": "^3.2.0",
-		"svelte-preprocess": "^5.0.3",
+		"prettier": "^2.8.8",
+		"prettier-plugin-svelte": "^2.10.1",
+		"svelte-check": "^3.4.3",
+		"svelte-preprocess": "^5.0.4",
 		"svelte-prism": "^1.1.6",
-		"tailwindcss": "^3.3.1",
+		"tailwindcss": "^3.3.2",
 		"typescript": "^5.0.4",
-		"vite": "4.2.1"
+		"vite": "4.3.9"
 	},
 	"exports": {
 		"./Chessboard.svelte": {
@@ -68,6 +68,6 @@
 		}
 	},
 	"dependencies": {
-		"svelte": "^3.58.0"
+		"svelte": "^3.59.1"
 	}
 }
