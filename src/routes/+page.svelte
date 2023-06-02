@@ -209,6 +209,8 @@
 						if (browser && mounted) chessboard.setFEN?.(state.board.startFen, true, false);
 					}
 				}}
+				bind:allowCastling={state.legal.settings.allowCastling}
+				bind:allowEnPassant={state.legal.settings.allowEnPassant}
 				bind:enabled={state.legal.enabled}
 			/>
 			<Highlight bind:enabled={state.highlight.enabled} bind:settings={state.highlight.settings} />
@@ -224,7 +226,7 @@
 				<Chessboard bind:this={chessboard} {config} className="rounded-md" />
 			</div>
 			<div class="row-start-2 relative">
-				<div class="shadow-lg rounded ">
+				<div class="shadow-lg rounded">
 					<div class="absolute right-2 top-2 flex gap-4">
 						<button
 							on:click={() => {

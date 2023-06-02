@@ -365,16 +365,30 @@ export default class Chessboard {
 	 */
 	public getCapturedPawnSquareIfIsEnPassant = (move: string): ChessSquare | undefined => {
 		if (move[0] === move[2]) return undefined;
+		// check that it is not a regular capture
 		if (this.getPieceFromSquare(<ChessSquare>move.substring(2, 4))) return undefined;
+		// check that pawn move
 		const pawn = this.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
 		if (pawn === undefined || (pawn.name !== 'wP' && pawn.name !== 'bP')) return undefined;
 
-		const capturedPawn = this.getPieceFromSquare(
+		const enPassantTargetSquare = <ChessSquare>(
 			`${<ChessFile>move[2]}${<ChessRank>(
 				(parseInt(move[3], 10) + (pawn.name === 'wP' ? -1 : 1)).toString()
 			)}`
 		);
-		return capturedPawn?.square;
+		// check that the last move ends with enPassantTargetSquare
+		if (this.state.legal.lastMove.substring(2, 4) !== enPassantTargetSquare) return undefined;
+		// check that target pawn exists
+		const targetPawn = this.getPieceFromSquare(enPassantTargetSquare);
+		if (!targetPawn || targetPawn.name[1] !== 'P') return undefined;
+		// check that the last move was the first move for the enpassant target
+		if (
+			Math.abs(
+				parseInt(this.state.legal.lastMove[1], 10) - parseInt(this.state.legal.lastMove[3], 10)
+			) !== 2
+		)
+			return undefined;
+		return enPassantTargetSquare;
 	};
 
 	public isCapture = (move: string): boolean => {

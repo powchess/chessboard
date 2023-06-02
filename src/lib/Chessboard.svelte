@@ -227,14 +227,10 @@
 		const rookMove = chessboard.getRookMoveIfIsCastling(move);
 		const capturedPawnSquare = chessboard.getCapturedPawnSquareIfIsEnPassant(move);
 
-		if (rookMove && chessboard.legalEnabled && chessboard.state.legal.settings.allowCastling) {
+		if (rookMove && chessboard.state.legal.settings.allowCastling) {
 			movePiece(rookMove, false);
 			playMoveSound('CASTLE');
-		} else if (
-			capturedPawnSquare &&
-			chessboard.legalEnabled &&
-			chessboard.state.legal.settings.allowEnPassant
-		) {
+		} else if (capturedPawnSquare && chessboard.state.legal.settings.allowEnPassant) {
 			removePiece(capturedPawnSquare);
 			playMoveSound('CAPTURE');
 		} else if (chessboard.isCapture(move)) {

@@ -29,9 +29,9 @@ export default class LegalState {
 		whiteToMove: true,
 		moves: [],
 		settings: {
-			allowPromotion: true,
-			allowEnPassant: true,
-			allowCastling: true
+			allowPromotion: false,
+			allowEnPassant: false,
+			allowCastling: false
 		},
 		preMoves: {
 			enabled: false,
@@ -62,10 +62,14 @@ export default class LegalState {
 
 	public setConfigSettings = (config?: ChessboardConfig['legal']) => {
 		if (config !== undefined) {
-			if (config === true) this.enabled = true;
-			else if (config === false) this.enabled = false;
-			else {
+			if (config === true) {
 				this.enabled = true;
+				this.settings.allowCastling = true;
+				this.settings.allowEnPassant = true;
+				this.settings.allowPromotion = true;
+			} else if (config === false) this.enabled = false;
+			else {
+				if (config.enabled !== undefined) this.enabled = config.enabled;
 				if (config.settings) {
 					if (config.settings.allowCastling !== undefined)
 						this.settings.allowCastling = config.settings.allowCastling;
