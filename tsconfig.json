@@ -14,5 +14,6 @@
 		"noFallthroughCasesInSwitch": true,
 		"noImplicitOverride": true,
 		"noUnusedLocals": true
-	}
+	},
+	"include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"],
 }

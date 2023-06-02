@@ -224,7 +224,7 @@
 				<Chessboard bind:this={chessboard} {config} className="rounded-md" />
 			</div>
 			<div class="row-start-2 relative">
-				<div class="shadow-lg rounded ">
+				<div class="shadow-lg rounded">
 					<div class="absolute right-2 top-2 flex gap-4">
 						<button
 							on:click={() => {
