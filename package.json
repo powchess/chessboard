@@ -1,7 +1,7 @@
 {
 	"name": "@powchess/chessboard",
 	"private": false,
-	"version": "1.1.0",
+	"version": "1.1.2",
 	"description": "Chessboard UI Package for PowChess.com",
 	"repository": {
 		"type": "git",
@@ -64,9 +64,9 @@
 	},
 	"exports": {
 		"./Chessboard.svelte": {
-			"types": "./types/Chessboard.svelte.d.ts",
-			"svelte": "./src/lib/Chessboard.svelte",
-			"default": "./src/lib/Chessboard.svelte"
+			"types": "./Chessboard.svelte.d.ts",
+			"svelte": "./Chessboard.svelte",
+			"default": "./Chessboard.svelte"
 		}
 	},
 	"dependencies": {
