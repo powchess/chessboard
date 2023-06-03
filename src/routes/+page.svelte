@@ -209,6 +209,8 @@
 						if (browser && mounted) chessboard.setFEN?.(state.board.startFen, true, false);
 					}
 				}}
+				bind:allowCastling={state.legal.settings.allowCastling}
+				bind:allowEnPassant={state.legal.settings.allowEnPassant}
 				bind:enabled={state.legal.enabled}
 			/>
 			<Highlight bind:enabled={state.highlight.enabled} bind:settings={state.highlight.settings} />

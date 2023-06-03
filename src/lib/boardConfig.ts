@@ -51,6 +51,7 @@ export type ChessboardConfig = {
 	legal?:
 		| boolean
 		| {
+				enabled?: boolean;
 				settings?: {
 					allowPromotion: boolean;
 					allowEnPassant: boolean;
