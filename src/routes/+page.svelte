@@ -100,8 +100,6 @@
 	const getConfigString = (newState: State, ts: boolean) => {
 		const cfg = newState.getConfig();
 
-		const importConfig = `\n\timport type { ChessboardConfig } from '@powchess/chessboard/boardConfig';`;
-
 		if (browser && mounted) {
 			chessboard.setState?.(newState);
 		}
@@ -143,7 +141,7 @@
 		/* eslint-disable no-useless-escape */
 		let resultString = `\
 <script${ts ? ' lang="ts"' : ''}>
-	import Chessboard from '@powchess/chessboard';${ts ? importConfig : ''}${
+	import Chessboard${ts ? ', { type ChessboardConfig }' : ''} from '@powchess/chessboard';${
 			needColorImport() && ts ? importColor : ''
 		}${
 			state.legal.enabled
