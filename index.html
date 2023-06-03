@@ -4,16 +4,16 @@
 		<meta charset="utf-8" />
 		<link rel="icon" href="./favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
-		<meta http-equiv="content-security-policy" content="">
-		<link href="./_app/immutable/assets/_layout.430bfc59.css" rel="stylesheet">
-		<link href="./_app/immutable/assets/_page.cfbd9007.css" rel="stylesheet">
-		<link rel="modulepreload" href="./_app/immutable/entry/start.7973b11e.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index.d9835f42.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.53207bf4.js">
-		<link rel="modulepreload" href="./_app/immutable/chunks/index.106ea73c.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/app.84ed8fad.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/_layout.svelte.543ff64a.js">
-		<link rel="modulepreload" href="./_app/immutable/entry/_page.svelte.0e730896.js"><title>Chessboard • PowChess.com</title><!-- HEAD_svelte-tebjht_START --><link rel="stylesheet" href="prism-one-dark.css"><!-- HEAD_svelte-tebjht_END -->
+		
+		<link href="./_app/immutable/assets/0.7425c4ca.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/2.1133904d.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.77df60ff.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.79a59410.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/singletons.910f7760.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.04bc2942.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.50b031b4.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.b78814e0.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.a2429409.js"><title>Chessboard • PowChess.com</title><!-- HEAD_svelte-tebjht_START --><link rel="stylesheet" href="prism-one-dark.css"><!-- HEAD_svelte-tebjht_END -->
 	</head>
 	<body>
 		<div>
@@ -25,25 +25,25 @@
 			<span class="ml-[21px]">Board</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-180"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
-	<div class="py-2 px-4"><div class="mb-2"><select class="svelte-lnr7xr"><option value="standard">standard</option><option value="darkBlue">darkBlue</option></select>
+	<div class="py-2 px-4"><div class="mb-2"><select class="svelte-1c01etf"><option value="standard">standard</option><option value="darkBlue">darkBlue</option></select>
 		<label for="boardTheme" class="select-none">board theme</label></div>
 
-	<div class="mb-2"><input id="mouseEvents" type="checkbox" class="svelte-lnr7xr" checked>
+	<div class="mb-2"><input id="mouseEvents" type="checkbox" class="svelte-1c01etf" checked>
 		<label for="mouseEvents" class="select-none">mouseEvents</label></div>
 
-	<div class="mb-2"><input id="notation" type="checkbox" class="svelte-lnr7xr" checked>
+	<div class="mb-2"><input id="notation" type="checkbox" class="svelte-1c01etf" checked>
 		<label for="notation" class="select-none">notation</label></div>
 
-	<div class="mb-2"><input id="flipped" type="checkbox" class="svelte-lnr7xr">
+	<div class="mb-2"><input id="flipped" type="checkbox" class="svelte-1c01etf">
 		<label for="flipped" class="select-none">flipped</label></div>
 
-	<div class="mt-2 mb-1"><input id="resizibleEnabled" type="checkbox" class="svelte-lnr7xr" checked>
+	<div class="mt-2 mb-1"><input id="resizibleEnabled" type="checkbox" class="svelte-1c01etf" checked>
 		<label for="resizibleEnabled" class="select-none">resizible</label></div></div></div>
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
 			<span class="">Movable</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-180"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
-	<div class="py-2 px-4"><div><select class="svelte-xrxnwg"><option value="2">Both</option><option value="0">White</option><option value="1">Black</option></select></div></div></div>
+	<div class="py-2 px-4"><div><select class="svelte-1bvjddo"><option value="2">Both</option><option value="0">White</option><option value="1">Black</option></select></div></div></div>
 			<div class="bg-slate-900/20 rounded shadow-lg flex flex-col"><button class="flex justify-between px-4 py-2 transition hover:bg-slate-800/40 rounded" ><div class="flex gap-1"><input type="checkbox" class="mr-1" checked>
 			<span class="">Draggable</span></div>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
@@ -74,12 +74,12 @@
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 transition rotate-0"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"></path></svg></button>
 
 	</div></div>
-		<div class="grid grid-rows-[90wh_auto] gap-10"><div class="w-full lg:w-[calc(70vh*(var(--boardScale,70)/100*0.7+0.3))]"><div class="boardWrapper svelte-sse5i8"><div class="board text-sm rounded-md svelte-sse5i8" style="--boardTheme: url(/_app/immutable/assets/standard.97995bf9.svg);"><div style="width: 100%; height: 100%" class="w svelte-sse5i8"><div style="translate: 0px 0px;" class="bR black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bN black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bB black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bQ black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bK black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bB black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bN black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bR black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wR white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wN white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wB white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wQ white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wK white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wB white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wN white opacity-0 svelte-6jzr8p"></div><div style="translate: 0px 0px;" class="wR white opacity-0 svelte-6jzr8p"></div></div>
+		<div class="grid grid-rows-[90wh_auto] gap-10"><div class="w-full lg:w-[calc(70vh*(var(--boardScale,70)/100*0.7+0.3))]"><div class="boardWrapper svelte-2axv8q"><div class="board text-sm rounded-md svelte-2axv8q" style="--boardTheme: url(/_app/immutable/assets/standard.97995bf9.svg);"><div style="width: 100%; height: 100%" class="w svelte-2axv8q"><div style="translate: 0px 0px;" class="bR black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bN black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bB black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bQ black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bK black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bB black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bN black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bR black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="bP black opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wP white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wR white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wN white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wB white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wQ white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wK white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wB white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wN white opacity-0 svelte-1chvf31"></div><div style="translate: 0px 0px;" class="wR white opacity-0 svelte-1chvf31"></div></div>
 		
 		
 		
 		
-		<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg)" viewBox="0 0 8 8" class="svelte-19gv2n4"><defs><marker id="start-g" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="green" d="M 0 5 v 10 c 0 2.8 2.2 5 5 5 L 6 20 V 0 L 5 0 C 2.2 0 0 2.2 0 5 z"></path></marker>
+		<svg xmlns="http://www.w3.org/2000/svg" style="transform: rotate(0deg)" viewBox="0 0 8 8" class="svelte-d96ma4"><defs><marker id="start-g" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="green" d="M 0 5 v 10 c 0 2.8 2.2 5 5 5 L 6 20 V 0 L 5 0 C 2.2 0 0 2.2 0 5 z"></path></marker>
 			<marker id="end-g" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="green" d="M 9.5 9.5 l -8.7 -5 C 0.5 4.3 0 4.6 0 5 v 10 c 0 0.4 0.5 0.7 0.9 0.5 l 8.7 -5 C 9.9 10.3 9.9 9.7 9.5 9.5 z"></path></marker><marker id="start-r" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="red" d="M 0 5 v 10 c 0 2.8 2.2 5 5 5 L 6 20 V 0 L 5 0 C 2.2 0 0 2.2 0 5 z"></path></marker>
 			<marker id="end-r" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="red" d="M 9.5 9.5 l -8.7 -5 C 0.5 4.3 0 4.6 0 5 v 10 c 0 0.4 0.5 0.7 0.9 0.5 l 8.7 -5 C 9.9 10.3 9.9 9.7 9.5 9.5 z"></path></marker><marker id="start-b" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="blue" d="M 0 5 v 10 c 0 2.8 2.2 5 5 5 L 6 20 V 0 L 5 0 C 2.2 0 0 2.2 0 5 z"></path></marker>
 			<marker id="end-b" viewBox="0 0 10 20" refX="0.2" refY="10" markerUnits="strokeWidth" orient="auto" fill="currentColor"><path fill="blue" d="M 9.5 9.5 l -8.7 -5 C 0.5 4.3 0 4.6 0 5 v 10 c 0 0.4 0.5 0.7 0.9 0.5 l 8.7 -5 C 9.9 10.3 9.9 9.7 9.5 9.5 z"></path></marker><marker id="start-o" viewBox="0 0 5 20" refX="4" refY="10" markerUnits="strokeWidth" markerWidth="0.5" markerHeight="1" orient="auto"><path fill="orange" d="M 0 5 v 10 c 0 2.8 2.2 5 5 5 L 6 20 V 0 L 5 0 C 2.2 0 0 2.2 0 5 z"></path></marker>
@@ -136,19 +136,20 @@
 			
 			<script>
 				{
-					__sveltekit_1nkhdwz = {
-						env: {},
+					__sveltekit_ngrb5q = {
 						base: new URL(".", location).pathname.slice(0, -1),
-						element: document.currentScript.parentElement
+						env: {}
 					};
+
+					const element = document.currentScript.parentElement;
 
 					const data = [{"type":"data","data":null,"uses":{}},null];
 
 					Promise.all([
-						import("./_app/immutable/entry/start.7973b11e.js"),
-						import("./_app/immutable/entry/app.84ed8fad.js")
+						import("./_app/immutable/entry/start.77df60ff.js"),
+						import("./_app/immutable/entry/app.50b031b4.js")
 					]).then(([kit, app]) => {
-						kit.start(app, __sveltekit_1nkhdwz.element, {
+						kit.start(app, element, {
 							node_ids: [0, 2],
 							data,
 							form: null,
