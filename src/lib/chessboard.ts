@@ -131,14 +131,14 @@ export default class Chessboard {
 	};
 
 	public setPiece = (square: ChessSquare, name: ChessPiece) => {
-		if (this.notValidThing({ square, piece: name })) return;
+		if (Chessboard.notValidThing({ square, piece: name })) return;
 		const piece = this.state.pieces.find((p) => p.square === square);
 		if (piece) piece.name = name;
 		else this.state.pieces.push({ square, name });
 	};
 
 	public removePiece = (square: ChessSquare) => {
-		if (this.notValidThing({ square })) return;
+		if (Chessboard.notValidThing({ square })) return;
 		this.state.pieces.forEach((element, i) => {
 			if (element.square === square) {
 				this.state.pieces.splice(i, 1);
@@ -151,7 +151,7 @@ export default class Chessboard {
 	};
 
 	public getGridCoordsFromSquare = (square: ChessSquare): { x: number; y: number } => {
-		if (this.notValidThing({ square })) return { x: 0, y: 0 };
+		if (Chessboard.notValidThing({ square })) return { x: 0, y: 0 };
 
 		const file = <ChessFile>square[0];
 		const rank = <ChessRank>square[1];
@@ -165,7 +165,7 @@ export default class Chessboard {
 	};
 
 	public makeMove = (move: string): void => {
-		if (this.notValidThing({ move })) return;
+		if (Chessboard.notValidThing({ move })) return;
 
 		let moveSuccessful = false;
 		let cachedPiece: Piece | undefined;
@@ -300,8 +300,7 @@ export default class Chessboard {
 		return this.state.pieces.find((piece) => piece.square === square);
 	}
 
-	// eslint-disable-next-line class-methods-use-this
-	private notValidThing = (payload: {
+	private static notValidThing = (payload: {
 		square?: ChessSquare;
 		piece?: string;
 		move?: string;
@@ -334,7 +333,6 @@ export default class Chessboard {
 	 * Returns rook move if the parameter is a castling move
 	 * @param move
 	 */
-	// eslint-disable-next-line class-methods-use-this
 	public getRookMoveIfIsCastling = (move: string): 'h1f1' | 'a1d1' | 'h8f8' | 'a8d8' | null => {
 		if (!this.isCastling(move)) return null;
 		switch (move) {
