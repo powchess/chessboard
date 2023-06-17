@@ -1,10 +1,6 @@
-<script context="module" lang="ts">
-	export type ChessboardConfig = Config;
-</script>
-
 <script lang="ts">
 	import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte';
-	import type { ChessboardConfig as Config, MoveTypeSound } from './boardConfig';
+	import type { ChessboardConfig, MoveTypeSound } from './boardConfig';
 	import Chessboard from './chessboard';
 	import Notation from './Notation.svelte';
 	import Piece from './Piece.svelte';
