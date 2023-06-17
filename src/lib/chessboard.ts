@@ -321,7 +321,6 @@ export default class Chessboard {
 		this.state.draggable.ghostPiece.piece = undefined;
 	};
 
-	// eslint-disable-next-line class-methods-use-this
 	public isCastling = (move: string): boolean => {
 		const startSquare = move.slice(0, 2) as ChessSquare;
 		const movingPiece = this.getPieceFromSquare(startSquare);
