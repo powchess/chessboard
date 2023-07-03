@@ -1,5 +1,3 @@
-/* eslint-disable no-param-reassign */
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { get } from 'svelte/store';
 import type { Tweened } from 'svelte/motion';
 import { fileToIndex, squareToSQXY } from './utils';
@@ -300,7 +298,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 				easing: easingFunc
 			})
 			.then(() => {
-				if (!dragging) node.dispatchEvent(new CustomEvent('animationEnded'));
 				if (!dragging) node.classList.remove('dragging');
 			});
 
