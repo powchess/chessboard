@@ -10,15 +10,10 @@ declare namespace svelteHTML {
 	interface HTMLAttributes {
 		'on:startMoving'?: (e: CustomEvent) => void;
 		'on:squareover'?: (e: CustomEvent) => void;
-		oncaptured?: (e: CustomEvent) => void;
+		'on:captured'?: (e: CustomEvent<void>) => void;
 		'on:dropped'?: (e: CustomEvent) => void;
 		'on:clicked'?: (e: CustomEvent) => void;
-		oncanceled?: (e: CustomEvent) => void;
-		onmovemadeUndo?: (e: CustomEvent) => void;
-		onpieceCaptured?: (e: CustomEvent) => void;
-		onmovemadeSilent?: (e: CustomEvent) => void;
-		onnewPreMove?: (e: CustomEvent) => void;
-		onerror?: (e: ErrorEvent) => void;
+		'on:canceled'?: (e: CustomEvent<void>) => void;
 		'on:resizing'?: (e: CustomEvent) => void;
 		'on:endResizing'?: (e: CustomEvent) => void;
 		'on:drawCircle'?: (e: CustomEvent) => void;
