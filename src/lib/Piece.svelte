@@ -193,9 +193,7 @@
 	on:startMoving
 	on:captured
 	on:canceled
-	on:squareover={(e) => {
-		dispatch('squareover', e.detail);
-	}}
+	on:squareover
 	style="translate: {$coords.x}px {$coords.y}px;{$coords.scale !== 1
 		? ` scale: ${$coords.scale}`
 		: ''}"
