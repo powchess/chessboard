@@ -191,7 +191,6 @@
 	on:dropped={dropped}
 	on:clicked
 	on:startMoving
-	on:animationEnded
 	on:captured
 	on:canceled
 	on:squareover={(e) => {

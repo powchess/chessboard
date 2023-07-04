@@ -676,6 +676,8 @@
 
 <div bind:this={boardWrapper} class="boardWrapper">
 	<div
+		role="button"
+		tabindex="0"
 		on:pointerdown={boardClick}
 		on:contextmenu|preventDefault
 		on:drag|preventDefault
