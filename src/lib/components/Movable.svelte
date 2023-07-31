@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Color } from '$lib/enums';
+	import type { Color } from '$lib/enums';
 	import Section from './Section.svelte';
 
 	export let name = 'Movable';
@@ -12,9 +12,9 @@
 <Section {name} bind:enabled {expanded}>
 	<div>
 		<select bind:value={color}>
-			<option value={Color.BOTH}>Both</option>
-			<option value={Color.WHITE}>White</option>
-			<option value={Color.BLACK}>Black</option>
+			<option value="BOTH">Both</option>
+			<option value="WHITE">White</option>
+			<option value="BLACK">Black</option>
 		</select>
 	</div>
 </Section>

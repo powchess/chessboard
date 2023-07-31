@@ -14,13 +14,12 @@
 	import DrawTools from '$lib/components/DrawTools.svelte';
 	import Sounds from '$lib/components/Sounds.svelte';
 	import CopyButton from '$lib/components/CopyButton.svelte';
-	import { Color } from '$lib/enums';
 	import Legal from '$lib/components/Legal.svelte';
 
 	const chess = new Chess();
 
 	const config: ChessboardConfig = {
-		movable: Color.BOTH,
+		movable: 'BOTH',
 		legal: true,
 		callbacks: {
 			afterMove: (move) =>
@@ -123,23 +122,16 @@
 
 		const importColor = "\n\timport { Color } from '@powchess/chessboard/enums';";
 
-		if (ts) {
-			configString = configString
-				.replaceAll(`movable: ${Color.WHITE}`, 'movable: Color.WHITE')
-				.replaceAll(`movable: ${Color.BLACK}`, 'movable: Color.BLACK')
-				.replaceAll(`movable: ${Color.BOTH}`, 'movable: Color.BOTH');
-		}
-
 		function needColorImport() {
 			return (
-				configString.includes('movable: Color.WHITE') ||
-				configString.includes('movable: Color.BLACK') ||
-				configString.includes('movable: Color.BOTH')
+				configString.includes("movable: 'WHITE'") ||
+				configString.includes("movable: 'BLACK'") ||
+				configString.includes("movable: 'BOTH'")
 			);
 		}
 
 		/* eslint-disable no-useless-escape */
-		let resultString = `\
+		const resultString = `\
 <script${ts ? ' lang="ts"' : ''}>
 	import Chessboard${ts ? ', { type ChessboardConfig }' : ''} from '@powchess/chessboard';${
 			needColorImport() && ts ? importColor : ''
@@ -155,13 +147,6 @@
 <\/script>
 
 <Chessboard {config} className="rounded-md" />`;
-
-		if (!ts) {
-			resultString = resultString
-				.replaceAll('Color.WHITE', `${Color.WHITE}`)
-				.replaceAll('Color.BLACK', `${Color.BLACK}`)
-				.replaceAll('Color.BOTH', `${Color.BOTH}`);
-		}
 
 		return resultString;
 	};
@@ -183,13 +168,9 @@
 				bind:notation={state.board.notation}
 				bind:flipped={state.board.flipped}
 				bind:resizible={state.board.resizible}
-				expanded={true}
+				expanded
 			/>
-			<Movable
-				bind:enabled={state.movable.enabled}
-				bind:color={state.movable.color}
-				expanded={true}
-			/>
+			<Movable bind:enabled={state.movable.enabled} bind:color={state.movable.color} expanded />
 			<Draggable
 				bind:enabled={state.draggable.enabled}
 				bind:ghostPiece={state.draggable.ghostPiece.enabled}
@@ -197,7 +178,7 @@
 				bind:duration={state.draggable.transition.settings.duration}
 				bind:easing={state.draggable.transition.settings.easing}
 			/>
-			<Section name={'Selectable'} bind:enabled={state.selectable.enabled} showExpand={false} />
+			<Section name="Selectable" bind:enabled={state.selectable.enabled} showExpand={false} />
 			<Legal
 				on:changed={() => {
 					if (!state.legal.enabled) {

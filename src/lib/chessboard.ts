@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
-import { SquareColor } from './enums';
 import type { ChessBoard, ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes';
 import { State, type Square, type Piece } from './state/index';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils';
 import type { ChessboardConfig } from './boardConfig';
+import type { SquareType } from './enums';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
 
@@ -27,27 +27,22 @@ export default class Chessboard {
 	}
 
 	private changeLegalHoverIfNeeded = (newSquare: Square) => {
-		if (newSquare.color !== SquareColor.LEGAL && newSquare.color !== SquareColor.PREMOVE) return;
+		if (newSquare.color !== 'LEGAL' && newSquare.color !== 'PREMOVE') return;
 
 		this.state.pieces.forEach((piece: Piece) => {
 			if (piece.square === newSquare.square)
-				newSquare.color =
-					newSquare.color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
+				newSquare.color = newSquare.color === 'LEGAL' ? 'LEGALHOVER' : 'PREMOVEHOVER';
 		});
 	};
 
-	public highlightSquare = (square: ChessSquare, mode: SquareColor) => {
+	public highlightSquare = (square: ChessSquare, mode: SquareType) => {
 		const newSquare: Square = {
 			square,
 			color: mode
 		};
 
 		this.state.markedSquares.forEach((element: Square) => {
-			if (
-				element.square === square &&
-				element.color !== SquareColor.MOVE &&
-				element.color !== SquareColor.CHECK
-			)
+			if (element.square === square && element.color !== 'MOVE' && element.color !== 'CHECK')
 				this.state.markedSquares.delete(element);
 		});
 
@@ -55,19 +50,14 @@ export default class Chessboard {
 		this.state.markedSquares.add(newSquare);
 	};
 
-	public legalHover = (
-		sqr: ChessSquare | undefined,
-		color: SquareColor.LEGAL | SquareColor.PREMOVE = SquareColor.LEGAL
-	) => {
+	public legalHover = (sqr: ChessSquare | undefined, color: 'LEGAL' | 'PREMOVE' = 'LEGAL') => {
 		if (sqr === undefined) return;
 		this.state.markedSquares.forEach((square) => {
 			if (square.square === sqr && square.color === color)
-				square.color =
-					color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER;
+				square.color = color === 'LEGAL' ? 'LEGALHOVER' : 'PREMOVEHOVER';
 			else if (
 				square.square !== sqr &&
-				square.color ===
-					(color === SquareColor.LEGAL ? SquareColor.LEGALHOVER : SquareColor.PREMOVEHOVER)
+				square.color === (color === 'LEGAL' ? 'LEGALHOVER' : 'PREMOVEHOVER')
 			) {
 				let pieceExist = false;
 				this.state.pieces.forEach((piece) => {
@@ -80,7 +70,7 @@ export default class Chessboard {
 		});
 	};
 
-	public toggleSquareHighlight = (square: ChessSquare, mode: SquareColor): boolean => {
+	public toggleSquareHighlight = (square: ChessSquare, mode: SquareType): boolean => {
 		const newSquare: Square = {
 			square,
 			color: mode
@@ -105,13 +95,13 @@ export default class Chessboard {
 		let selectedSquare = '';
 
 		this.state.markedSquares.forEach((square: Square) => {
-			if (square.color === SquareColor.SELECT) selectedSquare = square.square;
+			if (square.color === 'SELECT') selectedSquare = square.square;
 		});
 
 		return selectedSquare;
 	};
 
-	public clearSquare = (square: ChessSquare, mode?: SquareColor) => {
+	public clearSquare = (square: ChessSquare, mode?: SquareType) => {
 		if (square.length !== 2) {
 			return;
 		}
@@ -122,7 +112,7 @@ export default class Chessboard {
 		});
 	};
 
-	public clearAllSquares = (mode?: SquareColor) => {
+	public clearAllSquares = (mode?: SquareType) => {
 		if (mode === undefined) this.state.markedSquares.clear();
 		else
 			this.state.markedSquares.forEach((square) => {

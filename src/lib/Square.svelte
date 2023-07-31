@@ -2,10 +2,10 @@
 	import type { BoardTheme } from './boardConfig';
 	import boardThemesStyles from './boardThemes/boardThemes';
 	import type { ChessSquare } from './chessTypes';
-	import type { SquareColor } from './enums';
+	import type { SquareType } from './enums';
 
 	export let square: ChessSquare;
-	export let color: SquareColor;
+	export let color: SquareType;
 	export let getGridCoordsFromSquare: (square: ChessSquare) => { x: number; y: number };
 	export let flipped: boolean;
 	export let theme: BoardTheme;
