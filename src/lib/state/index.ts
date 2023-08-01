@@ -8,7 +8,7 @@ import LegalState from './legal';
 import HighlightState from './highlight';
 import DrawToolsState from './drawTools';
 import SoundsState from './sounds';
-import type { SquareColor } from '$lib/enums';
+import type { SquareType } from '$lib/enums';
 import Callbacks from './callbacks';
 
 export const defaultFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -20,7 +20,7 @@ export type ArrowData = {
 };
 
 export type Piece = { square: ChessSquare; name: ChessPiece };
-export type Square = { square: ChessSquare; color: SquareColor };
+export type Square = { square: ChessSquare; color: SquareType };
 
 export class State {
 	public pieces: Piece[];

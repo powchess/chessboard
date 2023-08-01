@@ -1,14 +1,14 @@
 import type { ChessboardConfig } from '$lib/boardConfig';
-import { Color } from '$lib/enums';
+import type { Color } from '$lib/enums';
 
 export default class MovableState {
 	public enabled: boolean;
 
-	public color: Color.WHITE | Color.BLACK | Color.BOTH;
+	public color: Color;
 
 	public defaultState = {
 		enabled: true,
-		color: Color.BOTH
+		color: 'BOTH'
 	} as const;
 
 	constructor(config?: ChessboardConfig['movable']) {
@@ -22,25 +22,25 @@ export default class MovableState {
 		switch (config) {
 			case true:
 				this.enabled = true;
-				this.color = Color.BOTH;
+				this.color = 'BOTH';
 				break;
 			case false:
 				this.enabled = false;
 				break;
-			case Color.WHITE:
+			case 'WHITE':
 				this.enabled = true;
-				this.color = Color.WHITE;
+				this.color = 'WHITE';
 				break;
-			case Color.BLACK:
+			case 'BLACK':
 				this.enabled = true;
-				this.color = Color.BLACK;
+				this.color = 'BLACK';
 				break;
 			default:
 				break;
 		}
 	};
 
-	public getConfig = (): undefined | Color.WHITE | Color.BLACK | Color.BOTH | boolean => {
+	public getConfig = (): undefined | Color | boolean => {
 		if (this.enabled && this.defaultState.enabled && this.color !== this.defaultState.color)
 			return this.color;
 		if (this.enabled && !this.defaultState.enabled) return this.color;

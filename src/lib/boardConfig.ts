@@ -1,5 +1,3 @@
-import type { Color } from './enums';
-
 type TupleToUnion<T extends unknown[]> = T[number];
 export const BoardThemes = ['standard', 'darkBlue'] as const;
 export type BoardTheme = 'standard' | 'darkBlue';
@@ -32,7 +30,7 @@ export type ChessboardConfig = {
 	 * @value Color.BLACK - allowed to move only black
 	 * @value false - moving is not allowed
 	 */
-	movable?: boolean | Color.WHITE | Color.BLACK | Color.BOTH;
+	movable?: boolean | 'WHITE' | 'BLACK' | 'BOTH';
 
 	draggable?:
 		| boolean

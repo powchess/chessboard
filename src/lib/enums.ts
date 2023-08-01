@@ -1,40 +1,35 @@
-export enum Color {
-	WHITE,
-	BLACK,
-	BOTH,
-	SPECTATOR,
-	SERVER
-}
+import type HighlightState from './state/highlight';
 
-export enum SquareColor {
-	LEGAL,
-	LEGALHOVER,
-	CHECK,
-	MOVE,
-	NEXTMOVE,
-	PREMOVE,
-	PREMOVEHOVER,
-	SELECT
-}
+export type Color = 'WHITE' | 'BLACK' | 'BOTH';
+
+export type SquareType =
+	| 'LEGAL'
+	| 'LEGALHOVER'
+	| 'CHECK'
+	| 'MOVE'
+	| 'NEXTMOVE'
+	| 'PREMOVE'
+	| 'PREMOVEHOVER'
+	| 'SELECT';
 
 export const squareColorToString = (
-	color: SquareColor | 'legal' | 'check' | 'move' | 'nextMove' | 'preMove' | 'select'
-): 'legal' | 'check' | 'move' | 'nextMove' | 'preMove' | 'select' => {
-	if (typeof color === 'string') return color;
+	color: SquareType | keyof HighlightState['settings']
+): keyof HighlightState['settings'] => {
+	if (color[0] === color[0].toLowerCase()) return color as keyof HighlightState['settings'];
 	switch (color) {
-		case SquareColor.LEGAL:
-		case SquareColor.LEGALHOVER:
+		case 'LEGAL':
+		case 'LEGALHOVER':
 			return 'legal';
-		case SquareColor.CHECK:
+		case 'CHECK':
 			return 'check';
-		case SquareColor.MOVE:
+		case 'MOVE':
 			return 'move';
-		case SquareColor.NEXTMOVE:
+		case 'NEXTMOVE':
 			return 'nextMove';
-		case SquareColor.PREMOVE:
-		case SquareColor.PREMOVEHOVER:
+		case 'PREMOVE':
+		case 'PREMOVEHOVER':
 			return 'preMove';
-		case SquareColor.SELECT:
+		case 'SELECT':
 			return 'select';
 		default:
 			return 'check';
