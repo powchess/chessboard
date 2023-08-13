@@ -782,6 +782,7 @@
 		-ms-user-select: none; /* Internet Explorer/Edge */
 		user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
 		touch-action: none;
+		outline: none;
 		position: relative;
 		aspect-ratio: 1;
 		width: 100%;
