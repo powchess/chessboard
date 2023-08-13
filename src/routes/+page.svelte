@@ -202,7 +202,7 @@
 		</div>
 		<div class="grid grid-rows-[90wh_auto] gap-10">
 			<div class="w-full lg:w-[calc(70vh*(var(--boardScale,70)/100*0.7+0.3))]">
-				<Chessboard bind:this={chessboard} {config} className="rounded-md" />
+				<Chessboard bind:this={chessboard} {config} class="rounded-md" />
 			</div>
 			<div class="row-start-2 relative">
 				<div class="shadow-lg rounded">
