@@ -18,5 +18,6 @@ declare namespace svelteHTML {
 		'on:endResizing'?: (e: CustomEvent) => void;
 		'on:drawCircle'?: (e: CustomEvent) => void;
 		'on:drawArrow'?: (e: CustomEvent) => void;
+		'on:newsize'?: (e: CustomEvent) => void;
 	}
 }

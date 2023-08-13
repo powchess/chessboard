@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, onDestroy, onMount, tick } from 'svelte';
+	import { createEventDispatcher, onMount, tick } from 'svelte';
 	import type { ChessboardConfig, MoveTypeSound } from './boardConfig';
 	import Chessboard from './chessboard';
 	import Notation from './Notation.svelte';
@@ -15,15 +15,16 @@
 	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes';
 	import type { State, Piece as StatePiece } from './state/index';
 	import { squareColorToString, type SquareType } from './enums';
+	import { fitSize } from './fitSize';
 
 	export let config: ChessboardConfig;
-	export let className = '';
+	let className: string | undefined | null = undefined;
+	export { className as class };
 
 	const chessboard = new Chessboard(config);
 	const dispatch = createEventDispatcher();
 
 	let boardDiv: HTMLDivElement;
-	let boardWrapper: HTMLDivElement;
 	let arrowsSvg: SVGGElement;
 	let sounds: Sounds;
 
@@ -561,43 +562,6 @@
 			highlightSquare(piece.square, 'SELECT');
 	};
 
-	function setupChessboardObserver(boardWrap: HTMLDivElement) {
-		if (!boardDiv || !boardWrap) return undefined;
-		teardownChessboard?.();
-
-		if (typeof window.ResizeObserver === 'undefined') {
-			throw new Error('window.ResizeObserver is missing.');
-		}
-
-		const observer = new ResizeObserver((entries) => {
-			const boundingRect = boardWrap.getBoundingClientRect();
-			entries.forEach(() => {
-				chessboard.state.board.size =
-					(Math.floor((boundingRect.width * window.devicePixelRatio) / 8) * 8) /
-					window.devicePixelRatio;
-				boardDiv.style.setProperty(
-					'width',
-					`${
-						(Math.floor((boundingRect.width * window.devicePixelRatio) / 8) * 8) /
-						window.devicePixelRatio
-					}px`
-				);
-				boardDiv.style.setProperty(
-					'height',
-					`${
-						(Math.floor((boundingRect.width * window.devicePixelRatio) / 8) * 8) /
-						window.devicePixelRatio
-					}px`
-				);
-			});
-		});
-		observer.observe(boardWrap);
-		return () => {
-			observer.unobserve(boardWrap);
-			observer.disconnect();
-		};
-	}
-
 	const getRoundedSquareCorner = (square: ChessSquare) => {
 		if (square === 'a1') return chessboard.flipped ? 'top-right' : 'bottom-left';
 		if (square === 'a8') return chessboard.flipped ? 'bottom-right' : 'top-left';
@@ -628,8 +592,6 @@
 		return '';
 	};
 
-	$: teardownChessboard = setupChessboardObserver(boardWrapper);
-
 	onMount(() => {
 		mounted = true;
 		updateLegalState(true);
@@ -637,16 +599,20 @@
 			highlightMove(chessboard.state.callbacks.getLastMove());
 		if (chessboard.state.board.resizible)
 			document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
-	});
 
-	onDestroy(() => {
-		teardownChessboard?.();
-		if (mounted && chessboard.state.board.resizible)
-			document.body.style.removeProperty('--boardScale');
+		return () => {
+			if (chessboard.state.board.resizible) document.body.style.removeProperty('--boardScale');
+		};
 	});
 </script>
 
-<div bind:this={boardWrapper} class="boardWrapper">
+<div
+	use:fitSize
+	on:newsize={(e) => {
+		chessboard.state.board.size = e.detail;
+	}}
+	class="boardWrapper"
+>
 	<div
 		role="button"
 		tabindex="0"
