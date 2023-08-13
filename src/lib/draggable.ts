@@ -306,10 +306,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		globalDX = 0;
 		globalDY = 0;
 
-		setTimeout(() => {
-			if (!dragging) node.classList.remove('dragging');
-		}, duration);
-
 		nodeCentered = false;
 		circle.remove();
 		circleAdded = false;
