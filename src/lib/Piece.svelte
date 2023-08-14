@@ -33,7 +33,6 @@
 	let canDragVar = false;
 	let canSelectVar = false;
 	let canCaptureVar = false;
-	// let prevSquare = '';
 
 	const dispatch = createEventDispatcher();
 	let curDuration = draggableState?.transition?.enabled

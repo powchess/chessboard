@@ -175,8 +175,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		globalDX += dx;
 		globalDY += dy;
 
-		// console.log(globalDX, globalDY);
-
 		if (!nodeCentered) centerNode(isMobile);
 		if (!nodeCentered) return;
 
