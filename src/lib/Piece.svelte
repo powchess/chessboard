@@ -27,6 +27,8 @@
 	export let legalState: LegalState | undefined = undefined;
 	export let movableState: MovableState | undefined = undefined;
 
+	let pieceDiv: HTMLDivElement;
+
 	let selected = false;
 	let canDragVar = false;
 	let canSelectVar = false;
@@ -48,7 +50,8 @@
 
 	const getColorFromString = (piece: ChessPiece) => (piece[0] === 'w' ? 'WHITE' : 'BLACK');
 
-	const reRenderPieces = (sq: ChessSquare) => {
+	const reRenderPieces = (sq: ChessSquare, withAnimation?: boolean) => {
+		pieceDiv?.classList.remove('dragging');
 		const newCoords = getGridCoordsFromSquare(sq);
 
 		coords.update(
@@ -58,7 +61,7 @@
 				scale: 1
 			}),
 			{
-				duration: mounted ? curDuration : 0,
+				duration: (withAnimation === undefined || withAnimation) && mounted ? curDuration : 0,
 				easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut']
 			}
 		);
@@ -171,11 +174,12 @@
 	$: canSelectVar = canSelect(movableState, selectableState);
 	$: canCaptureVar = canCapture(legalState, movableState, selectableState);
 	$: if (curPieceIsNotSelectedPiece(selectableState?.selectedPiece)) selected = false;
-	$: flipped, reRenderPieces(square);
+	$: flipped, reRenderPieces(square, false);
 	$: changeSize(boardSize);
 </script>
 
 <div
+	bind:this={pieceDiv}
 	use:drag={{
 		startSquare: square,
 		mouseEvents,

@@ -137,20 +137,23 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		currentSquare = startSquare;
 		const bcr = (<HTMLElement>e.target).getBoundingClientRect();
 
+		x = e.clientX;
+		y = e.clientY;
+
 		if (e.pointerType === 'touch') {
-			x = e.clientX;
-			y = e.clientY;
 			offsetX = e.clientX - bcr.x;
 			offsetY = e.clientY - bcr.y;
 		} else {
-			x = e.clientX;
-			y = e.clientY;
 			offsetX = e.offsetX;
 			offsetY = e.offsetY;
 		}
 
-		globalDX = 0;
-		globalDY = 0;
+		const boardBcr = node.parentElement?.getBoundingClientRect();
+
+		if (!boardBcr) return;
+
+		globalDX = e.clientX - offsetX - boardBcr.x - startX;
+		globalDY = e.clientY - offsetY - boardBcr.y - startY;
 		scrollX = window.scrollX;
 		scrollY = window.scrollY;
 
@@ -306,10 +309,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		globalDX = 0;
 		globalDY = 0;
 
-		setTimeout(() => {
-			if (!dragging) node.classList.remove('dragging');
-		}, duration);
-
 		nodeCentered = false;
 		circle.remove();
 		circleAdded = false;
@@ -325,12 +324,14 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 			{ duration: 0 }
 		);
 		if (Math.abs(globalDX) > 1 || Math.abs(globalDY) > 1) {
+			const boardBcr = node.parentElement?.getBoundingClientRect();
+			if (!boardBcr) return;
 			coords.update(
 				() => ({
-					x: startX + (x - node.offsetWidth / 2 - node.getBoundingClientRect().x),
+					x: x - node.offsetWidth / 2 - boardBcr.x,
 					y: isTouch
-						? startY + (y - node.offsetHeight * 1.5 - node.getBoundingClientRect().y)
-						: startY + (y - node.offsetHeight / 2 - node.getBoundingClientRect().y),
+						? y - node.offsetHeight * 1.5 - boardBcr.y
+						: y - node.offsetHeight / 2 - boardBcr.y,
 					scale: isTouch ? touchScale : 1
 				}),
 				{ duration: 0 }
