@@ -95,7 +95,12 @@
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
 	};
 
-	export const highlightMove = (move: string, clear = true, color: SquareType = 'MOVE') => {
+	export const highlightMove = (
+		move: string | undefined,
+		clear = true,
+		color: SquareType = 'MOVE'
+	) => {
+		if (move === undefined) return;
 		if (move.length < 4 || !allowDrawHighlightSquares(color)) return;
 		if (clear) clearAllSquares(color);
 		highlightManySquares(
@@ -148,21 +153,19 @@
 	export const updateLegalState = (updateSelect = false) => {
 		if (!chessboard.legalEnabled) return;
 
-		if (chessboard.state.callbacks.getWhiteToMove)
-			chessboard.whiteToMove = chessboard.state.callbacks.getWhiteToMove();
+		chessboard.whiteToMove =
+			chessboard.state.callbacks.getWhiteToMove?.() ?? chessboard.whiteToMove;
 
-		if (chessboard.state.callbacks.getPreMoves && chessboard.preMovesEnabled)
-			chessboard.preMoves = chessboard.state.callbacks.getPreMoves();
-		else chessboard.preMoves = [];
+		if (chessboard.preMovesEnabled)
+			chessboard.preMoves = chessboard.state.callbacks.getPreMoves?.() ?? [];
 
-		if (chessboard.state.callbacks.getLegalMoves && chessboard.state.legal.enabled)
-			chessboard.legalMoves = chessboard.state.callbacks.getLegalMoves();
-		else chessboard.legalMoves = [];
+		if (chessboard.legalEnabled)
+			chessboard.legalMoves = chessboard.state.callbacks.getLegalMoves?.() ?? [];
 
 		// change preMoves to legalMoves
 		if (updateSelect) updateSelectedPieceHighlight();
 
-		if (chessboard.state.callbacks.getInCheck && chessboard.state.callbacks.getInCheck()) {
+		if (chessboard.state.callbacks.getInCheck?.()) {
 			if (chessboard.whiteToMove) setCheckSquare(chessboard.getWhiteKingSquare());
 			else setCheckSquare(chessboard.getBlackKingSquare());
 		} else removeCheckSquare();
@@ -189,7 +192,7 @@
 
 	export const makeMove = (move: string): void => {
 		if (move.substring(0, 2) === move.substring(2, 4)) return;
-		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(move);
+		chessboard.state.callbacks.beforeMove?.(move);
 		const prevSelectedPiece = chessboard.selectedPiece
 			? { ...chessboard.selectedPiece }
 			: undefined;
@@ -211,7 +214,7 @@
 		removeGhostPiece();
 		movePiece(move);
 
-		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(move);
+		chessboard.state.callbacks.afterMove?.(move);
 
 		updateLegalState(false);
 
@@ -527,13 +530,13 @@
 		const newPiece = (piece.name[0] + e.detail.toUpperCase()) as ChessPiece;
 		const newMove = promotionLastMove + e.detail;
 
-		if (chessboard.state.callbacks.beforeMove) chessboard.state.callbacks.beforeMove(newMove);
+		chessboard.state.callbacks.beforeMove?.(newMove);
 
 		chessboard.setPiece(piece.square, newPiece);
 		chessboard.state.pieces = chessboard.state.pieces;
 		playMoveSound(promotionIsCapture ? 'CAPTURE' : 'MOVE');
 
-		if (chessboard.state.callbacks.afterMove) chessboard.state.callbacks.afterMove(newMove);
+		chessboard.state.callbacks.afterMove?.(newMove);
 		updateLegalState();
 	};
 
@@ -595,8 +598,7 @@
 	onMount(() => {
 		mounted = true;
 		updateLegalState(true);
-		if (chessboard.state.callbacks.getLastMove)
-			highlightMove(chessboard.state.callbacks.getLastMove());
+		highlightMove(chessboard.state.callbacks.getLastMove?.());
 		if (chessboard.state.board.resizible)
 			document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
 
@@ -616,7 +618,7 @@
 	<div
 		role="button"
 		tabindex="0"
-		on:pointerdown={boardClick}
+		on:pointerdown|capture={boardClick}
 		on:contextmenu|preventDefault
 		on:drag|preventDefault
 		use:drawArrows={{

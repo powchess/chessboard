@@ -121,14 +121,14 @@ export default class Chessboard {
 	};
 
 	public setPiece = (square: ChessSquare, name: ChessPiece) => {
-		if (Chessboard.notValidThing({ square, piece: name })) return;
+		if (!Chessboard.isValidThing({ square, piece: name })) return;
 		const piece = this.state.pieces.find((p) => p.square === square);
 		if (piece) piece.name = name;
 		else this.state.pieces.push({ square, name });
 	};
 
 	public removePiece = (square: ChessSquare) => {
-		if (Chessboard.notValidThing({ square })) return;
+		if (!Chessboard.isValidThing({ square })) return;
 		this.state.pieces.forEach((element, i) => {
 			if (element.square === square) {
 				this.state.pieces.splice(i, 1);
@@ -141,7 +141,7 @@ export default class Chessboard {
 	};
 
 	public getGridCoordsFromSquare = (square: ChessSquare): { x: number; y: number } => {
-		if (Chessboard.notValidThing({ square })) return { x: 0, y: 0 };
+		if (!Chessboard.isValidThing({ square })) return { x: 0, y: 0 };
 
 		const file = <ChessFile>square[0];
 		const rank = <ChessRank>square[1];
@@ -155,7 +155,7 @@ export default class Chessboard {
 	};
 
 	public makeMove = (move: string): void => {
-		if (Chessboard.notValidThing({ move })) return;
+		if (!Chessboard.isValidThing({ move })) return;
 
 		let moveSuccessful = false;
 		let cachedPiece: Piece | undefined;
@@ -290,17 +290,17 @@ export default class Chessboard {
 		return this.state.pieces.find((piece) => piece.square === square);
 	}
 
-	private static notValidThing = (payload: {
+	private static isValidThing = (payload: {
 		square?: ChessSquare;
 		piece?: string;
 		move?: string;
 	}): boolean => {
 		const { square, piece, move } = payload;
 
-		if (square && square.length !== 2) return true;
-		if (piece && piece.length !== 2) return true;
-		if (move && move.length !== 4 && move.length !== 5) return true;
-		return false;
+		if (square && square.length !== 2) return false;
+		if (piece && piece.length !== 2) return false;
+		if (move && move.length !== 4 && move.length !== 5) return false;
+		return true;
 	};
 
 	public setGhostPiece = (piece: Piece) => {
