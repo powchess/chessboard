@@ -160,7 +160,6 @@
 	on:dropped={dropped}
 	on:clicked
 	on:startMoving
-	on:captured
 	on:canceled
 	on:squareover={(e) => {
 		dispatch('squareover', e.detail);

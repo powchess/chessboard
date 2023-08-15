@@ -540,25 +540,6 @@
 		updateLegalState();
 	};
 
-	const handleCaptured = (square: ChessSquare) => {
-		if (!chessboard.selectedPiece) return;
-		const move = chessboard.selectedPiece.square + square;
-
-		if (chessboard.legalEnabled) {
-			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(`${move}q`))
-				makeMovePromotion(move);
-			else if (chessboard.legalMoves.includes(move)) makeMove(move);
-			else if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) {
-				if (chessboard.isPromotion(move)) makeNextMove(`${move}q`);
-				else makeNextMove(move);
-			} else {
-				deselect();
-			}
-		} else makeMove(move);
-
-		deselect(false);
-	};
-
 	const handleSelect = (piece: StatePiece) => {
 		const tmp = chessboard.getPieceFromSquare(piece.square);
 		if (tmp && tmp.square === piece.square && tmp.name === piece.name)
@@ -581,17 +562,12 @@
 		)
 			return '';
 		if (!chessboard.legalEnabled) return 'wb';
-		if (chessboard.state.movable.color === 'BOTH') return whiteToMove ? 'w' : 'b';
 		if (
-			chessboard.state.movable.color === 'WHITE' &&
-			(whiteToMove || (!whiteToMove && chessboard.preMovesEnabled))
+			chessboard.state.movable.color === 'BOTH' ||
+			whiteToMove === (chessboard.state.movable.color === 'WHITE') ||
+			chessboard.preMovesEnabled
 		)
-			return 'w';
-		if (
-			chessboard.state.movable.color === 'BLACK' &&
-			(!whiteToMove || (whiteToMove && chessboard.preMovesEnabled))
-		)
-			return 'b';
+			return whiteToMove ? 'w' : 'b';
 		return '';
 	};
 
@@ -667,7 +643,6 @@
 						on:select={() => handleSelect(piece)}
 						on:canceled={() => deselect()}
 						on:deselect={() => deselect()}
-						on:captured={() => handleCaptured(piece.square)}
 					/>
 				{/each}
 			{/if}
