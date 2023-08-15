@@ -32,7 +32,6 @@
 	let selected = false;
 	let canDragVar = false;
 	let canSelectVar = false;
-	let canCaptureVar = false;
 
 	const dispatch = createEventDispatcher();
 	let curDuration = draggableState?.transition?.enabled
@@ -132,37 +131,6 @@
 		return checkColor(movable);
 	};
 
-	const canCapture = (legal?: LegalState, movable?: MovableState, selectable?: SelectableState) => {
-		if (!movable?.enabled || !selectable?.enabled || !mouseEvents) return false;
-
-		if (legal?.enabled) {
-			if (
-				selectableState?.selectedPiece !== undefined &&
-				selectableState?.selectedPiece?.square !== square &&
-				(legal.moves.includes(selectableState.selectedPiece.square + square) ||
-					legal.moves.includes(`${selectableState.selectedPiece.square + square}q`))
-			) {
-				return true;
-			}
-			if (
-				selectableState?.selectedPiece !== undefined &&
-				legal.preMoves.enabled &&
-				getColorFromString(selectableState?.selectedPiece.name) === movable.color &&
-				(legal.preMoves.moves.includes(selectableState.selectedPiece.square + square) ||
-					legal.preMoves.moves.includes(`${selectableState.selectedPiece.square + square}q`))
-			)
-				return true;
-			return false;
-		}
-
-		if (
-			selectableState?.selectedPiece !== undefined &&
-			selectableState?.selectedPiece?.square !== square
-		)
-			return true;
-		return false;
-	};
-
 	const curPieceIsNotSelectedPiece = (piece: Piece | undefined) =>
 		piece === undefined || piece.name !== name || piece.square !== square;
 
@@ -172,7 +140,6 @@
 
 	$: canDragVar = canDrag(movableState, draggableState);
 	$: canSelectVar = canSelect(movableState, selectableState);
-	$: canCaptureVar = canCapture(legalState, movableState, selectableState);
 	$: if (curPieceIsNotSelectedPiece(selectableState?.selectedPiece)) selected = false;
 	$: flipped, reRenderPieces(square, false);
 	$: changeSize(boardSize);
@@ -185,7 +152,6 @@
 		mouseEvents,
 		canDrag: canDragVar,
 		canSelect: canSelectVar,
-		canCapture: canCaptureVar,
 		boardFlipped: flipped,
 		duration: draggableState?.transition.enabled ? draggableState.transition.settings.duration : 0,
 		easingFunc: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut'],
@@ -204,9 +170,7 @@
 		: ''}"
 	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost
 		? ' ghost'
-		: ''}{!movableState?.enabled && !isGhost ? ' static' : ''}{!mounted
-		? ' opacity-0'
-		: ''}{canCaptureVar ? ' capture' : ''}"
+		: ''}{!movableState?.enabled && !isGhost ? ' static' : ''}{!mounted ? ' opacity-0' : ''}"
 />
 
 <style>
@@ -226,6 +190,7 @@
 		background-size: 100% 100% !important;
 		will-change: transform;
 		z-index: 2;
+		pointer-events: none;
 	}
 	.ghost {
 		opacity: 0.3;

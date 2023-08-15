@@ -731,6 +731,7 @@
 
 <style>
 	:global(.w .white, .b .black, .wb .black, .wb .white) {
+		pointer-events: auto;
 		cursor: pointer;
 	}
 
