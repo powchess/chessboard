@@ -542,8 +542,14 @@
 
 	const handleSelect = (piece: StatePiece) => {
 		const tmp = chessboard.getPieceFromSquare(piece.square);
-		if (tmp && tmp.square === piece.square && tmp.name === piece.name)
+		if (
+			tmp &&
+			tmp.square === piece.square &&
+			tmp.name === piece.name &&
+			chessboard.selectableEnabled
+		)
 			highlightSquare(piece.square, 'SELECT');
+		else deselect();
 	};
 
 	const getRoundedSquareCorner = (square: ChessSquare) => {
@@ -623,10 +629,9 @@
 						name={piece.name}
 						boardSize={chessboard.state.board.size}
 						mouseEvents={chessboard.state.board.mouseEvents}
-						legalState={chessboard.state.legal}
 						draggableState={chessboard.state.draggable}
-						selectableState={chessboard.state.selectable}
 						movableState={chessboard.state.movable}
+						selectedPiece={chessboard.selectedPiece}
 						getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 						flipped={chessboard.flipped}
 						on:move={moveMadeFromPiece}
