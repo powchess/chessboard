@@ -568,12 +568,16 @@
 		)
 			return '';
 		if (!chessboard.legalEnabled) return 'wb';
+
+		if (chessboard.preMovesEnabled && chessboard.state.movable.color !== 'BOTH')
+			return chessboard.state.movable.color[0].toLowerCase();
+
 		if (
 			chessboard.state.movable.color === 'BOTH' ||
-			whiteToMove === (chessboard.state.movable.color === 'WHITE') ||
-			chessboard.preMovesEnabled
+			whiteToMove === (chessboard.state.movable.color === 'WHITE')
 		)
 			return whiteToMove ? 'w' : 'b';
+
 		return '';
 	};
 
