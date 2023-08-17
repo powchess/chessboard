@@ -9,6 +9,7 @@
 	export let transition = false;
 	export let duration = 120;
 	export let easing = 'easeInOut';
+	export let clickMoveAnimation = true;
 
 	export let expanded = false;
 </script>
@@ -28,13 +29,17 @@
 				<input id="transitionDuration" type="number" class="w-16" bind:value={duration} />
 				<label for="transitionDuration" class="select-none">duration</label>
 			</div>
-			<div class="flex gap-2">
+			<div class="flex gap-2 mb-2">
 				<select id="easingFuncs" bind:value={easing}>
 					{#each EasingFuncsArray as easingFunc}
 						<option value={easingFunc}>{easingFunc}</option>
 					{/each}
 				</select>
 				<label for="easingFuncs" class="select-none">easing</label>
+			</div>
+			<div class="flex gap-2">
+				<input id="clickMoveAnimation" type="checkbox" bind:checked={clickMoveAnimation} />
+				<label for="clickMoveAnimation" class="select-none">Click-Move Animation</label>
 			</div>
 		</div>
 	{/if}

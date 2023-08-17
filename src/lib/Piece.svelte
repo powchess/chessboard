@@ -41,9 +41,9 @@
 
 	let mounted = false;
 
-	const reRenderPieces = (sq: ChessSquare, withAnimation?: boolean) => {
+	const reRenderPieces = (withAnimation: boolean) => {
 		pieceDiv?.classList.remove('dragging');
-		const newCoords = getGridCoordsFromSquare(sq);
+		const newCoords = getGridCoordsFromSquare(square);
 
 		coords.update(
 			() => ({
@@ -52,7 +52,7 @@
 				scale: 1
 			}),
 			{
-				duration: (withAnimation === undefined || withAnimation) && mounted ? curDuration : 0,
+				duration: withAnimation && mounted ? curDuration : 0,
 				easing: easingFuncs[draggableState?.transition.settings.easing ?? 'cubicInOut']
 			}
 		);
@@ -79,7 +79,11 @@
 
 	const dropped = (e: CustomEvent) => {
 		const dropSquare = e.detail as ChessSquare | undefined;
-		curDuration = 0;
+		if (
+			draggableState?.transition?.settings !== undefined &&
+			!draggableState.transition.settings.clickMoveAnimation
+		)
+			curDuration = 0;
 		if (!dropSquare) dispatch('deselect');
 		if (square === dropSquare) {
 			if (!selected) dispatch('select');
@@ -87,7 +91,10 @@
 			selected = !selected;
 		} else selected = false;
 		if (canDrag(movableState, draggableState)) dispatch('endDragging', square + e.detail);
-		if (square !== e.detail && e.detail) dispatch('move', square + e.detail);
+		if (square !== e.detail && e.detail) {
+			curDuration = 0;
+			dispatch('move', square + e.detail);
+		}
 	};
 
 	const canDrag = (movable?: MovableState, draggable?: DraggableState) => {
@@ -103,7 +110,8 @@
 	});
 
 	$: if (curPieceIsNotSelectedPiece(selectedPiece)) selected = false;
-	$: flipped, reRenderPieces(square, false);
+	$: flipped, reRenderPieces(false);
+	$: square, reRenderPieces(true);
 	$: changePosition(boardSize);
 </script>
 
