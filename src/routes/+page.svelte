@@ -177,6 +177,7 @@
 				bind:transition={state.draggable.transition.enabled}
 				bind:duration={state.draggable.transition.settings.duration}
 				bind:easing={state.draggable.transition.settings.easing}
+				bind:clickMoveAnimation={state.draggable.transition.settings.clickMoveAnimation}
 			/>
 			<Section name="Selectable" bind:enabled={state.selectable.enabled} showExpand={false} />
 			<Legal

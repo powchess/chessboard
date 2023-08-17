@@ -540,29 +540,16 @@
 		updateLegalState();
 	};
 
-	const handleCaptured = (square: ChessSquare) => {
-		if (!chessboard.selectedPiece) return;
-		const move = chessboard.selectedPiece.square + square;
-
-		if (chessboard.legalEnabled) {
-			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(`${move}q`))
-				makeMovePromotion(move);
-			else if (chessboard.legalMoves.includes(move)) makeMove(move);
-			else if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) {
-				if (chessboard.isPromotion(move)) makeNextMove(`${move}q`);
-				else makeNextMove(move);
-			} else {
-				deselect();
-			}
-		} else makeMove(move);
-
-		deselect(false);
-	};
-
 	const handleSelect = (piece: StatePiece) => {
 		const tmp = chessboard.getPieceFromSquare(piece.square);
-		if (tmp && tmp.square === piece.square && tmp.name === piece.name)
+		if (
+			tmp &&
+			tmp.square === piece.square &&
+			tmp.name === piece.name &&
+			chessboard.selectableEnabled
+		)
 			highlightSquare(piece.square, 'SELECT');
+		else deselect();
 	};
 
 	const getRoundedSquareCorner = (square: ChessSquare) => {
@@ -581,17 +568,16 @@
 		)
 			return '';
 		if (!chessboard.legalEnabled) return 'wb';
-		if (chessboard.state.movable.color === 'BOTH') return whiteToMove ? 'w' : 'b';
+
+		if (chessboard.preMovesEnabled && chessboard.state.movable.color !== 'BOTH')
+			return chessboard.state.movable.color[0].toLowerCase();
+
 		if (
-			chessboard.state.movable.color === 'WHITE' &&
-			(whiteToMove || (!whiteToMove && chessboard.preMovesEnabled))
+			chessboard.state.movable.color === 'BOTH' ||
+			whiteToMove === (chessboard.state.movable.color === 'WHITE')
 		)
-			return 'w';
-		if (
-			chessboard.state.movable.color === 'BLACK' &&
-			(!whiteToMove || (whiteToMove && chessboard.preMovesEnabled))
-		)
-			return 'b';
+			return whiteToMove ? 'w' : 'b';
+
 		return '';
 	};
 
@@ -647,10 +633,9 @@
 						name={piece.name}
 						boardSize={chessboard.state.board.size}
 						mouseEvents={chessboard.state.board.mouseEvents}
-						legalState={chessboard.state.legal}
 						draggableState={chessboard.state.draggable}
-						selectableState={chessboard.state.selectable}
 						movableState={chessboard.state.movable}
+						selectedPiece={chessboard.selectedPiece}
 						getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 						flipped={chessboard.flipped}
 						on:move={moveMadeFromPiece}
@@ -667,7 +652,6 @@
 						on:select={() => handleSelect(piece)}
 						on:canceled={() => deselect()}
 						on:deselect={() => deselect()}
-						on:captured={() => handleCaptured(piece.square)}
 					/>
 				{/each}
 			{/if}
@@ -731,6 +715,7 @@
 
 <style>
 	:global(.w .white, .b .black, .wb .black, .wb .white) {
+		pointer-events: auto;
 		cursor: pointer;
 	}
 

@@ -57,8 +57,6 @@ type DragParams = {
 	boardFlipped: boolean;
 	mouseEvents: boolean;
 	canDrag: boolean;
-	canSelect: boolean;
-	canCapture: boolean;
 	duration: number;
 	easingFunc: (t: number) => number;
 	coords: Tweened<{
@@ -86,16 +84,7 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 	let dragging = false;
 	let isMobile = false;
 
-	let {
-		startSquare,
-		boardFlipped,
-		mouseEvents,
-		canDrag,
-		canSelect,
-		canCapture,
-		duration,
-		easingFunc
-	} = params;
+	let { startSquare, boardFlipped, mouseEvents, canDrag, duration, easingFunc } = params;
 	const { coords } = params;
 
 	let startX = get(coords).x;
@@ -109,11 +98,7 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 		if (e.pointerType === 'touch') isMobile = true;
 		else isMobile = false;
 
-		if (canCapture) {
-			node.dispatchEvent(new CustomEvent('captured'));
-			return;
-		}
-		if (canSelect || canDrag) node.dispatchEvent(new CustomEvent('clicked'));
+		node.dispatchEvent(new CustomEvent('clicked'));
 		if (!canDrag) {
 			node.dispatchEvent(
 				new CustomEvent('dropped', {
@@ -370,10 +355,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 			easingFunc = newParams.easingFunc;
 
 			if (newParams.canDrag !== canDrag) canDrag = newParams.canDrag;
-
-			if (newParams.canSelect !== canSelect) canSelect = newParams.canSelect;
-
-			if (newParams.canCapture !== canCapture) canCapture = newParams.canCapture;
 
 			if (newParams.mouseEvents !== mouseEvents) mouseEvents = newParams.mouseEvents;
 

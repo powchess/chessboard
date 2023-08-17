@@ -41,6 +41,7 @@ export type ChessboardConfig = {
 					| {
 							duration?: number;
 							easing?: EasingFuncs;
+							clickMoveAnimation?: boolean;
 					  };
 		  };
 

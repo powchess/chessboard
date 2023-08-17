@@ -14,6 +14,7 @@ export default class DraggableState {
 		settings: {
 			duration: number;
 			easing: EasingFuncs;
+			clickMoveAnimation: boolean;
 		};
 	};
 
@@ -27,7 +28,8 @@ export default class DraggableState {
 			enabled: true,
 			settings: {
 				duration: 120,
-				easing: 'cubicInOut'
+				easing: 'cubicInOut',
+				clickMoveAnimation: true
 			}
 		}
 	} as const;
@@ -57,10 +59,12 @@ export default class DraggableState {
 					else if (config?.transition === false) this.transition.enabled = false;
 					else {
 						this.transition.enabled = true;
-						if (config?.transition?.duration)
-							this.transition.settings.duration = config?.transition?.duration;
-						if (config?.transition?.easing)
-							this.transition.settings.easing = config?.transition?.easing;
+						if (config?.transition?.duration !== undefined)
+							this.transition.settings.duration = config.transition.duration;
+						if (config?.transition?.easing !== undefined)
+							this.transition.settings.easing = config.transition.easing;
+						if (config?.transition?.clickMoveAnimation !== undefined)
+							this.transition.settings.clickMoveAnimation = config.transition.clickMoveAnimation;
 					}
 				}
 			}
@@ -68,19 +72,12 @@ export default class DraggableState {
 	};
 
 	public getConfig = () => {
-		const draggable: {
-			ghostPiece?: boolean;
-			transition?:
-				| boolean
-				| {
-						duration?: number;
-						easing?: EasingFuncs;
-				  };
-		} = {};
+		const draggable: ChessboardConfig['draggable'] = {};
 
 		const transition: {
 			duration?: number;
 			easing?: EasingFuncs;
+			clickMoveAnimation?: boolean;
 		} = {};
 
 		if (this.enabled && this.defaultState.enabled) {
@@ -91,6 +88,11 @@ export default class DraggableState {
 					transition.duration = this.transition.settings.duration;
 				if (this.transition.settings.easing !== this.defaultState.transition.settings.easing)
 					transition.easing = this.transition.settings.easing;
+				if (
+					this.transition.settings.clickMoveAnimation !==
+					this.defaultState.transition.settings.clickMoveAnimation
+				)
+					transition.clickMoveAnimation = this.transition.settings.clickMoveAnimation;
 
 				if (Object.keys(transition).length !== 0) draggable.transition = transition;
 			}
