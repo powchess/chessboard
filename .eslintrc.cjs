@@ -29,15 +29,6 @@ module.exports = {
 			}
 		}
 	],
-	settings: {
-		svelte: {
-			compileOptions: {
-				postcss: {
-					configFilePath: './postcss.config.cjs'
-				}
-			}
-		}
-	},
 	parserOptions: {
 		ecmaVersion: 2020,
 		sourceType: 'module',
