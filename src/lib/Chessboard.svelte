@@ -318,7 +318,7 @@
 		const square = getSquareFromCoords(x, y);
 		if (!square) return;
 		const piece = chessboard.getPieceFromSquare(square);
-		dispatch('squareClick', { square, piece: piece ? piece.name : undefined });
+		dispatch('squareClick', { square, piece: piece?.name });
 
 		if (!chessboard.selectableEnabled && !chessboard.draggableEnabled) {
 			deselect();
@@ -339,6 +339,7 @@
 			if (chessboard.preMovesEnabled && chessboard.preMoves.includes(move)) {
 				if (chessboard.isPromotion(move)) makeNextMove(`${move}q`);
 				else makeNextMove(move);
+				e.stopPropagation();
 			}
 			deselect(false);
 			return;
