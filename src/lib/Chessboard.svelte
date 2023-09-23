@@ -595,16 +595,14 @@
 	});
 </script>
 
-<div
-	use:fitSize
-	on:newsize={(e) => {
-		chessboard.state.board.size = e.detail;
-	}}
-	class="boardWrapper"
->
+<div class="boardWrapper">
 	<div
 		role="button"
 		tabindex="0"
+		use:fitSize
+		on:newsize={(e) => {
+			chessboard.state.board.size = e.detail;
+		}}
 		on:pointerdown|capture={boardClick}
 		on:contextmenu|preventDefault
 		on:drag|preventDefault
