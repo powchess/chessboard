@@ -598,7 +598,7 @@
 	});
 </script>
 
-<div class="boardWrapper">
+<div class="boardWrapper {className}">
 	<div
 		role="button"
 		tabindex="0"
@@ -619,9 +619,7 @@
 			dispatch('drawCircle', { square: e.detail.square, color: e.detail.color })}
 		on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 		bind:this={boardDiv}
-		class="board text-sm {className}{!chessboard.legalEnabled && chessboard.selectedPiece
-			? ' pointer'
-			: ''}"
+		class="board text-sm{!chessboard.legalEnabled && chessboard.selectedPiece ? ' pointer' : ''}"
 		style="
 		--boardTheme: url({chessboard.state.board.boardTheme === 'standard'
 			? standardBoard
@@ -709,6 +707,9 @@
 			<PromotionModal bind:this={promotionModal} on:newPromotion={handlePromotion} />
 		{/if}
 	</div>
+	<div use:fitSize class="layer-1">
+		<slot name="layer-1" />
+	</div>
 </div>
 
 {#if chessboard.soundsEnabled}
@@ -728,6 +729,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		position: relative;
 	}
 	.board {
 		-webkit-touch-callout: none; /* iOS Safari */
@@ -747,6 +749,7 @@
 		font-size: 0.75rem;
 		line-height: 1rem;
 		cursor: default;
+		border-radius: inherit;
 	}
 
 	.pointer {
@@ -758,5 +761,16 @@
 			font-size: 0.875rem;
 			line-height: 1.25rem;
 		}
+	}
+
+	.layer-1 {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		pointer-events: none;
+		z-index: 5;
+		border-radius: inherit;
+		overflow: hidden;
 	}
 </style>
