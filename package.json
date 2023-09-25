@@ -1,7 +1,7 @@
 {
 	"name": "@powchess/chessboard",
 	"private": false,
-	"version": "1.3.10",
+	"version": "1.3.11",
 	"description": "Chessboard UI Package for PowChess.com",
 	"repository": {
 		"type": "git",
