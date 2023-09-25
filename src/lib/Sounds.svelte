@@ -3,7 +3,7 @@
 	import captureSound from './assets/sounds/capture.wav';
 	import castleSound from './assets/sounds/castle.wav';
 	import undoSound from './assets/sounds/undo.mp3';
-	import type { MoveTypeSound } from './boardConfig';
+	import type { MoveTypeSound } from './boardConfig.js';
 
 	export let settings: {
 		MOVE: boolean;

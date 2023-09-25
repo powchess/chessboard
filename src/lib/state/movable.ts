@@ -1,5 +1,5 @@
-import type { ChessboardConfig } from '$lib/boardConfig';
-import type { Color } from '$lib/enums';
+import type { ChessboardConfig } from '$lib/boardConfig.js';
+import type { Color } from '$lib/enums.js';
 
 export default class MovableState {
 	public enabled: boolean;

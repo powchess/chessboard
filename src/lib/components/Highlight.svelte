@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type HighlightState from '$lib/state/highlight';
+	import type HighlightState from '$lib/state/highlight.js';
 	import Section from './Section.svelte';
 
 	export let name = 'Highlight';

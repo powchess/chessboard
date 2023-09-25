@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import { EasingFuncsArray } from '$lib/boardConfig';
+	import { EasingFuncsArray } from '$lib/boardConfig.js';
 	import Section from './Section.svelte';
 
 	export let name = 'Draggable';

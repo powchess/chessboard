@@ -1,5 +1,5 @@
-import type { ChessboardConfig } from '$lib/boardConfig';
-import type { ArrowTool, CircleTool } from '$lib/drawArrows';
+import type { ChessboardConfig } from '$lib/boardConfig.js';
+import type { ArrowTool, CircleTool } from '$lib/drawArrows.js';
 
 export default class DrawToolsState {
 	public enabled: boolean;

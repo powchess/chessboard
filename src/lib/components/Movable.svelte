@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Color } from '$lib/enums';
+	import type { Color } from '$lib/enums.js';
 	import Section from './Section.svelte';
 
 	export let name = 'Movable';

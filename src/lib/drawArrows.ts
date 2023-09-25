@@ -1,5 +1,5 @@
-import type { ChessSquare } from './chessTypes';
-import { squareToSQXY } from './utils';
+import type { ChessSquare } from './chessTypes.js';
+import { squareToSQXY } from './utils.js';
 
 type Props = {
 	svg: SVGGElement;

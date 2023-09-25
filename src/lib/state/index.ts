@@ -1,15 +1,15 @@
-import type { ChessPiece, ChessSquare } from '../chessTypes';
-import type { ChessboardConfig } from '../boardConfig';
-import BoardState from './board';
-import MovableState from './movable';
-import DraggableState from './draggable';
-import SelectableState from './selectable';
-import LegalState from './legal';
-import HighlightState from './highlight';
-import DrawToolsState from './drawTools';
-import SoundsState from './sounds';
-import type { SquareType } from '$lib/enums';
-import Callbacks from './callbacks';
+import type { ChessPiece, ChessSquare } from '../chessTypes.js';
+import type { ChessboardConfig } from '../boardConfig.js';
+import BoardState from './board.js';
+import MovableState from './movable.js';
+import DraggableState from './draggable.js';
+import SelectableState from './selectable.js';
+import LegalState from './legal.js';
+import HighlightState from './highlight.js';
+import DrawToolsState from './drawTools.js';
+import SoundsState from './sounds.js';
+import type { SquareType } from '$lib/enums.js';
+import Callbacks from './callbacks.js';
 
 export const defaultFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 

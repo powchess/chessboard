@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { BoardThemes, type BoardTheme } from '$lib/boardConfig';
+	import { BoardThemes, type BoardTheme } from '$lib/boardConfig.js';
 	import Section from './Section.svelte';
 
 	export let name = 'Board';

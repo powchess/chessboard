@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { BoardTheme } from './boardConfig';
-	import boardThemesStyles from './boardThemes/boardThemes';
-	import type { ChessSquare } from './chessTypes';
-	import type { SquareType } from './enums';
+	import type { BoardTheme } from './boardConfig.js';
+	import boardThemesStyles from './boardThemes/boardThemes.js';
+	import type { ChessSquare } from './chessTypes.js';
+	import type { SquareType } from './enums.js';
 
 	export let square: ChessSquare;
 	export let color: SquareType;
