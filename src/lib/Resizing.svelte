@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import resizing from './boardResizing';
-	import boardThemesStyles from './boardThemes/boardThemes';
-	import type Chessboard from './chessboard';
+	import resizing from './boardResizing.js';
+	import boardThemesStyles from './boardThemes/boardThemes.js';
+	import type Chessboard from './chessboard.js';
 
 	const dispatch = createEventDispatcher();
 

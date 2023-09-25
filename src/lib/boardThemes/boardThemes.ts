@@ -2,12 +2,12 @@ import {
 	squareStyles as standardSquareStyles,
 	colors as standardColors,
 	imageName as standardImageName
-} from './standard';
+} from './standard.js';
 import {
 	squareStyles as darkBlueSquareStyles,
 	colors as darkBlueColors,
 	imageName as darkBlueImageName
-} from './darkBlue';
+} from './darkBlue.js';
 
 const boardThemesStyles = {
 	squareStyles: {

@@ -1,5 +1,5 @@
-import type { BoardTheme, ChessboardConfig, PiecesTheme } from '$lib/boardConfig';
-import { defaultFEN } from '$lib/state/index';
+import type { BoardTheme, ChessboardConfig, PiecesTheme } from '$lib/boardConfig.js';
+import { defaultFEN } from '$lib/state/index.js';
 
 export default class BoardState {
 	public boardTheme: BoardTheme;

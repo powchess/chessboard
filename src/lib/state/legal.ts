@@ -1,5 +1,5 @@
-import type { ChessboardConfig } from '$lib/boardConfig';
-import type { ChessSquare } from '$lib/chessTypes';
+import type { ChessboardConfig } from '$lib/boardConfig.js';
+import type { ChessSquare } from '$lib/chessTypes.js';
 
 export default class LegalState {
 	public enabled: boolean;

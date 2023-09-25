@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
 import type { Tweened } from 'svelte/motion';
-import { fileToIndex, squareToSQXY } from './utils';
-import type { ChessFile, ChessRank, ChessSquare } from './chessTypes';
+import { fileToIndex, squareToSQXY } from './utils.js';
+import type { ChessFile, ChessRank, ChessSquare } from './chessTypes.js';
 
 function getEndSquare(
 	startSquare: ChessSquare,

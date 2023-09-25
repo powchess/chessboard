@@ -1,5 +1,5 @@
 import Chessboard from './Chessboard.svelte';
-import type { ChessboardConfig } from './boardConfig';
+import type { ChessboardConfig } from './boardConfig.js';
 
-export { ChessboardConfig };
+export { type ChessboardConfig };
 export default Chessboard;

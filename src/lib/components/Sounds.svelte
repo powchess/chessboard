@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type SoundsState from '$lib/state/sounds';
+	import type SoundsState from '$lib/state/sounds.js';
 	import Section from './Section.svelte';
 
 	export let name = 'Sounds';

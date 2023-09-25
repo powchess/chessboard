@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { drawTools, removeComputerArrows, type ArrowTool, type CircleTool } from './drawArrows';
+	import { drawTools, removeComputerArrows, type ArrowTool, type CircleTool } from './drawArrows.js';
 
 	export let flipped = false;
 	export let svg: SVGGElement;

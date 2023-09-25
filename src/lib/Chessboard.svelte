@@ -1,21 +1,21 @@
 <script lang="ts">
 	import { createEventDispatcher, onMount, tick } from 'svelte';
-	import type { ChessboardConfig, MoveTypeSound } from './boardConfig';
-	import Chessboard from './chessboard';
+	import type { ChessboardConfig, MoveTypeSound } from './boardConfig.js';
+	import Chessboard from './chessboard.js';
 	import Notation from './Notation.svelte';
 	import Piece from './Piece.svelte';
 	import Square from './Square.svelte';
-	import drawArrows, { type ArrowTool, type CircleTool } from './drawArrows';
+	import drawArrows, { type ArrowTool, type CircleTool } from './drawArrows.js';
 	import Arrows from './Arrows.svelte';
 	import PromotionModal from './PromotionModal.svelte';
 	import Sounds from './Sounds.svelte';
 	import standardBoard from './assets/boards/standard.svg';
 	import darkBlueBoard from './assets/boards/darkBlue.svg';
 	import Resizing from './Resizing.svelte';
-	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes';
-	import type { State, Piece as StatePiece } from './state/index';
-	import { squareColorToString, type SquareType } from './enums';
-	import { fitSize } from './fitSize';
+	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
+	import type { State, Piece as StatePiece } from './state/index.js';
+	import { squareColorToString, type SquareType } from './enums.js';
+	import { fitSize } from './fitSize.js';
 
 	export let config: ChessboardConfig;
 	let className: string | undefined | null = undefined;

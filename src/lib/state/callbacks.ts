@@ -1,4 +1,4 @@
-import type { ChessboardConfig } from '$lib/boardConfig';
+import type { ChessboardConfig } from '$lib/boardConfig.js';
 
 export default class Callbacks {
 	public getLegalMoves: (() => string[]) | undefined;

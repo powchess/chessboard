@@ -1,5 +1,5 @@
-import type { ChessboardConfig } from '$lib/boardConfig';
-import type { Piece } from '$lib/state/index';
+import type { ChessboardConfig } from '$lib/boardConfig.js';
+import type { Piece } from '$lib/state/index.js';
 
 export default class SelectableState {
 	public enabled: boolean;

@@ -1,4 +1,4 @@
-import type { ChessBoard, ChessFile, ChessIndex, ChessRank, ChessSquare } from './chessTypes';
+import type { ChessBoard, ChessFile, ChessIndex, ChessRank, ChessSquare } from './chessTypes.js';
 
 const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
 const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'] as const;

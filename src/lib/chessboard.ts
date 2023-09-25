@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
-import type { ChessBoard, ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes';
-import { State, type Square, type Piece } from './state/index';
-import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils';
-import type { ChessboardConfig } from './boardConfig';
-import type { SquareType } from './enums';
+import type { ChessBoard, ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
+import { State, type Square, type Piece } from './state/index.js';
+import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils.js';
+import type { ChessboardConfig } from './boardConfig.js';
+import type { SquareType } from './enums.js';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
 

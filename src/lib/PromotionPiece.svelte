@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import type { ChessPiece } from './chessTypes';
+	import type { ChessPiece } from './chessTypes.js';
 	import './assets/pieces.css';
 
 	export let piece: string;

@@ -2,12 +2,12 @@
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { tweened } from 'svelte/motion';
 	import * as easingFuncs from 'svelte/easing';
-	import drag from './draggable';
-	import type { ChessPiece, ChessSquare } from './chessTypes';
-	import type { Piece } from './state';
+	import drag from './draggable.js';
+	import type { ChessPiece, ChessSquare } from './chessTypes.js';
+	import type { Piece } from './state/index.js';
 	import './assets/pieces.css';
-	import type DraggableState from './state/draggable';
-	import type MovableState from './state/movable';
+	import type DraggableState from './state/draggable.js';
+	import type MovableState from './state/movable.js';
 
 	export let square: ChessSquare;
 	export let name: ChessPiece;

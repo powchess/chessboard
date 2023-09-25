@@ -3,8 +3,8 @@
 	import { onMount } from 'svelte';
 	import { Chess, type Move } from 'chess.js';
 	import Chessboard from '$lib/Chessboard.svelte';
-	import { State } from '$lib/state/index';
-	import type { ChessboardConfig } from '$lib/boardConfig';
+	import { State } from '$lib/state/index.js';
+	import type { ChessboardConfig } from '$lib/boardConfig.js';
 	import { browser } from '$app/environment';
 	import Board from '$lib/components/Board.svelte';
 	import Movable from '$lib/components/Movable.svelte';

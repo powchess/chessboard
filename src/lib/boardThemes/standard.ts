@@ -1,4 +1,4 @@
-import type { SquareType } from '$lib/enums';
+import type { SquareType } from '$lib/enums.js';
 
 export const squareStyles: Record<SquareType, string> = {
 	LEGAL: 'legal cursor-pointer',

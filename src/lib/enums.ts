@@ -1,4 +1,4 @@
-import type HighlightState from './state/highlight';
+import type HighlightState from './state/highlight.js';
 
 export type Color = 'WHITE' | 'BLACK' | 'BOTH';
 
