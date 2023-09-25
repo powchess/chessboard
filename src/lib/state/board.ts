@@ -56,6 +56,7 @@ export default class BoardState {
 			if (config.flipped !== undefined) this.flipped = config.flipped;
 			if (config.notation !== undefined) this.notation = config.notation;
 			if (config.startFen !== undefined) this.startFen = config.startFen;
+			if (config.scale !== undefined) this.scale = config.scale;
 			if (config.resizible !== undefined) this.resizible = config.resizible;
 		}
 	};
@@ -68,6 +69,7 @@ export default class BoardState {
 			...(this.flipped !== this.defaultState.flipped && { flipped: this.flipped }),
 			...(this.notation !== this.defaultState.notation && { notation: this.notation }),
 			...(this.startFen !== this.defaultState.startFen && { startFen: this.startFen }),
+			...(this.scale !== this.defaultState.scale && { scale: this.scale }),
 			...(this.resizible !== this.defaultState.resizible && { resizible: this.resizible })
 		};
 		if (Object.keys(cfg).length === 0) return undefined;
