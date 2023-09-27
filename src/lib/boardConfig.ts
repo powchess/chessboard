@@ -18,7 +18,7 @@ export type ChessboardConfig = {
 		flipped?: boolean;
 		notation?: boolean;
 		startFen?: string;
-		startSize?: number;
+		scale?: number;
 		resizible?: boolean;
 	};
 
