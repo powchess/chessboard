@@ -41,7 +41,14 @@
 			}
 		},
 		board: {
-			resizible: true
+			resizible: true,
+			skins: {
+				enabled: true,
+				urls: {
+					wP60: 'https://banner2.cleanpng.com/20180409/gde/kisspng-chess-computer-icons-pawn-bishop-pawn-5acb74c9227837.2430830015232831451412.jpg',
+					wP4: 'https://cdn.shopify.com/s/files/1/2209/1363/products/ColorChangePawn_600x.gif?v=1535647342'
+				}
+			}
 		}
 	};
 

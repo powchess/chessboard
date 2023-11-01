@@ -1,4 +1,4 @@
-import type { ChessPiece, ChessSquare } from '../chessTypes.js';
+import type { ChessSquare } from '../chessTypes.js';
 import type { ChessboardConfig } from '../boardConfig.js';
 import BoardState from './board.js';
 import MovableState from './movable.js';
@@ -10,6 +10,7 @@ import DrawToolsState from './drawTools.js';
 import SoundsState from './sounds.js';
 import type { SquareType } from '$lib/enums.js';
 import Callbacks from './callbacks.js';
+import { Pieces, type Piece } from './piece.js';
 
 export const defaultFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -19,11 +20,10 @@ export type ArrowData = {
 	opacity: number;
 };
 
-export type Piece = { square: ChessSquare; name: ChessPiece };
 export type Square = { square: ChessSquare; color: SquareType };
 
 export class State {
-	public pieces: Piece[];
+	public pieces: Pieces;
 
 	public markedSquares: Set<Square>;
 
@@ -46,7 +46,7 @@ export class State {
 	public sounds: SoundsState;
 
 	constructor(cfg?: ChessboardConfig) {
-		this.pieces = [];
+		this.pieces = new Pieces();
 		this.markedSquares = new Set();
 
 		this.board = new BoardState(cfg?.board);

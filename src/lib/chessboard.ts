@@ -1,9 +1,10 @@
 /* eslint-disable no-param-reassign */
 import type { ChessBoard, ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
-import { State, type Square, type Piece } from './state/index.js';
+import { State, type Square, defaultFEN } from './state/index.js';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils.js';
 import type { ChessboardConfig } from './boardConfig.js';
 import type { SquareType } from './enums.js';
+import type { Piece } from './state/piece.js';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
 
@@ -23,16 +24,22 @@ export default class Chessboard {
 
 	constructor(cfg?: ChessboardConfig | undefined) {
 		this.state = new State(cfg);
-		if (this.state.board.startFen) this.updatePiecesWithFen(this.state.board.startFen);
+		// if (this.state.board.startFen) this.updatePiecesWithFen(this.state.board.startFen);
+		// if (this.state.board.startFen === defaultFEN)
+		// 	this.updatePiecesWithFen(this.state.board.startFen);
+		this.state.pieces.initPieces(this.state.board.startFen ?? defaultFEN);
 	}
+
+	// private setDefaultFENWithSkins = () => {
+	// 	this.state.pieces;
+	// };
 
 	private changeLegalHoverIfNeeded = (newSquare: Square) => {
 		if (newSquare.color !== 'LEGAL' && newSquare.color !== 'PREMOVE') return;
 
-		this.state.pieces.forEach((piece: Piece) => {
-			if (piece.square === newSquare.square)
-				newSquare.color = newSquare.color === 'LEGAL' ? 'LEGALHOVER' : 'PREMOVEHOVER';
-		});
+		const piece = this.state.pieces.squareMap.get(newSquare.square);
+
+		if (piece) newSquare.color = newSquare.color === 'LEGAL' ? 'LEGALHOVER' : 'PREMOVEHOVER';
 	};
 
 	public highlightSquare = (square: ChessSquare, mode: SquareType) => {
@@ -57,15 +64,10 @@ export default class Chessboard {
 				square.color = color === 'LEGAL' ? 'LEGALHOVER' : 'PREMOVEHOVER';
 			else if (
 				square.square !== sqr &&
-				square.color === (color === 'LEGAL' ? 'LEGALHOVER' : 'PREMOVEHOVER')
+				square.color === (color === 'LEGAL' ? 'LEGALHOVER' : 'PREMOVEHOVER') &&
+				!this.state.pieces.squareMap.has(square.square)
 			) {
-				let pieceExist = false;
-				this.state.pieces.forEach((piece) => {
-					if (piece.square === square.square) pieceExist = true;
-				});
-				if (!pieceExist) {
-					square.color = color;
-				}
+				square.color = color;
 			}
 		});
 	};
@@ -121,23 +123,28 @@ export default class Chessboard {
 	};
 
 	public setPiece = (square: ChessSquare, name: ChessPiece) => {
-		if (!Chessboard.isValidThing({ square, piece: name })) return;
-		const piece = this.state.pieces.find((p) => p.square === square);
-		if (piece) piece.name = name;
-		else this.state.pieces.push({ square, name });
+		// const piece = this.state.pieces.find((p) => p.square === square);
+		// if (!Chessboard.isValidThing({ square, piece: name })) return;
+		// const piece = this.state.pieces.find((p) => p.square === square);
+		// if (piece) piece.name = name;
+		// else this.state.pieces.push({ square, name });
+
+		this.state.pieces.setPiece(square, name);
 	};
 
 	public removePiece = (square: ChessSquare) => {
-		if (!Chessboard.isValidThing({ square })) return;
-		this.state.pieces.forEach((element, i) => {
-			if (element.square === square) {
-				this.state.pieces.splice(i, 1);
-			}
-		});
+		// if (!Chessboard.isValidThing({ square })) return undefined;
+		// let cachedPiece: Piece | undefined;
+		// this.state.pieces.forEach((element, i) => {
+		// 	if (element.square === square) {
+		// 		[cachedPiece] = [...this.state.pieces.splice(i, 1)];
+		// 	}
+		// });
+		return this.state.pieces.removePieceBySquare(square);
 	};
 
 	public clearAllPieces = () => {
-		this.state.pieces.length = 0;
+		this.state.pieces.clearPieces();
 	};
 
 	public getGridCoordsFromSquare = (square: ChessSquare): { x: number; y: number } => {
@@ -155,125 +162,119 @@ export default class Chessboard {
 	};
 
 	public makeMove = (move: string): void => {
-		if (!Chessboard.isValidThing({ move })) return;
+		// if (!Chessboard.isValidThing({ move })) return;
 
-		let moveSuccessful = false;
-		let cachedPiece: Piece | undefined;
+		// const startSQ = <ChessSquare>move.substring(0, 2);
+		// const endSQ = <ChessSquare>move.substring(2, 4);
+		// const promPiece = move.substring(4);
 
-		const startSQ = <ChessSquare>move.substring(0, 2);
-		const endSQ = <ChessSquare>move.substring(2, 4);
-		const promPiece = move.substring(4);
+		// let moveSuccessful = false;
+		// const cachedPiece = this.removePiece(endSQ);
 
-		this.state.pieces.forEach((piece: Piece) => {
-			if (piece.square === endSQ) {
-				cachedPiece = piece;
-				this.removePiece(piece.square);
-			}
-		});
+		// this.state.pieces.forEach((piece: Piece) => {
+		// 	if (piece.square === startSQ) {
+		// 		piece.square = endSQ;
+		// 		moveSuccessful = true;
 
-		this.state.pieces.forEach((piece: Piece) => {
-			if (piece.square === startSQ) {
-				piece.square = endSQ;
-				moveSuccessful = true;
+		// 		if (promPiece) piece.name = (piece.name[0] + promPiece.toUpperCase()) as ChessPiece;
+		// 	}
+		// });
 
-				if (promPiece) piece.name = (piece.name[0] + promPiece.toUpperCase()) as ChessPiece;
-			}
-		});
+		// if (!moveSuccessful) {
+		// 	if (cachedPiece) this.state.pieces.push(cachedPiece);
+		// } else this.state.legal.lastMove = move;
 
-		if (!moveSuccessful) {
-			if (cachedPiece) this.state.pieces.push(cachedPiece);
-		} else this.state.legal.lastMove = move;
+		this.state.pieces.makeMove(move);
 	};
 
 	private getSquareFromIndices = (x: number, y: number): ChessSquare =>
 		`${<ChessFile>Object.keys(this.letters)[x]}${<ChessRank>(y + 1).toString()}`;
 
-	public updatePiecesWithFen = (fen: string): void => {
-		const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
-		const numbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
-		let j = 0;
-		let m = 0;
-		for (let i = 0; i < (fen.includes(' ') ? fen.indexOf(' ') : fen.length); i++) {
-			if (fen[i] === '/') {
-				j++;
-				m = 0;
-			} else if (!numbers.includes(fen[i])) {
-				if (fen[i] === fen[i].toUpperCase()) {
-					board[j][m] = `w${fen[i]}` as ChessPiece;
-				} else {
-					board[j][m] = `b${fen[i].toUpperCase()}` as ChessPiece;
-				}
-				m++;
-			} else {
-				for (let k = 0; k < parseInt(fen[i], 10); k++) {
-					board[j][m] = null;
-					m++;
-				}
-			}
-		}
-
-		const piecesAdded: Piece[] = [];
-		const piecesDeleted: Piece[] = [];
-
-		for (let y = 0; y < board.length; ++y) {
-			for (let x = 0; x < board.length; ++x) {
-				const piece = board[y][x];
-				const oldPiece = this.getPieceFromSquare(this.getSquareFromIndices(x, Math.abs(y - 7)));
-				if (piece && !oldPiece) {
-					piecesAdded.push({
-						square: <ChessSquare>this.getSquareFromIndices(x, Math.abs(y - 7)),
-						name: piece
-					});
-				}
-				if (!piece && oldPiece) {
-					piecesDeleted.push(oldPiece);
-				}
-				if (piece && oldPiece && piece !== oldPiece.name) {
-					piecesAdded.push({
-						square: <ChessSquare>this.getSquareFromIndices(x, Math.abs(y - 7)),
-						name: piece
-					});
-					piecesDeleted.push(oldPiece);
-				}
-			}
-		}
-
-		for (let i = 0; i < piecesDeleted.length; i++) {
-			for (let n = 0; n < piecesAdded.length; n++) {
-				if (!piecesAdded[n] || !piecesDeleted[i]) continue;
-				if (piecesAdded[n].name === piecesDeleted[i].name) {
-					piecesDeleted[i].square = piecesAdded[n].square;
-					piecesDeleted.splice(i, 1);
-					i--;
-					piecesAdded.splice(n, 1);
-					n--;
-				}
-			}
-		}
-
-		piecesAdded.forEach((piece) => {
-			this.state.pieces.push(piece);
-		});
-
-		piecesDeleted.forEach((piece) => {
-			this.state.pieces.splice(this.state.pieces.indexOf(piece), 1);
-		});
-	};
+	// public updatePiecesWithFen = (fen: string): void => {
+	// const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
+	// const numbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
+	// let j = 0;
+	// let m = 0;
+	// for (let i = 0; i < (fen.includes(' ') ? fen.indexOf(' ') : fen.length); i++) {
+	// 	if (fen[i] === '/') {
+	// 		j++;
+	// 		m = 0;
+	// 	} else if (!numbers.includes(fen[i])) {
+	// 		if (fen[i] === fen[i].toUpperCase()) {
+	// 			board[j][m] = `w${fen[i]}` as ChessPiece;
+	// 		} else {
+	// 			board[j][m] = `b${fen[i].toUpperCase()}` as ChessPiece;
+	// 		}
+	// 		m++;
+	// 	} else {
+	// 		for (let k = 0; k < parseInt(fen[i], 10); k++) {
+	// 			board[j][m] = null;
+	// 			m++;
+	// 		}
+	// 	}
+	// }
+	// const piecesAdded: Piece[] = [];
+	// const piecesDeleted: Piece[] = [];
+	// for (let y = 0; y < board.length; ++y) {
+	// 	for (let x = 0; x < board.length; ++x) {
+	// 		const piece = board[y][x];
+	// 		const oldPiece = this.getPieceFromSquare(this.getSquareFromIndices(x, Math.abs(y - 7)));
+	// 		if (piece && !oldPiece) {
+	// 			piecesAdded.push({
+	// 				square: <ChessSquare>this.getSquareFromIndices(x, Math.abs(y - 7)),
+	// 				name: piece
+	// 			});
+	// 		}
+	// 		if (!piece && oldPiece) {
+	// 			piecesDeleted.push(oldPiece);
+	// 		}
+	// 		if (piece && oldPiece && piece !== oldPiece.name) {
+	// 			piecesAdded.push({
+	// 				square: <ChessSquare>this.getSquareFromIndices(x, Math.abs(y - 7)),
+	// 				name: piece
+	// 			});
+	// 			piecesDeleted.push(oldPiece);
+	// 		}
+	// 	}
+	// }
+	// for (let i = 0; i < piecesDeleted.length; i++) {
+	// 	for (let n = 0; n < piecesAdded.length; n++) {
+	// 		if (!piecesAdded[n] || !piecesDeleted[i]) continue;
+	// 		if (piecesAdded[n].name === piecesDeleted[i].name) {
+	// 			piecesDeleted[i].square = piecesAdded[n].square;
+	// 			piecesDeleted.splice(i, 1);
+	// 			i--;
+	// 			piecesAdded.splice(n, 1);
+	// 			n--;
+	// 		}
+	// 	}
+	// }
+	// piecesAdded.forEach((piece) => {
+	// 	this.state.pieces.push(piece);
+	// });
+	// piecesDeleted.forEach((piece) => {
+	// 	this.state.pieces.splice(this.state.pieces.indexOf(piece), 1);
+	// });
+	// };
 
 	public getWhiteKingSquare(): ChessSquare | undefined {
-		const king = this.state.pieces.find((piece) => piece.name === 'wK');
-		if (king) return king.square;
-		return undefined;
+		// const king = this.state.pieces.find((piece) => piece.name === 'wK');
+		// if (king) return king.square;
+		// return undefined;
+
+		return this.state.pieces.idMap.get('wK0')?.square;
 	}
 
 	public getBlackKingSquare(): ChessSquare | undefined {
-		const king = this.state.pieces.find((piece) => piece.name === 'bK');
-		if (king) return king.square;
-		return undefined;
+		// const king = this.state.pieces.find((piece) => piece.name === 'bK');
+		// if (king) return king.square;
+		// return undefined;
+
+		return this.state.pieces.idMap.get('bK0')?.square;
 	}
 
 	public getShortFEN() {
-		if (this.state.pieces.length === 0) return emptyFEN;
+		if (this.state.pieces.size === 0) return emptyFEN;
 
 		const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
 
@@ -287,7 +288,7 @@ export default class Chessboard {
 
 	public getPieceFromSquare(square: ChessSquare | undefined): Piece | undefined {
 		if (!square) return undefined;
-		return this.state.pieces.find((piece) => piece.square === square);
+		return this.state.pieces.squareMap.get(square);
 	}
 
 	private static isValidThing = (payload: {

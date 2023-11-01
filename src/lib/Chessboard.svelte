@@ -13,9 +13,10 @@
 	import darkBlueBoard from './assets/boards/darkBlue.svg';
 	import Resizing from './Resizing.svelte';
 	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
-	import type { State, Piece as StatePiece } from './state/index.js';
+	import type { State } from './state/index.js';
 	import { squareColorToString, type SquareType } from './enums.js';
 	import { fitSize } from './fitSize.js';
+	import type { Piece as StatePiece } from './state/piece.js';
 
 	export let config: ChessboardConfig;
 	let className: string | undefined | null = undefined;
@@ -394,32 +395,34 @@
 		deselectPiece = true,
 		sound: MoveTypeSound | false = 'MOVE'
 	) => {
-		chessboard.updatePiecesWithFen(fen);
-		if (deselectPiece) {
-			deselect();
-		}
+		//chessboard.updatePiecesWithFen(fen);
+		console.log('пока ничего не делает');
+		return;
+		// if (deselectPiece) {
+		// 	deselect();
+		// }
 
-		clearAllSquares();
-		removeGhostPiece();
+		// clearAllSquares();
+		// removeGhostPiece();
 
-		updateLegalState(false);
+		// updateLegalState(false);
 
-		chessboard.currentPreMove = '';
-		if (chessboard.state.callbacks.getLastMove) {
-			const lastMove = chessboard.state.callbacks.getLastMove();
-			chessboard.lastMove = lastMove;
-			if (sound !== false) {
-				if (sound !== 'MOVE') playMoveSound(sound);
-				else if (chessboard.isCastling(lastMove)) playMoveSound('CASTLE');
-				else playMoveSound(sound);
-			}
+		// chessboard.currentPreMove = '';
+		// if (chessboard.state.callbacks.getLastMove) {
+		// 	const lastMove = chessboard.state.callbacks.getLastMove();
+		// 	chessboard.lastMove = lastMove;
+		// 	if (sound !== false) {
+		// 		if (sound !== 'MOVE') playMoveSound(sound);
+		// 		else if (chessboard.isCastling(lastMove)) playMoveSound('CASTLE');
+		// 		else playMoveSound(sound);
+		// 	}
 
-			highlightMove(lastMove);
-		} else if (sound !== false) playMoveSound(sound);
+		// 	highlightMove(lastMove);
+		// } else if (sound !== false) playMoveSound(sound);
 
-		updateSelectedPieceHighlight();
+		// updateSelectedPieceHighlight();
 
-		chessboard.state.pieces = chessboard.state.pieces;
+		// chessboard.state.pieces = chessboard.state.pieces;
 	};
 
 	export const getShortFEN = () => chessboard.getShortFEN();
@@ -627,10 +630,10 @@
 	>
 		<div style="width: 100%; height: 100%" class={whoCanMove(chessboard.whiteToMove)}>
 			{#if chessboard.state.board.startFen}
-				{#each chessboard.state.pieces as piece (piece)}
+				{#each chessboard.state.pieces.idMap.values() as piece (piece.id)}
 					<Piece
-						square={piece.square}
-						name={piece.name}
+						{...piece}
+						skins={chessboard.state.board.skins}
 						boardSize={chessboard.state.board.size}
 						mouseEvents={chessboard.state.board.mouseEvents}
 						draggableState={chessboard.state.draggable}
@@ -659,9 +662,9 @@
 		{#if chessboard.ghostPiece}
 			<Piece
 				isGhost={true}
+				skins={chessboard.state.board.skins}
 				boardSize={chessboard.state.board.size}
-				square={chessboard.ghostPiece.square}
-				name={chessboard.ghostPiece.name}
+				{...chessboard.ghostPiece}
 				getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 				flipped={chessboard.flipped}
 			/>
