@@ -392,37 +392,38 @@
 
 	export const setFEN = (
 		fen: string,
-		deselectPiece = true,
-		sound: MoveTypeSound | false = 'MOVE'
+		opts?: { deselectPiece?: boolean; sound?: MoveTypeSound | false }
 	) => {
-		//chessboard.updatePiecesWithFen(fen);
-		console.log('пока ничего не делает');
-		return;
-		// if (deselectPiece) {
-		// 	deselect();
-		// }
+		chessboard.updatePiecesWithFen(fen);
 
-		// clearAllSquares();
-		// removeGhostPiece();
+		const deselectPiece = opts?.deselectPiece ?? true;
+		const sound = opts?.sound ?? 'MOVE';
 
-		// updateLegalState(false);
+		if (deselectPiece) {
+			deselect();
+		}
 
-		// chessboard.currentPreMove = '';
-		// if (chessboard.state.callbacks.getLastMove) {
-		// 	const lastMove = chessboard.state.callbacks.getLastMove();
-		// 	chessboard.lastMove = lastMove;
-		// 	if (sound !== false) {
-		// 		if (sound !== 'MOVE') playMoveSound(sound);
-		// 		else if (chessboard.isCastling(lastMove)) playMoveSound('CASTLE');
-		// 		else playMoveSound(sound);
-		// 	}
+		clearAllSquares();
+		removeGhostPiece();
 
-		// 	highlightMove(lastMove);
-		// } else if (sound !== false) playMoveSound(sound);
+		updateLegalState(false);
 
-		// updateSelectedPieceHighlight();
+		chessboard.currentPreMove = '';
+		if (chessboard.state.callbacks.getLastMove) {
+			const lastMove = chessboard.state.callbacks.getLastMove();
+			chessboard.lastMove = lastMove;
+			if (sound !== false) {
+				if (sound !== 'MOVE') playMoveSound(sound);
+				else if (chessboard.isCastling(lastMove)) playMoveSound('CASTLE');
+				else playMoveSound(sound);
+			}
 
-		// chessboard.state.pieces = chessboard.state.pieces;
+			highlightMove(lastMove);
+		} else if (sound !== false) playMoveSound(sound);
+
+		updateSelectedPieceHighlight();
+
+		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
 	export const getShortFEN = () => chessboard.getShortFEN();

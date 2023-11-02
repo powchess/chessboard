@@ -4,7 +4,7 @@ import { State, type Square, defaultFEN } from './state/index.js';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils.js';
 import type { ChessboardConfig } from './boardConfig.js';
 import type { SquareType } from './enums.js';
-import type { Piece } from './state/piece.js';
+import { Pieces, type Piece } from './state/piece.js';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
 
@@ -145,75 +145,37 @@ export default class Chessboard {
 		this.state.pieces.makeMove(move);
 	};
 
-	private getSquareFromIndices = (x: number, y: number): ChessSquare =>
-		`${<ChessFile>Object.keys(this.letters)[x]}${<ChessRank>(y + 1).toString()}`;
+	public updatePiecesWithFen = (fen: string): void => {
+		if (this.state.board.skins.enabled) throw new Error('Cannot update pieces with skins enabled');
 
-	// public updatePiecesWithFen = (fen: string): void => {
-	// const board = [...Array(8)].map(() => Array(8).fill(null)) as ChessBoard;
-	// const numbers = ['1', '2', '3', '4', '5', '6', '7', '8'];
-	// let j = 0;
-	// let m = 0;
-	// for (let i = 0; i < (fen.includes(' ') ? fen.indexOf(' ') : fen.length); i++) {
-	// 	if (fen[i] === '/') {
-	// 		j++;
-	// 		m = 0;
-	// 	} else if (!numbers.includes(fen[i])) {
-	// 		if (fen[i] === fen[i].toUpperCase()) {
-	// 			board[j][m] = `w${fen[i]}` as ChessPiece;
-	// 		} else {
-	// 			board[j][m] = `b${fen[i].toUpperCase()}` as ChessPiece;
-	// 		}
-	// 		m++;
-	// 	} else {
-	// 		for (let k = 0; k < parseInt(fen[i], 10); k++) {
-	// 			board[j][m] = null;
-	// 			m++;
-	// 		}
-	// 	}
-	// }
-	// const piecesAdded: Piece[] = [];
-	// const piecesDeleted: Piece[] = [];
-	// for (let y = 0; y < board.length; ++y) {
-	// 	for (let x = 0; x < board.length; ++x) {
-	// 		const piece = board[y][x];
-	// 		const oldPiece = this.getPieceFromSquare(this.getSquareFromIndices(x, Math.abs(y - 7)));
-	// 		if (piece && !oldPiece) {
-	// 			piecesAdded.push({
-	// 				square: <ChessSquare>this.getSquareFromIndices(x, Math.abs(y - 7)),
-	// 				name: piece
-	// 			});
-	// 		}
-	// 		if (!piece && oldPiece) {
-	// 			piecesDeleted.push(oldPiece);
-	// 		}
-	// 		if (piece && oldPiece && piece !== oldPiece.name) {
-	// 			piecesAdded.push({
-	// 				square: <ChessSquare>this.getSquareFromIndices(x, Math.abs(y - 7)),
-	// 				name: piece
-	// 			});
-	// 			piecesDeleted.push(oldPiece);
-	// 		}
-	// 	}
-	// }
-	// for (let i = 0; i < piecesDeleted.length; i++) {
-	// 	for (let n = 0; n < piecesAdded.length; n++) {
-	// 		if (!piecesAdded[n] || !piecesDeleted[i]) continue;
-	// 		if (piecesAdded[n].name === piecesDeleted[i].name) {
-	// 			piecesDeleted[i].square = piecesAdded[n].square;
-	// 			piecesDeleted.splice(i, 1);
-	// 			i--;
-	// 			piecesAdded.splice(n, 1);
-	// 			n--;
-	// 		}
-	// 	}
-	// }
-	// piecesAdded.forEach((piece) => {
-	// 	this.state.pieces.push(piece);
-	// });
-	// piecesDeleted.forEach((piece) => {
-	// 	this.state.pieces.splice(this.state.pieces.indexOf(piece), 1);
-	// });
-	// };
+		const newPieces = new Pieces({ startFen: fen });
+
+		const piecesDeleted: Piece[] = [];
+		const piecesAdded: Piece[] = [];
+
+		this.state.pieces.idMap.forEach((piece) => {
+			const newPiece = newPieces.squareMap.get(piece.square);
+			if (!newPiece || newPiece.name !== piece.name) piecesDeleted.push(piece);
+		});
+
+		newPieces.idMap.forEach((piece) => {
+			const oldPiece = this.state.pieces.squareMap.get(piece.square);
+			if (!oldPiece || oldPiece.name !== piece.name) piecesAdded.push(piece);
+		});
+
+		for (let i = 0; i < piecesDeleted.length; i++) {
+			for (let j = 0; j < piecesAdded.length; j++) {
+				if (!piecesAdded[j] || !piecesDeleted[i]) continue;
+				if (piecesAdded[j].name === piecesDeleted[i].name) {
+					piecesDeleted[i].square = piecesAdded[j].square;
+					piecesDeleted.splice(i, 1);
+					i--;
+					piecesAdded.splice(j, 1);
+					j--;
+				}
+			}
+		}
+	};
 
 	public getWhiteKingSquare(): ChessSquare | undefined {
 		return this.state.pieces.idMap.get('wK0')?.square;
