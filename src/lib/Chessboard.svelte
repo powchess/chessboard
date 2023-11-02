@@ -671,7 +671,7 @@
 			/>
 		{/if}
 		{#if chessboard.highlightEnabled}
-			{#each [...chessboard.state.markedSquares] as square (square)}
+			{#each [...chessboard.state.markedSquares] as square (square.square)}
 				<Square
 					on:dragenter={(e) => {
 						highlightSquare(e.detail.square, 'LEGALHOVER');

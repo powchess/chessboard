@@ -175,6 +175,14 @@ export default class Chessboard {
 				}
 			}
 		}
+
+		piecesAdded.forEach((piece) => {
+			this.state.pieces.setPiece(piece.square, piece.name);
+		});
+
+		piecesDeleted.forEach((piece) => {
+			this.state.pieces.removePieceBySquare(piece.square);
+		});
 	};
 
 	public getWhiteKingSquare(): ChessSquare | undefined {
