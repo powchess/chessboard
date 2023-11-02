@@ -17,7 +17,7 @@ export class Pieces {
 	public squareMap = new Map<ChessSquare, Piece | undefined>();
 
 	// свободные id map
-	private emptyIdMap = new Map<ChessPiece, IdCount[]>();
+	private emptyIdMap = new Map<ChessPiece, IdCount>();
 
 	// id присваивается в момент инициализации стартовой позиции - startFen. После этого id не меняется. При изменении позиции, меняется только square.
 	// Если фигура съедена, то удаляется из piecesMap. Если фигура превращается, то меняется name и url.
@@ -61,7 +61,6 @@ export class Pieces {
 
 		this.idMap.delete(id);
 		this.squareMap.delete(piece.square);
-		this.clearId(id);
 
 		return piece;
 	};
@@ -72,7 +71,6 @@ export class Pieces {
 
 		this.idMap.delete(piece.id);
 		this.squareMap.delete(piece.square);
-		this.clearId(piece.id);
 
 		return piece;
 	};
@@ -90,9 +88,16 @@ export class Pieces {
 		if (endPiece) this.removePieceById(endPiece.id);
 
 		this.squareMap.delete(piece.square);
+
 		piece.square = to;
 		this.squareMap.set(to, piece);
-		if (prom) piece.name = `${piece.name[0]}${prom.toUpperCase()}` as ChessPiece;
+
+		if (!prom) return;
+
+		this.idMap.delete(piece.id);
+		piece.name = `${piece.name[0]}${prom.toUpperCase()}` as ChessPiece;
+		piece.id = this.getEmptyId(piece.name);
+		this.idMap.set(piece.id, piece);
 	};
 
 	private initFromFen = (fen: string) => {
@@ -122,31 +127,11 @@ export class Pieces {
 	};
 
 	private getEmptyId = (name: ChessPiece): PieceId => {
-		if (!this.emptyIdMap.has(name)) this.emptyIdMap.set(name, Pieces.getFilledStackWithIds());
+		const emptyId = this.emptyIdMap.get(name) ?? 0;
 
-		const ids = this.emptyIdMap.get(name);
-		if (!ids) throw new Error('ids is undefined');
+		this.emptyIdMap.set(name, (emptyId + 1) as IdCount);
 
-		const id = ids.pop();
-		if (id === undefined) throw new Error('id is undefined');
-
-		return `${name}${id}`;
-	};
-
-	private clearId = (id: PieceId) => {
-		const name = id.substring(0, 2) as ChessPiece;
-
-		const ids = this.emptyIdMap.get(name);
-
-		if (!ids) throw new Error(`emptyIdMap has no name ${name}`);
-
-		ids.push(parseInt(id.substring(2, id.length), 10) as IdCount);
-	};
-
-	private static getFilledStackWithIds = (): IdCount[] => {
-		return Array(64)
-			.fill(0)
-			.map((_, i) => (63 - i) as IdCount);
+		return `${name}${emptyId}` as PieceId;
 	};
 
 	public getPieceArray = (): Piece[] => {

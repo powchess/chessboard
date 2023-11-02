@@ -24,15 +24,8 @@ export default class Chessboard {
 
 	constructor(cfg?: ChessboardConfig | undefined) {
 		this.state = new State(cfg);
-		// if (this.state.board.startFen) this.updatePiecesWithFen(this.state.board.startFen);
-		// if (this.state.board.startFen === defaultFEN)
-		// 	this.updatePiecesWithFen(this.state.board.startFen);
 		this.state.pieces.initPieces(this.state.board.startFen ?? defaultFEN);
 	}
-
-	// private setDefaultFENWithSkins = () => {
-	// 	this.state.pieces;
-	// };
 
 	private changeLegalHoverIfNeeded = (newSquare: Square) => {
 		if (newSquare.color !== 'LEGAL' && newSquare.color !== 'PREMOVE') return;
@@ -123,23 +116,10 @@ export default class Chessboard {
 	};
 
 	public setPiece = (square: ChessSquare, name: ChessPiece) => {
-		// const piece = this.state.pieces.find((p) => p.square === square);
-		// if (!Chessboard.isValidThing({ square, piece: name })) return;
-		// const piece = this.state.pieces.find((p) => p.square === square);
-		// if (piece) piece.name = name;
-		// else this.state.pieces.push({ square, name });
-
 		this.state.pieces.setPiece(square, name);
 	};
 
 	public removePiece = (square: ChessSquare) => {
-		// if (!Chessboard.isValidThing({ square })) return undefined;
-		// let cachedPiece: Piece | undefined;
-		// this.state.pieces.forEach((element, i) => {
-		// 	if (element.square === square) {
-		// 		[cachedPiece] = [...this.state.pieces.splice(i, 1)];
-		// 	}
-		// });
 		return this.state.pieces.removePieceBySquare(square);
 	};
 
@@ -162,28 +142,6 @@ export default class Chessboard {
 	};
 
 	public makeMove = (move: string): void => {
-		// if (!Chessboard.isValidThing({ move })) return;
-
-		// const startSQ = <ChessSquare>move.substring(0, 2);
-		// const endSQ = <ChessSquare>move.substring(2, 4);
-		// const promPiece = move.substring(4);
-
-		// let moveSuccessful = false;
-		// const cachedPiece = this.removePiece(endSQ);
-
-		// this.state.pieces.forEach((piece: Piece) => {
-		// 	if (piece.square === startSQ) {
-		// 		piece.square = endSQ;
-		// 		moveSuccessful = true;
-
-		// 		if (promPiece) piece.name = (piece.name[0] + promPiece.toUpperCase()) as ChessPiece;
-		// 	}
-		// });
-
-		// if (!moveSuccessful) {
-		// 	if (cachedPiece) this.state.pieces.push(cachedPiece);
-		// } else this.state.legal.lastMove = move;
-
 		this.state.pieces.makeMove(move);
 	};
 
@@ -258,18 +216,10 @@ export default class Chessboard {
 	// };
 
 	public getWhiteKingSquare(): ChessSquare | undefined {
-		// const king = this.state.pieces.find((piece) => piece.name === 'wK');
-		// if (king) return king.square;
-		// return undefined;
-
 		return this.state.pieces.idMap.get('wK0')?.square;
 	}
 
 	public getBlackKingSquare(): ChessSquare | undefined {
-		// const king = this.state.pieces.find((piece) => piece.name === 'bK');
-		// if (king) return king.square;
-		// return undefined;
-
 		return this.state.pieces.idMap.get('bK0')?.square;
 	}
 
