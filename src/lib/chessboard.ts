@@ -145,28 +145,45 @@ export default class Chessboard {
 		this.state.pieces.makeMove(move);
 	};
 
-	public updatePiecesWithFen = (fen: string): void => {
-		if (this.state.board.skins.enabled) throw new Error('Cannot update pieces with skins enabled');
+	public updatePieces(pieces: Piece[]): void;
+	public updatePieces(fen: string): void;
+	public updatePieces(piecesOrFen: string | Piece[]): void {
+		if (this.state.board.skins.enabled && typeof piecesOrFen === 'string')
+			throw new Error('Cannot update pieces with skins enabled');
 
-		const newPieces = new Pieces({ startFen: fen });
+		const newPieces =
+			typeof piecesOrFen === 'string' ? new Pieces(piecesOrFen) : new Pieces(piecesOrFen);
 
 		const piecesDeleted: Piece[] = [];
 		const piecesAdded: Piece[] = [];
 
-		this.state.pieces.idMap.forEach((piece) => {
-			const newPiece = newPieces.squareMap.get(piece.square);
-			if (!newPiece || newPiece.name !== piece.name) piecesDeleted.push(piece);
-		});
-
-		newPieces.idMap.forEach((piece) => {
-			const oldPiece = this.state.pieces.squareMap.get(piece.square);
-			if (!oldPiece || oldPiece.name !== piece.name) piecesAdded.push(piece);
-		});
+		if (typeof piecesOrFen === 'string') {
+			this.state.pieces.idMap.forEach((piece) => {
+				const newPiece = newPieces.squareMap.get(piece.square);
+				if (!newPiece || newPiece.name !== piece.name) piecesDeleted.push(piece);
+			});
+			newPieces.idMap.forEach((piece) => {
+				const oldPiece = this.state.pieces.squareMap.get(piece.square);
+				if (!oldPiece || oldPiece.name !== piece.name) piecesAdded.push(piece);
+			});
+		} else {
+			this.state.pieces.idMap.forEach((piece) => {
+				const newPiece = newPieces.idMap.get(piece.id);
+				if (!newPiece || newPiece.square !== piece.square) piecesDeleted.push(piece);
+			});
+			newPieces.idMap.forEach((piece) => {
+				const oldPiece = this.state.pieces.idMap.get(piece.id);
+				if (!oldPiece || oldPiece.square !== piece.square) piecesAdded.push(piece);
+			});
+		}
 
 		for (let i = 0; i < piecesDeleted.length; i++) {
 			for (let j = 0; j < piecesAdded.length; j++) {
 				if (!piecesAdded[j] || !piecesDeleted[i]) continue;
-				if (piecesAdded[j].name === piecesDeleted[i].name) {
+				if (
+					piecesAdded[j].name === piecesDeleted[i].name &&
+					(typeof piecesOrFen === 'string' || piecesAdded[j].id === piecesDeleted[i].id)
+				) {
 					piecesDeleted[i].square = piecesAdded[j].square;
 					piecesDeleted.splice(i, 1);
 					i--;
@@ -175,15 +192,13 @@ export default class Chessboard {
 				}
 			}
 		}
-
 		piecesAdded.forEach((piece) => {
-			this.state.pieces.setPiece(piece.square, piece.name);
+			this.state.pieces.setPiece(piece);
 		});
-
 		piecesDeleted.forEach((piece) => {
 			this.state.pieces.removePieceBySquare(piece.square);
 		});
-	};
+	}
 
 	public getWhiteKingSquare(): ChessSquare | undefined {
 		return this.state.pieces.idMap.get('wK0')?.square;

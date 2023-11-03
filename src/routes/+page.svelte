@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { Chess, type Move } from 'chess.js';
 	import Chessboard from '$lib/Chessboard.svelte';
-	import { State } from '$lib/state/index.js';
+	import { State, defaultFEN } from '$lib/state/index.js';
 	import type { ChessboardConfig } from '$lib/boardConfig.js';
 	import { browser } from '$app/environment';
 	import Board from '$lib/components/Board.svelte';
@@ -193,7 +193,8 @@
 						// for some reason it doesn't work without !state.legal.enabled,
 						// on:changed event is triggered before the change??
 						chess.reset();
-						if (browser && mounted) chessboard.setFEN?.(state.board.startFen, true, false);
+						if (browser && mounted)
+							chessboard.setPieces?.(state.board.startFen, { deselectPiece: true, sound: false });
 					}
 				}}
 				bind:allowCastling={state.legal.settings.allowCastling}
@@ -212,7 +213,175 @@
 			<div class="w-full lg:w-[calc(70vh*(var(--boardScale,70)/100*0.7+0.3))]">
 				<Chessboard bind:this={chessboard} {config} class="rounded-md" />
 			</div>
-			<div class="row-start-2 relative">
+			<button
+				on:click={() => {
+					chessboard.setPieces([
+						{
+							id: 'bR0',
+							square: 'a8',
+							name: 'bR'
+						},
+						{
+							id: 'bN0',
+							square: 'b8',
+							name: 'bN'
+						},
+						{
+							id: 'bB0',
+							square: 'c8',
+							name: 'bB'
+						},
+						{
+							id: 'bQ0',
+							square: 'd8',
+							name: 'bQ'
+						},
+						{
+							id: 'bK0',
+							square: 'e8',
+							name: 'bK'
+						},
+						{
+							id: 'bB1',
+							square: 'f8',
+							name: 'bB'
+						},
+						{
+							id: 'bN1',
+							square: 'g8',
+							name: 'bN'
+						},
+						{
+							id: 'bR1',
+							square: 'h8',
+							name: 'bR'
+						},
+						{
+							id: 'bP0',
+							square: 'a7',
+							name: 'bP'
+						},
+						{
+							id: 'bP1',
+							square: 'b7',
+							name: 'bP'
+						},
+						{
+							id: 'bP2',
+							square: 'c7',
+							name: 'bP'
+						},
+						{
+							id: 'bP3',
+							square: 'd7',
+							name: 'bP'
+						},
+						{
+							id: 'bP4',
+							square: 'e7',
+							name: 'bP'
+						},
+						{
+							id: 'bP5',
+							square: 'f7',
+							name: 'bP'
+						},
+						{
+							id: 'bP6',
+							square: 'g7',
+							name: 'bP'
+						},
+						{
+							id: 'bP7',
+							square: 'h7',
+							name: 'bP'
+						},
+						{
+							id: 'wP0',
+							square: 'a2',
+							name: 'wP'
+						},
+						{
+							id: 'wP1',
+							square: 'b2',
+							name: 'wP'
+						},
+						{
+							id: 'wP2',
+							square: 'c2',
+							name: 'wP'
+						},
+						{
+							id: 'wP3',
+							square: 'd2',
+							name: 'wP'
+						},
+						{
+							id: 'wP4',
+							square: 'e2',
+							name: 'wP'
+						},
+						{
+							id: 'wP5',
+							square: 'f2',
+							name: 'wP'
+						},
+						{
+							id: 'wP6',
+							square: 'g2',
+							name: 'wP'
+						},
+						{
+							id: 'wP7',
+							square: 'h2',
+							name: 'wP'
+						},
+						{
+							id: 'wR0',
+							square: 'a1',
+							name: 'wR'
+						},
+						{
+							id: 'wN0',
+							square: 'b1',
+							name: 'wN'
+						},
+						{
+							id: 'wB0',
+							square: 'c1',
+							name: 'wB'
+						},
+						{
+							id: 'wQ0',
+							square: 'd1',
+							name: 'wQ'
+						},
+						{
+							id: 'wK0',
+							square: 'e1',
+							name: 'wK'
+						},
+						{
+							id: 'wB1',
+							square: 'f1',
+							name: 'wB'
+						},
+						{
+							id: 'wN1',
+							square: 'g1',
+							name: 'wN'
+						},
+						{
+							id: 'wR1',
+							square: 'h1',
+							name: 'wR'
+						}
+					]);
+				}}
+			>
+				set default fen
+			</button>
+			<!-- <div class="row-start-2 relative">
 				<div class="shadow-lg rounded">
 					<div class="absolute right-2 top-2 flex gap-4">
 						<button
@@ -229,7 +398,7 @@
 					</div>
 					<Prism source={code} language="svelte" />
 				</div>
-			</div>
+			</div> -->
 		</div>
 	</div>
 </div>

@@ -390,11 +390,13 @@
 		}
 	};
 
-	export const setFEN = (
-		fen: string,
-		opts?: { deselectPiece?: boolean; sound?: MoveTypeSound | false }
-	) => {
-		chessboard.updatePiecesWithFen(fen);
+	type SetFenOpts = { deselectPiece?: boolean; sound?: MoveTypeSound | false };
+
+	function setPieces(fen: string, opts?: SetFenOpts): void;
+	function setPieces(pieces: StatePiece[], opts?: SetFenOpts): void;
+	export function setPieces(fenOrPieces: string | StatePiece[], opts?: SetFenOpts): void {
+		if (typeof fenOrPieces === 'string') chessboard.updatePieces(fenOrPieces);
+		else chessboard.updatePieces(fenOrPieces);
 
 		const deselectPiece = opts?.deselectPiece ?? true;
 		const sound = opts?.sound ?? 'MOVE';
@@ -424,7 +426,7 @@
 		updateSelectedPieceHighlight();
 
 		chessboard.state.pieces = chessboard.state.pieces;
-	};
+	}
 
 	export const getShortFEN = () => chessboard.getShortFEN();
 
@@ -671,7 +673,7 @@
 			/>
 		{/if}
 		{#if chessboard.highlightEnabled}
-			{#each [...chessboard.state.markedSquares] as square (square.square)}
+			{#each [...chessboard.state.markedSquares] as square (square)}
 				<Square
 					on:dragenter={(e) => {
 						highlightSquare(e.detail.square, 'LEGALHOVER');

@@ -23,39 +23,56 @@ export class Pieces {
 	// Если фигура съедена, то удаляется из piecesMap. Если фигура превращается, то меняется name и url.
 	// Скины для фигур будут работать если игра была инициализирована с useSkins = true и если startFen = defaultFEN.
 
-	constructor(opts?: { startFen?: string }) {
-		const { startFen } = opts ?? {};
+	constructor(fen?: string);
+	constructor(pieces?: Piece[]);
+	constructor(fenOrPieces?: string | Piece[]) {
+		if (fenOrPieces) {
+			if (typeof fenOrPieces === 'string') {
+				this.initPieces(fenOrPieces);
+			} else {
+				this.clearPieces();
 
-		this.initPieces(startFen ?? defaultFEN);
+				for (const piece of fenOrPieces) {
+					this.idMap.set(piece.id, piece);
+					this.squareMap.set(piece.square, piece);
+				}
+			}
+		} else this.initPieces(defaultFEN);
 	}
 
-	public initPieces = (fen: string) => {
+	public initPieces(fen: string) {
 		this.idMap.clear();
 		this.emptyIdMap.clear();
 
 		this.initFromFen(fen);
-	};
+	}
 
-	public clearPieces = () => {
+	public clearPieces() {
 		this.idMap.clear();
 		this.squareMap.clear();
 		this.emptyIdMap.clear();
-	};
+	}
 
-	public setPiece = (square: ChessSquare, name: ChessPiece) => {
-		const existedPiece = this.squareMap.get(square);
-		if (existedPiece) {
-			this.removePieceById(existedPiece.id);
-		}
-		const id = this.getEmptyId(name);
+	public setPiece(square: ChessSquare, name: ChessPiece): void;
+	public setPiece(piece: Piece): void;
+	public setPiece(squareOrPiece: ChessSquare | Piece, name?: ChessPiece) {
+		let newPiece: Piece;
+		if (typeof squareOrPiece === 'string') {
+			if (!name) return;
+			const square = squareOrPiece;
 
-		const piece = { id, square, name };
+			const id = this.getEmptyId(name);
+			newPiece = { id, square, name };
+		} else newPiece = squareOrPiece;
 
-		this.idMap.set(id, piece);
-		this.squareMap.set(square, piece);
-	};
+		this.removePieceById(newPiece.id);
+		this.removePieceBySquare(newPiece.square);
 
-	public removePieceById = (id: PieceId): Piece | undefined => {
+		this.idMap.set(newPiece.id, newPiece);
+		this.squareMap.set(newPiece.square, newPiece);
+	}
+
+	public removePieceById(id: PieceId): Piece | undefined {
 		const piece = this.idMap.get(id);
 		if (!piece) return undefined;
 
@@ -63,9 +80,9 @@ export class Pieces {
 		this.squareMap.delete(piece.square);
 
 		return piece;
-	};
+	}
 
-	public removePieceBySquare = (square: ChessSquare): Piece | undefined => {
+	public removePieceBySquare(square: ChessSquare): Piece | undefined {
 		const piece = this.squareMap.get(square);
 		if (!piece) return undefined;
 
@@ -73,9 +90,9 @@ export class Pieces {
 		this.squareMap.delete(piece.square);
 
 		return piece;
-	};
+	}
 
-	public makeMove = (move: string): ChessPiece | undefined => {
+	public makeMove(move: string): ChessPiece | undefined {
 		const from = <ChessSquare>move.substring(0, 2);
 		const to = <ChessSquare>move.substring(2, 4);
 		const prom = move.substring(4) as 'q' | 'r' | 'b' | 'n' | '';
@@ -98,9 +115,9 @@ export class Pieces {
 		piece.name = `${piece.name[0]}${prom.toUpperCase()}` as ChessPiece;
 		piece.id = this.getEmptyId(piece.name);
 		this.idMap.set(piece.id, piece);
-	};
+	}
 
-	private initFromFen = (fen: string) => {
+	private initFromFen(fen: string) {
 		const shortFen = fen.split(' ')[0];
 		const rows = shortFen.split('/');
 
@@ -124,19 +141,19 @@ export class Pieces {
 				}
 			}
 		}
-	};
+	}
 
-	private getEmptyId = (name: ChessPiece): PieceId => {
+	private getEmptyId(name: ChessPiece): PieceId {
 		const emptyId = this.emptyIdMap.get(name) ?? 0;
 
 		this.emptyIdMap.set(name, (emptyId + 1) as IdCount);
 
 		return `${name}${emptyId}` as PieceId;
-	};
+	}
 
-	public getPieceArray = (): Piece[] => {
+	public getPieceArray(): Piece[] {
 		return Array.from(this.idMap.values());
-	};
+	}
 
 	public get size(): number {
 		return this.idMap.size;
