@@ -1,10 +1,17 @@
-import type { BoardTheme, ChessboardConfig, PiecesTheme } from '$lib/boardConfig.js';
+import type { BoardTheme, ChessboardConfig } from '$lib/boardConfig.js';
 import { defaultFEN } from '$lib/state/index.js';
+import type { PieceId } from './piece.js';
 
+export type PieceSkins = {
+	[K in PieceId]?: string;
+};
 export default class BoardState {
 	public boardTheme: BoardTheme;
 
-	public piecesTheme: PiecesTheme;
+	public skins: {
+		enabled: boolean;
+		urls: PieceSkins;
+	};
 
 	public mouseEvents: boolean;
 
@@ -22,7 +29,10 @@ export default class BoardState {
 
 	public defaultState = {
 		boardTheme: 'standard',
-		piecesTheme: 'standard',
+		skins: {
+			enabled: false,
+			urls: {}
+		},
 		mouseEvents: true,
 		flipped: false,
 		notation: true,
@@ -35,7 +45,7 @@ export default class BoardState {
 
 	constructor(config?: ChessboardConfig['board']) {
 		this.boardTheme = this.defaultState.boardTheme;
-		this.piecesTheme = this.defaultState.piecesTheme;
+		this.skins = this.defaultState.skins;
 		this.mouseEvents = this.defaultState.mouseEvents;
 		this.flipped = this.defaultState.flipped;
 		this.notation = this.defaultState.notation;
@@ -50,21 +60,22 @@ export default class BoardState {
 
 	public setConfigSettings = (config?: ChessboardConfig['board']) => {
 		if (config !== undefined) {
-			if (config.boardTheme !== undefined) this.boardTheme = config.boardTheme;
-			if (config.piecesTheme !== undefined) this.piecesTheme = config.piecesTheme;
-			if (config.mouseEvents !== undefined) this.mouseEvents = config.mouseEvents;
-			if (config.flipped !== undefined) this.flipped = config.flipped;
-			if (config.notation !== undefined) this.notation = config.notation;
-			if (config.startFen !== undefined) this.startFen = config.startFen;
-			if (config.scale !== undefined) this.scale = config.scale;
-			if (config.resizible !== undefined) this.resizible = config.resizible;
+			this.boardTheme = config?.boardTheme ?? this.boardTheme;
+			this.skins.enabled = config?.skins?.enabled ?? this.skins.enabled;
+			this.skins.urls = config?.skins?.urls ?? this.skins.urls;
+			this.mouseEvents = config?.mouseEvents ?? this.mouseEvents;
+			this.flipped = config?.flipped ?? this.flipped;
+			this.notation = config?.notation ?? this.notation;
+			this.startFen = config?.startFen ?? this.startFen;
+			this.scale = config?.scale ?? this.scale;
+			this.resizible = config?.resizible ?? this.resizible;
 		}
 	};
 
 	public getConfig = () => {
 		const cfg = {
 			...(this.boardTheme !== this.defaultState.boardTheme && { boardTheme: this.boardTheme }),
-			...(this.piecesTheme !== this.defaultState.piecesTheme && { piecesTheme: this.piecesTheme }),
+			...(this.skins !== this.defaultState.skins && { piecesTheme: this.skins }),
 			...(this.mouseEvents !== this.defaultState.mouseEvents && { mouseEvents: this.mouseEvents }),
 			...(this.flipped !== this.defaultState.flipped && { flipped: this.flipped }),
 			...(this.notation !== this.defaultState.notation && { notation: this.notation }),

@@ -13,9 +13,10 @@
 	import darkBlueBoard from './assets/boards/darkBlue.svg';
 	import Resizing from './Resizing.svelte';
 	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
-	import type { State, Piece as StatePiece } from './state/index.js';
+	import type { State } from './state/index.js';
 	import { squareColorToString, type SquareType } from './enums.js';
 	import { fitSize } from './fitSize.js';
+	import type { Piece as StatePiece } from './state/piece.js';
 
 	export let config: ChessboardConfig;
 	let className: string | undefined | null = undefined;
@@ -389,12 +390,17 @@
 		}
 	};
 
-	export const setFEN = (
-		fen: string,
-		deselectPiece = true,
-		sound: MoveTypeSound | false = 'MOVE'
-	) => {
-		chessboard.updatePiecesWithFen(fen);
+	type SetFenOpts = { deselectPiece?: boolean; sound?: MoveTypeSound | false };
+
+	function setPieces(fen: string, opts?: SetFenOpts): void;
+	function setPieces(pieces: StatePiece[], opts?: SetFenOpts): void;
+	export function setPieces(fenOrPieces: string | StatePiece[], opts?: SetFenOpts): void {
+		if (typeof fenOrPieces === 'string') chessboard.updatePieces(fenOrPieces);
+		else chessboard.updatePieces(fenOrPieces);
+
+		const deselectPiece = opts?.deselectPiece ?? true;
+		const sound = opts?.sound ?? 'MOVE';
+
 		if (deselectPiece) {
 			deselect();
 		}
@@ -420,7 +426,7 @@
 		updateSelectedPieceHighlight();
 
 		chessboard.state.pieces = chessboard.state.pieces;
-	};
+	}
 
 	export const getShortFEN = () => chessboard.getShortFEN();
 
@@ -435,7 +441,7 @@
 		if (!scale || chessboard.state.board.scale === scale) return;
 
 		chessboard.state.board.scale = scale;
-		dispatch('resize', { scale: scale });
+		dispatch('resize', { scale });
 
 		if (mounted && chessboard.state.board.resizible)
 			document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
@@ -598,7 +604,7 @@
 	});
 </script>
 
-<div class="boardWrapper {className}">
+<div class="boardWrapper">
 	<div
 		role="button"
 		tabindex="0"
@@ -619,7 +625,9 @@
 			dispatch('drawCircle', { square: e.detail.square, color: e.detail.color })}
 		on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 		bind:this={boardDiv}
-		class="board text-sm{!chessboard.legalEnabled && chessboard.selectedPiece ? ' pointer' : ''}"
+		class="board text-sm{!chessboard.legalEnabled && chessboard.selectedPiece
+			? ' pointer'
+			: ''} {className}"
 		style="
 		--boardTheme: url({chessboard.state.board.boardTheme === 'standard'
 			? standardBoard
@@ -627,10 +635,10 @@
 	>
 		<div style="width: 100%; height: 100%" class={whoCanMove(chessboard.whiteToMove)}>
 			{#if chessboard.state.board.startFen}
-				{#each chessboard.state.pieces as piece (piece)}
+				{#each chessboard.state.pieces.idMap.values() as piece (piece.id)}
 					<Piece
-						square={piece.square}
-						name={piece.name}
+						{...piece}
+						skins={chessboard.state.board.skins}
 						boardSize={chessboard.state.board.size}
 						mouseEvents={chessboard.state.board.mouseEvents}
 						draggableState={chessboard.state.draggable}
@@ -659,9 +667,9 @@
 		{#if chessboard.ghostPiece}
 			<Piece
 				isGhost={true}
+				skins={chessboard.state.board.skins}
 				boardSize={chessboard.state.board.size}
-				square={chessboard.ghostPiece.square}
-				name={chessboard.ghostPiece.name}
+				{...chessboard.ghostPiece}
 				getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
 				flipped={chessboard.flipped}
 			/>
@@ -706,9 +714,15 @@
 		{#if chessboard.legalEnabled}
 			<PromotionModal bind:this={promotionModal} on:newPromotion={handlePromotion} />
 		{/if}
-	</div>
-	<div use:fitSize class="layer-1">
-		<slot name="layer-1" />
+		<div class="layer-1">
+			<slot name="layer-1" />
+		</div>
+		<div class="layer-2">
+			<slot name="layer-2" />
+		</div>
+		<div class="layer-3">
+			<slot name="layer-3" />
+		</div>
 	</div>
 </div>
 
@@ -730,6 +744,7 @@
 		align-items: center;
 		justify-content: center;
 		position: relative;
+		z-index: 0;
 	}
 	.board {
 		-webkit-touch-callout: none; /* iOS Safari */
@@ -749,7 +764,6 @@
 		font-size: 0.75rem;
 		line-height: 1rem;
 		cursor: default;
-		border-radius: inherit;
 	}
 
 	.pointer {
@@ -763,14 +777,24 @@
 		}
 	}
 
-	.layer-1 {
+	.layer-1,
+	.layer-2,
+	.layer-3 {
 		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		z-index: 4;
 		pointer-events: none;
-		z-index: 5;
 		border-radius: inherit;
-		overflow: hidden;
+	}
+
+	.layer-2 {
+		z-index: 5;
+	}
+
+	.layer-3 {
+		z-index: 6;
 	}
 </style>

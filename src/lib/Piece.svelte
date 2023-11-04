@@ -4,11 +4,13 @@
 	import * as easingFuncs from 'svelte/easing';
 	import drag from './draggable.js';
 	import type { ChessPiece, ChessSquare } from './chessTypes.js';
-	import type { Piece } from './state/index.js';
 	import './assets/pieces.css';
 	import type DraggableState from './state/draggable.js';
 	import type MovableState from './state/movable.js';
+	import type { Piece, PieceId } from './state/piece.js';
+	import type BoardState from './state/board.js';
 
+	export let id: PieceId;
 	export let square: ChessSquare;
 	export let name: ChessPiece;
 	export let mouseEvents = true;
@@ -17,6 +19,7 @@
 	export let isGhost = false;
 
 	export let boardSize: number;
+	export let skins: BoardState['skins'];
 
 	if (isGhost) mouseEvents = false;
 
@@ -133,7 +136,10 @@
 	on:squareover={(e) => {
 		dispatch('squareover', e.detail);
 	}}
-	style="translate: {$coords.x}px {$coords.y}px;{$coords.scale !== 1
+	{id}
+	style="{skins.enabled && skins.urls[id]
+		? `background: url(${skins.urls[id]}); `
+		: ''}translate: {$coords.x}px {$coords.y}px;{$coords.scale !== 1
 		? ` scale: ${$coords.scale}`
 		: ''}"
 	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost
