@@ -136,6 +136,7 @@
 	on:squareover={(e) => {
 		dispatch('squareover', e.detail);
 	}}
+	{id}
 	style="{skins.enabled && skins.urls[id]
 		? `background: url(${skins.urls[id]}); `
 		: ''}translate: {$coords.x}px {$coords.y}px;{$coords.scale !== 1
