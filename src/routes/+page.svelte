@@ -134,14 +134,14 @@
 		const resultString = `\
 <script${ts ? ' lang="ts"' : ''}>
 	import Chessboard${ts ? ', { type ChessboardConfig }' : ''} from '@powchess/chessboard';${
-			needColorImport() && ts ? importColor : ''
-		}${
-			state.legal.enabled
-				? ts
-					? "\n\timport { Chess, type Move } from 'chess.js';"
-					: "\n\timport { Chess } from 'chess.js';"
-				: ''
-		}${state.legal.enabled ? '\n\n\tconst chess = new Chess();' : ''}
+		needColorImport() && ts ? importColor : ''
+	}${
+		state.legal.enabled
+			? ts
+				? "\n\timport { Chess, type Move } from 'chess.js';"
+				: "\n\timport { Chess } from 'chess.js';"
+			: ''
+	}${state.legal.enabled ? '\n\n\tconst chess = new Chess();' : ''}
 
 	const config${ts ? ': ChessboardConfig' : ''} = ${configString};
 <\/script>

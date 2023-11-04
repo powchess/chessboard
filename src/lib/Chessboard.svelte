@@ -441,7 +441,7 @@
 		if (!scale || chessboard.state.board.scale === scale) return;
 
 		chessboard.state.board.scale = scale;
-		dispatch('resize', { scale: scale });
+		dispatch('resize', { scale });
 
 		if (mounted && chessboard.state.board.resizible)
 			document.body.style.setProperty('--boardScale', `${chessboard.state.board.scale}`);
