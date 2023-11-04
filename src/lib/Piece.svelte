@@ -9,6 +9,7 @@
 	import type MovableState from './state/movable.js';
 	import type { Piece, PieceId } from './state/piece.js';
 	import type BoardState from './state/board.js';
+	import { browser } from '$app/environment';
 
 	export let id: PieceId;
 	export let square: ChessSquare;
@@ -108,6 +109,16 @@
 	const curPieceIsNotSelectedPiece = (piece: Piece | undefined) =>
 		piece === undefined || piece.name !== name || piece.square !== square;
 
+	let url: string | undefined = undefined;
+
+	if (browser && skins.enabled && skins.urls[id]) {
+		let image = new Image();
+		image.src = skins.urls[id]!;
+		image.onload = () => {
+			url = skins.urls[id];
+		};
+	}
+
 	onMount(() => {
 		mounted = true;
 	});
@@ -136,8 +147,8 @@
 	on:squareover={(e) => {
 		dispatch('squareover', e.detail);
 	}}
-	style="{skins.enabled && skins.urls[id]
-		? `background: url(${skins.urls[id]}); `
+	style="{skins.enabled && url
+		? `background: url(${url}); `
 		: ''}translate: {$coords.x}px {$coords.y}px;{$coords.scale !== 1
 		? ` scale: ${$coords.scale}`
 		: ''}"
