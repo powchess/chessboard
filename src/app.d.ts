@@ -20,3 +20,5 @@ declare namespace svelteHTML {
 		'on:newsize'?: (e: CustomEvent) => void;
 	}
 }
+
+declare module 'prismjs'

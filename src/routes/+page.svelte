@@ -1,5 +1,6 @@
 <script lang="ts">
-	import Prism from 'svelte-prism';
+	import Prism from 'prismjs';
+	import 'prism-svelte';
 	import { onMount } from 'svelte';
 	import { Chess, type Move } from 'chess.js';
 	import Chessboard from '$lib/Chessboard.svelte';
@@ -117,7 +118,7 @@
 
 		configString = configString
 			.replace(/"([^"]+)":/g, '$1:')
-			.replaceAll('\n', '\n\t')
+			.replaceAll('\n', '\n\t\t')
 			.replace('"{functions}"', ts ? callbacksTS : callbacksJS);
 
 		const importColor = "\n\timport { Color } from '@powchess/chessboard/enums';";
@@ -131,22 +132,22 @@
 		}
 
 		/* eslint-disable no-useless-escape */
-		const resultString = `\
-<script${ts ? ' lang="ts"' : ''}>
-	import Chessboard${ts ? ', { type ChessboardConfig }' : ''} from '@powchess/chessboard';${
-		needColorImport() && ts ? importColor : ''
-	}${
-		state.legal.enabled
-			? ts
-				? "\n\timport { Chess, type Move } from 'chess.js';"
-				: "\n\timport { Chess } from 'chess.js';"
-			: ''
-	}${state.legal.enabled ? '\n\n\tconst chess = new Chess();' : ''}
+		const resultString = `
+    <script${ts ? ' lang="ts"' : ''}> 
+        import Chessboard${ts ? ', { type ChessboardConfig }' : ''} from '@powchess/chessboard';${
+					needColorImport() && ts ? importColor : ''
+				}${
+					state.legal.enabled
+						? ts
+							? "\n\t\timport { Chess, type Move } from 'chess.js';"
+							: "\n\t\timport { Chess } from 'chess.js';"
+						: ''
+				}${state.legal.enabled ? '\n\n\t\tconst chess = new Chess();' : ''}
 
-	const config${ts ? ': ChessboardConfig' : ''} = ${configString};
-<\/script>
+        const config${ts ? ': ChessboardConfig' : ''} = ${configString};
+    <\/script>
 
-<Chessboard {config} className="rounded-md" />`;
+    <Chessboard {config} className="rounded-md" />`;
 
 		return resultString;
 	};
@@ -221,7 +222,12 @@
 						</button>
 						<CopyButton copyText={code} />
 					</div>
-					<Prism source={code} language="svelte" />
+					<pre>
+                        <code>
+                            <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+                            {@html Prism.highlight(code, Prism.languages.svelte, 'svelte')}
+                        </code>
+					</pre>
 				</div>
 			</div>
 		</div>
