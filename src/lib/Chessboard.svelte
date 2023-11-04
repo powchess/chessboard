@@ -604,7 +604,7 @@
 	});
 </script>
 
-<div class="boardWrapper {className}">
+<div class="boardWrapper">
 	<div
 		role="button"
 		tabindex="0"
@@ -625,7 +625,9 @@
 			dispatch('drawCircle', { square: e.detail.square, color: e.detail.color })}
 		on:drawArrow={(e) => dispatch('drawArrow', { move: e.detail.move, color: e.detail.color })}
 		bind:this={boardDiv}
-		class="board text-sm{!chessboard.legalEnabled && chessboard.selectedPiece ? ' pointer' : ''}"
+		class="board text-sm{!chessboard.legalEnabled && chessboard.selectedPiece
+			? ' pointer'
+			: ''} {className}"
 		style="
 		--boardTheme: url({chessboard.state.board.boardTheme === 'standard'
 			? standardBoard
@@ -712,9 +714,15 @@
 		{#if chessboard.legalEnabled}
 			<PromotionModal bind:this={promotionModal} on:newPromotion={handlePromotion} />
 		{/if}
-	</div>
-	<div use:fitSize class="layer-1">
-		<slot name="layer-1" />
+		<div class="layer-1">
+			<slot name="layer-1" />
+		</div>
+		<div class="layer-2">
+			<slot name="layer-2" />
+		</div>
+		<div class="layer-3">
+			<slot name="layer-3" />
+		</div>
 	</div>
 </div>
 
@@ -736,6 +744,7 @@
 		align-items: center;
 		justify-content: center;
 		position: relative;
+		z-index: 0;
 	}
 	.board {
 		-webkit-touch-callout: none; /* iOS Safari */
@@ -755,7 +764,6 @@
 		font-size: 0.75rem;
 		line-height: 1rem;
 		cursor: default;
-		border-radius: inherit;
 	}
 
 	.pointer {
@@ -769,14 +777,24 @@
 		}
 	}
 
-	.layer-1 {
+	.layer-1,
+	.layer-2,
+	.layer-3 {
 		position: absolute;
-		left: 50%;
-		top: 50%;
-		transform: translate(-50%, -50%);
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		z-index: 4;
 		pointer-events: none;
-		z-index: 5;
 		border-radius: inherit;
-		overflow: hidden;
+	}
+
+	.layer-2 {
+		z-index: 5;
+	}
+
+	.layer-3 {
+		z-index: 6;
 	}
 </style>
