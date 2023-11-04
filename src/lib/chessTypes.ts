@@ -7,9 +7,10 @@ export type ChessFile = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h';
 export type ChessRank = '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8';
 export type ChessSquare = `${ChessFile}${ChessRank}`;
 export type ChessIndex = TupleToUnion<IndicesTo<8>>;
-type ChessColor = 'w' | 'b';
 type Piece = 'K' | 'Q' | 'R' | 'B' | 'N' | 'P';
-export type ChessPiece = `${ChessColor}${Piece}`;
+export type ChessWhitePiece = `w${Piece}`;
+export type ChessBlackPiece = `b${Piece}`;
+export type ChessPiece = ChessWhitePiece | ChessBlackPiece;
 
 type BoardRank<
 	T extends number = 8,

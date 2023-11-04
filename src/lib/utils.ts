@@ -3,6 +3,12 @@ import type { ChessBoard, ChessFile, ChessIndex, ChessRank, ChessSquare } from '
 const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const;
 const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'] as const;
 
+type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] extends N
+	? Acc[number]
+	: Enumerate<N, [...Acc, Acc['length']]>;
+
+export type IntRange<T extends number> = Exclude<Enumerate<T>, Enumerate<0>>;
+
 export function squareToSQXY(square: ChessSquare) {
 	return { x: files.indexOf(square[0] as ChessFile), y: ranks.indexOf(square[1] as ChessRank) };
 }

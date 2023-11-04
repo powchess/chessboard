@@ -134,14 +134,14 @@
 		const resultString = `\
 <script${ts ? ' lang="ts"' : ''}>
 	import Chessboard${ts ? ', { type ChessboardConfig }' : ''} from '@powchess/chessboard';${
-			needColorImport() && ts ? importColor : ''
-		}${
-			state.legal.enabled
-				? ts
-					? "\n\timport { Chess, type Move } from 'chess.js';"
-					: "\n\timport { Chess } from 'chess.js';"
-				: ''
-		}${state.legal.enabled ? '\n\n\tconst chess = new Chess();' : ''}
+		needColorImport() && ts ? importColor : ''
+	}${
+		state.legal.enabled
+			? ts
+				? "\n\timport { Chess, type Move } from 'chess.js';"
+				: "\n\timport { Chess } from 'chess.js';"
+			: ''
+	}${state.legal.enabled ? '\n\n\tconst chess = new Chess();' : ''}
 
 	const config${ts ? ': ChessboardConfig' : ''} = ${configString};
 <\/script>
@@ -186,7 +186,8 @@
 						// for some reason it doesn't work without !state.legal.enabled,
 						// on:changed event is triggered before the change??
 						chess.reset();
-						if (browser && mounted) chessboard.setFEN?.(state.board.startFen, true, false);
+						if (browser && mounted)
+							chessboard.setPieces?.(state.board.startFen, { deselectPiece: true, sound: false });
 					}
 				}}
 				bind:allowCastling={state.legal.settings.allowCastling}
