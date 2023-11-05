@@ -184,7 +184,7 @@ export default class Chessboard {
 					piecesAdded[j].name === piecesDeleted[i].name &&
 					(typeof piecesOrFen === 'string' || piecesAdded[j].id === piecesDeleted[i].id)
 				) {
-					piecesDeleted[i].square = piecesAdded[j].square;
+					this.state.pieces.makeMove(piecesDeleted[i].square + piecesAdded[j].square);
 					piecesDeleted.splice(i, 1);
 					i--;
 					piecesAdded.splice(j, 1);
