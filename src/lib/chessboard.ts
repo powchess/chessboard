@@ -193,10 +193,18 @@ export default class Chessboard {
 			}
 		}
 		piecesAdded.forEach((piece) => {
-			this.state.pieces.setPiece(piece);
+			if (typeof piecesOrFen === 'string') this.state.pieces.setPiece(piece.square, piece.name);
+			else this.state.pieces.setPiece(piece);
 		});
 		piecesDeleted.forEach((piece) => {
-			this.state.pieces.removePieceBySquare(piece.square);
+			const pieceFromMap = this.state.pieces.squareMap.get(piece.square);
+			if (
+				pieceFromMap &&
+				pieceFromMap.name === piece.name &&
+				pieceFromMap.id === piece.id &&
+				pieceFromMap.square === piece.square
+			)
+				this.state.pieces.removePieceBySquare(piece.square);
 		});
 	}
 
