@@ -16,6 +16,8 @@ export class Pieces {
 
 	public squareMap = new Map<ChessSquare, Piece | undefined>();
 
+	public nameMap = new Map<ChessPiece, Piece[]>();
+
 	private emptyIdMap = new Map<ChessPiece, IdCount[]>();
 
 	constructor(fen?: string);
@@ -41,10 +43,16 @@ export class Pieces {
 		this.initFromFen(fen);
 	}
 
-	public clearPieces() {
-		this.idMap.clear();
-		this.squareMap.clear();
-		this.emptyIdMap.clear();
+	public clearPieces(name?: string) {
+		if (name) {
+			this.idMap.forEach((piece) => {
+				if (piece.name === name) this.removePieceById(piece.id);
+			});
+		} else {
+			this.idMap.clear();
+			this.squareMap.clear();
+			this.emptyIdMap.clear();
+		}
 	}
 
 	public setPiece(square: ChessSquare, name: ChessPiece): void;
@@ -64,6 +72,12 @@ export class Pieces {
 
 		this.idMap.set(newPiece.id, newPiece);
 		this.squareMap.set(newPiece.square, newPiece);
+		if (!this.nameMap.has(newPiece.name)) this.nameMap.set(newPiece.name, []);
+
+		const pieces = this.nameMap.get(newPiece.name);
+		if (!pieces) throw new Error('pieces is undefined');
+
+		pieces.push(newPiece);
 	}
 
 	public removePieceById(id: PieceId): Piece | undefined {
@@ -72,6 +86,11 @@ export class Pieces {
 
 		this.idMap.delete(id);
 		this.squareMap.delete(piece.square);
+
+		const pieces = this.nameMap.get(piece.name);
+		if (!pieces) throw new Error('pieces is undefined');
+
+		pieces.splice(pieces.indexOf(piece), 1);
 		this.clearId(id);
 
 		return piece;
@@ -83,6 +102,11 @@ export class Pieces {
 
 		this.idMap.delete(piece.id);
 		this.squareMap.delete(piece.square);
+
+		const pieces = this.nameMap.get(piece.name);
+		if (!pieces) throw new Error('pieces is undefined');
+
+		pieces.splice(pieces.indexOf(piece), 1);
 		this.clearId(piece.id);
 
 		return piece;
