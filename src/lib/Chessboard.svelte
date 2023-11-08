@@ -270,15 +270,18 @@
 		chessboard.state.markedSquares = chessboard.state.markedSquares;
 	};
 
-	export const removeAllPiece = (): void => {
-		chessboard.clearAllPieces();
+	export const removeAllPiece = (name?: string): void => {
+		chessboard.clearAllPieces(name);
 		chessboard.state.pieces = chessboard.state.pieces;
 	};
 
-	export const createPiece = (square: ChessSquare, piece: ChessPiece): void => {
-		chessboard.setPiece(square, piece);
+	function createPiece(square: ChessSquare, name: ChessPiece): void;
+	function createPiece(piece: StatePiece): void;
+	export function createPiece(squareOrPiece: ChessSquare | StatePiece, name?: ChessPiece) {
+		if (typeof squareOrPiece === 'string' && name) chessboard.setPiece(squareOrPiece, name);
+		else if (typeof squareOrPiece === 'object') chessboard.setPiece(squareOrPiece);
 		chessboard.state.pieces = chessboard.state.pieces;
-	};
+	}
 
 	export const changeColorOfPiece = (square: ChessSquare, color?: 'WHITE' | 'BLACK') => {
 		const piece = chessboard.getPieceFromSquare(square)?.name;
@@ -310,7 +313,6 @@
 			deselect();
 			return;
 		}
-		if (!chessboard.movableEnabled) return;
 
 		const boundingRect = boardDiv.getBoundingClientRect();
 		const x = e.clientX - boundingRect.left;
@@ -320,6 +322,7 @@
 		if (!square) return;
 		const piece = chessboard.getPieceFromSquare(square);
 		dispatch('squareClick', { square, piece: piece?.name });
+		if (!chessboard.movableEnabled) return;
 
 		if (!chessboard.selectableEnabled && !chessboard.draggableEnabled) {
 			deselect();

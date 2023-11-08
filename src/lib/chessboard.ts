@@ -115,16 +115,19 @@ export default class Chessboard {
 			});
 	};
 
-	public setPiece = (square: ChessSquare, name: ChessPiece) => {
-		this.state.pieces.setPiece(square, name);
-	};
+	public setPiece(square: ChessSquare, name: ChessPiece): void;
+	public setPiece(piece: Piece): void;
+	public setPiece(squareOrPiece: ChessSquare | Piece, name?: ChessPiece) {
+		if (typeof squareOrPiece === 'string' && name) this.state.pieces.setPiece(squareOrPiece, name);
+		else if (typeof squareOrPiece !== 'string') this.state.pieces.setPiece(squareOrPiece);
+	}
 
 	public removePiece = (square: ChessSquare) => {
 		return this.state.pieces.removePieceBySquare(square);
 	};
 
-	public clearAllPieces = () => {
-		this.state.pieces.clearPieces();
+	public clearAllPieces = (name?: string) => {
+		this.state.pieces.clearPieces(name);
 	};
 
 	public getGridCoordsFromSquare = (square: ChessSquare): { x: number; y: number } => {
