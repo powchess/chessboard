@@ -16,7 +16,9 @@ export class Pieces {
 
 	public squareMap = new Map<ChessSquare, Piece | undefined>();
 
-	private emptyIdMap = new Map<ChessPiece, IdCount[]>();
+	public nameMap = new Map<ChessPiece, Piece[]>();
+
+	private usedIdMap = new Map<ChessPiece, IdCount[]>();
 
 	constructor(fen?: string);
 	constructor(pieces?: Piece[]);
@@ -35,16 +37,26 @@ export class Pieces {
 		} else this.initPieces(defaultFEN);
 	}
 
-	public initPieces(fen: string) {
+	public initPieces(fen: string): void;
+	public initPieces(pieces: Piece[]): void;
+	public initPieces(fenOrPieces: string | Piece[]) {
 		this.clearPieces();
 
-		this.initFromFen(fen);
+		if (typeof fenOrPieces === 'string') this.initFromFen(fenOrPieces);
+		else this.initFromPieces(fenOrPieces);
 	}
 
-	public clearPieces() {
-		this.idMap.clear();
-		this.squareMap.clear();
-		this.emptyIdMap.clear();
+	public clearPieces(name?: string) {
+		if (name) {
+			this.idMap.forEach((piece) => {
+				if (piece.name === name) this.removePieceById(piece.id);
+			});
+		} else {
+			this.idMap.clear();
+			this.squareMap.clear();
+			this.usedIdMap.clear();
+			this.nameMap.clear();
+		}
 	}
 
 	public setPiece(square: ChessSquare, name: ChessPiece): void;
@@ -57,13 +69,19 @@ export class Pieces {
 
 			const id = this.getEmptyId(name);
 			newPiece = { id, square, name };
-		} else newPiece = squareOrPiece;
+		} else newPiece = { ...squareOrPiece };
 
 		this.removePieceById(newPiece.id);
 		this.removePieceBySquare(newPiece.square);
 
 		this.idMap.set(newPiece.id, newPiece);
 		this.squareMap.set(newPiece.square, newPiece);
+		if (!this.nameMap.has(newPiece.name)) this.nameMap.set(newPiece.name, []);
+
+		const pieces = this.nameMap.get(newPiece.name);
+		if (!pieces) throw new Error('pieces is undefined');
+
+		pieces.push(newPiece);
 	}
 
 	public removePieceById(id: PieceId): Piece | undefined {
@@ -72,6 +90,11 @@ export class Pieces {
 
 		this.idMap.delete(id);
 		this.squareMap.delete(piece.square);
+
+		const pieces = this.nameMap.get(piece.name);
+		if (!pieces) throw new Error('pieces is undefined');
+
+		pieces.splice(pieces.indexOf(piece), 1);
 		this.clearId(id);
 
 		return piece;
@@ -83,6 +106,11 @@ export class Pieces {
 
 		this.idMap.delete(piece.id);
 		this.squareMap.delete(piece.square);
+
+		const pieces = this.nameMap.get(piece.name);
+		if (!pieces) throw new Error('pieces is undefined');
+
+		pieces.splice(pieces.indexOf(piece), 1);
 		this.clearId(piece.id);
 
 		return piece;
@@ -139,31 +167,39 @@ export class Pieces {
 		}
 	}
 
+	private initFromPieces(pieces: Piece[]) {
+		for (const piece of pieces) {
+			if (!this.usedIdMap.has(piece.name)) this.usedIdMap.set(piece.name, []);
+			this.usedIdMap
+				.get(piece.name)
+				?.push(parseInt(piece.id.substring(2, piece.id.length), 10) as IdCount);
+			this.setPiece(piece);
+		}
+		for (const [, ids] of this.usedIdMap) {
+			ids.sort((a, b) => a - b);
+		}
+	}
+
 	private getEmptyId = (name: ChessPiece): PieceId => {
-		if (!this.emptyIdMap.has(name)) this.emptyIdMap.set(name, Pieces.getFilledStackWithIds());
+		if (!this.usedIdMap.has(name)) this.usedIdMap.set(name, []);
 
-		const ids = this.emptyIdMap.get(name);
-		if (!ids) throw new Error('ids is undefined');
+		const usedIds = this.usedIdMap.get(name);
+		if (!usedIds) throw new Error('usedIds is undefined');
 
-		const id = ids.pop();
+		const id = usedIds.length === 0 ? 0 : ((usedIds[usedIds.length - 1] + 1) as IdCount);
 		if (id === undefined) throw new Error('id is undefined');
+		usedIds.push(id);
 
 		return `${name}${id}`;
 	};
 
 	private clearId = (id: PieceId) => {
 		const name = id.substring(0, 2) as ChessPiece;
-		const ids = this.emptyIdMap.get(name);
+		const ids = this.usedIdMap.get(name);
 
 		if (!ids) throw new Error(`emptyIdMap has no name ${name}`);
 
-		ids.push(parseInt(id.substring(2, id.length), 10) as IdCount);
-	};
-
-	private static getFilledStackWithIds = (): IdCount[] => {
-		return Array(64)
-			.fill(0)
-			.map((_, i) => (63 - i) as IdCount);
+		ids.splice(ids.indexOf(parseInt(id.substring(2, id.length), 10) as IdCount), 1);
 	};
 
 	public getPieceArray(): Piece[] {

@@ -21,4 +21,4 @@ declare namespace svelteHTML {
 	}
 }
 
-declare module 'prismjs'
+declare module 'prismjs';
