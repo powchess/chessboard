@@ -11,7 +11,7 @@ export type Piece = {
 	name: ChessPiece;
 };
 
-export class Pieces {
+export default class Pieces {
 	public idMap = new Map<PieceId, Piece>();
 
 	public squareMap = new Map<ChessSquare, Piece | undefined>();

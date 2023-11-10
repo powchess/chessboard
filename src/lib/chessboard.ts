@@ -4,7 +4,7 @@ import { State, type Square, defaultFEN } from './state/index.js';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils.js';
 import type { ChessboardConfig } from './boardConfig.js';
 import type { SquareType } from './enums.js';
-import { Pieces, type Piece } from './state/piece.js';
+import Pieces, { type Piece } from './state/piece.js';
 
 const emptyFEN = '8/8/8/8/8/8/8/8 w - - 0 1';
 

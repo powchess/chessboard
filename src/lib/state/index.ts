@@ -10,7 +10,7 @@ import DrawToolsState from './drawTools.js';
 import SoundsState from './sounds.js';
 import type { SquareType } from '$lib/enums.js';
 import Callbacks from './callbacks.js';
-import { Pieces, type Piece } from './piece.js';
+import Pieces, { type Piece } from './piece.js';
 
 export const defaultFEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
