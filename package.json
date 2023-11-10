@@ -1,7 +1,7 @@
 {
 	"name": "@powchess/chessboard",
 	"private": false,
-	"version": "1.4.4",
+	"version": "1.4.5",
 	"description": "Chessboard UI Package for PowChess.com",
 	"repository": {
 		"type": "git",
@@ -68,7 +68,8 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"svelte": "./dist/index.js"
+			"svelte": "./dist/index.js",
+			"default": "./dist/index.js"
 		}
 	},
 	"peerDependencies": {
