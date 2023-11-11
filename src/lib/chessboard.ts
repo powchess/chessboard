@@ -154,60 +154,42 @@ export default class Chessboard {
 		if (this.state.board.skins.enabled && typeof piecesOrFen === 'string')
 			throw new Error('Cannot update pieces with skins enabled');
 
-		const newPieces =
-			typeof piecesOrFen === 'string' ? new Pieces(piecesOrFen) : new Pieces(piecesOrFen);
+		if (typeof piecesOrFen !== 'string') {
+			this.state.pieces.initPieces(piecesOrFen);
+			return;
+		}
+
+		const newPieces = new Pieces(piecesOrFen);
 
 		const piecesDeleted: Piece[] = [];
 		const piecesAdded: Piece[] = [];
 
-		if (typeof piecesOrFen === 'string') {
-			this.state.pieces.idMap.forEach((piece) => {
-				const newPiece = newPieces.squareMap.get(piece.square);
-				if (!newPiece || newPiece.name !== piece.name) piecesDeleted.push(piece);
-			});
-			newPieces.idMap.forEach((piece) => {
-				const oldPiece = this.state.pieces.squareMap.get(piece.square);
-				if (!oldPiece || oldPiece.name !== piece.name) piecesAdded.push(piece);
-			});
-		} else {
-			this.state.pieces.idMap.forEach((piece) => {
-				const newPiece = newPieces.idMap.get(piece.id);
-				if (!newPiece || newPiece.square !== piece.square) piecesDeleted.push(piece);
-			});
-			newPieces.idMap.forEach((piece) => {
-				const oldPiece = this.state.pieces.idMap.get(piece.id);
-				if (!oldPiece || oldPiece.square !== piece.square) piecesAdded.push(piece);
-			});
-		}
-
-		for (let i = 0; i < piecesDeleted.length; i++) {
-			for (let j = 0; j < piecesAdded.length; j++) {
-				if (!piecesAdded[j] || !piecesDeleted[i]) continue;
-				if (
-					piecesAdded[j].name === piecesDeleted[i].name &&
-					(typeof piecesOrFen === 'string' || piecesAdded[j].id === piecesDeleted[i].id)
-				) {
-					this.state.pieces.makeMove(piecesDeleted[i].square + piecesAdded[j].square);
-					piecesDeleted.splice(i, 1);
-					i--;
-					piecesAdded.splice(j, 1);
-					j--;
-				}
-			}
-		}
-		piecesAdded.forEach((piece) => {
-			if (typeof piecesOrFen === 'string') this.state.pieces.setPiece(piece.square, piece.name);
-			else this.state.pieces.setPiece(piece);
+		this.state.pieces.idMap.forEach((piece) => {
+			const newPiece = newPieces.squareMap.get(piece.square);
+			if (!newPiece || newPiece.name !== piece.name) piecesDeleted.push(piece);
 		});
+
 		piecesDeleted.forEach((piece) => {
-			const pieceFromMap = this.state.pieces.squareMap.get(piece.square);
-			if (
-				pieceFromMap &&
-				pieceFromMap.name === piece.name &&
-				pieceFromMap.id === piece.id &&
-				pieceFromMap.square === piece.square
-			)
-				this.state.pieces.removePieceBySquare(piece.square);
+			this.state.pieces.removePieceById(piece.id);
+		});
+
+		newPieces.idMap.forEach((piece) => {
+			const oldPiece = this.state.pieces.squareMap.get(piece.square);
+			if (!oldPiece || oldPiece.name !== piece.name) {
+				for (let i = 0; i < piecesDeleted.length; i++) {
+					if (piecesDeleted[i].name !== piece.name) continue;
+
+					piecesDeleted[i].square = piece.square;
+					this.state.pieces.setPiece(piecesDeleted[i]);
+					piecesDeleted.splice(i, 1);
+					return;
+				}
+				piecesAdded.push(piece);
+			}
+		});
+
+		piecesAdded.forEach((piece) => {
+			this.state.pieces.setPiece(piece.square, piece.name);
 		});
 	}
 

@@ -24,24 +24,14 @@ export default class Pieces {
 	constructor(pieces?: Piece[]);
 	constructor(fenOrPieces?: string | Piece[]) {
 		if (fenOrPieces) {
-			if (typeof fenOrPieces === 'string') {
-				this.initPieces(fenOrPieces);
-			} else {
-				this.clearPieces();
-
-				for (const piece of fenOrPieces) {
-					this.idMap.set(piece.id, piece);
-					this.squareMap.set(piece.square, piece);
-				}
-			}
+			if (typeof fenOrPieces === 'string') this.initPieces(fenOrPieces);
+			else this.initPieces(fenOrPieces);
 		} else this.initPieces(defaultFEN);
 	}
 
 	public initPieces(fen: string): void;
 	public initPieces(pieces: Piece[]): void;
 	public initPieces(fenOrPieces: string | Piece[]) {
-		this.clearPieces();
-
 		if (typeof fenOrPieces === 'string') this.initFromFen(fenOrPieces);
 		else this.initFromPieces(fenOrPieces);
 	}
@@ -69,19 +59,31 @@ export default class Pieces {
 
 			const id = this.getEmptyId(name);
 			newPiece = { id, square, name };
-		} else newPiece = { ...squareOrPiece };
+		} else {
+			newPiece = { ...squareOrPiece };
+		}
 
 		this.removePieceById(newPiece.id);
 		this.removePieceBySquare(newPiece.square);
 
 		this.idMap.set(newPiece.id, newPiece);
 		this.squareMap.set(newPiece.square, newPiece);
+
 		if (!this.nameMap.has(newPiece.name)) this.nameMap.set(newPiece.name, []);
 
 		const pieces = this.nameMap.get(newPiece.name);
 		if (!pieces) throw new Error('pieces is undefined');
 
 		pieces.push(newPiece);
+
+		if (!this.usedIdMap.has(newPiece.name)) this.usedIdMap.set(newPiece.name, []);
+		const usedIds = this.usedIdMap.get(newPiece.name);
+		if (!usedIds) throw new Error('usedIds is undefined');
+		const id = parseInt(newPiece.id.substring(2, newPiece.id.length), 10) as IdCount;
+		if (!usedIds.includes(id)) {
+			usedIds.push(id);
+			usedIds.sort((a, b) => a - b);
+		}
 	}
 
 	public removePieceById(id: PieceId): Piece | undefined {
@@ -136,12 +138,20 @@ export default class Pieces {
 		if (!prom) return;
 
 		this.idMap.delete(piece.id);
+
+		const pieces = this.nameMap.get(piece.name);
+		if (!pieces) throw new Error('pieces is undefined');
+		pieces.splice(pieces.indexOf(piece), 1);
+
 		piece.name = `${piece.name[0]}${prom.toUpperCase()}` as ChessPiece;
+		this.clearId(piece.id);
 		piece.id = this.getEmptyId(piece.name);
 		this.idMap.set(piece.id, piece);
 	}
 
 	private initFromFen(fen: string) {
+		this.clearPieces();
+
 		const shortFen = fen.split(' ')[0];
 		const rows = shortFen.split('/');
 
@@ -168,12 +178,11 @@ export default class Pieces {
 	}
 
 	private initFromPieces(pieces: Piece[]) {
+		this.clearPieces();
+
 		for (const piece of pieces) {
-			if (!this.usedIdMap.has(piece.name)) this.usedIdMap.set(piece.name, []);
-			this.usedIdMap
-				.get(piece.name)
-				?.push(parseInt(piece.id.substring(2, piece.id.length), 10) as IdCount);
-			this.setPiece(piece);
+			const newPiece = { ...piece };
+			this.setPiece(newPiece);
 		}
 		for (const [, ids] of this.usedIdMap) {
 			ids.sort((a, b) => a - b);
@@ -202,10 +211,6 @@ export default class Pieces {
 		ids.splice(ids.indexOf(parseInt(id.substring(2, id.length), 10) as IdCount), 1);
 	};
 
-	public getPieceArray(): Piece[] {
-		return Array.from(this.idMap.values());
-	}
-
 	public get size(): number {
 		return this.idMap.size;
 	}
@@ -213,4 +218,8 @@ export default class Pieces {
 	public forEach: typeof this.idMap.forEach = (...props) => {
 		this.idMap.forEach(...props);
 	};
+
+	public getPieceArray(): Piece[] {
+		return [...this.idMap].map(([, piece]) => ({ ...piece }));
+	}
 }
