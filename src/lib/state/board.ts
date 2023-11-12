@@ -1,6 +1,6 @@
 import type { BoardTheme, ChessboardConfig } from '$lib/boardConfig.js';
 import { defaultFEN } from '$lib/state/index.js';
-import type { PieceId } from './piece.js';
+import type { Piece, PieceId } from './piece.js';
 
 export type PieceSkins = {
 	[K in PieceId]?: string;
@@ -21,6 +21,8 @@ export default class BoardState {
 
 	public startFen: string;
 
+	public startPieces: Piece[];
+
 	public size: number;
 
 	public scale: number;
@@ -38,6 +40,7 @@ export default class BoardState {
 		notation: true,
 		shadow: false,
 		startFen: defaultFEN,
+		startPieces: [] as Piece[],
 		size: 0,
 		scale: 70,
 		resizible: false
@@ -50,6 +53,7 @@ export default class BoardState {
 		this.flipped = this.defaultState.flipped;
 		this.notation = this.defaultState.notation;
 		this.startFen = this.defaultState.startFen;
+		this.startPieces = this.defaultState.startPieces;
 
 		this.size = this.defaultState.size;
 		this.scale = this.defaultState.scale;
@@ -67,6 +71,7 @@ export default class BoardState {
 			this.flipped = config?.flipped ?? this.flipped;
 			this.notation = config?.notation ?? this.notation;
 			this.startFen = config?.startFen ?? this.startFen;
+			this.startPieces = config?.startPieces ?? this.startPieces;
 			this.scale = config?.scale ?? this.scale;
 			this.resizible = config?.resizible ?? this.resizible;
 		}
