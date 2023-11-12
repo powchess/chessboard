@@ -1,4 +1,4 @@
-import type { PieceId } from './state/piece.js';
+import type { Piece, PieceId } from './state/piece.js';
 
 type TupleToUnion<T extends unknown[]> = T[number];
 export const BoardThemes = ['standard', 'darkBlue'] as const;
@@ -24,6 +24,7 @@ export type ChessboardConfig = {
 		flipped?: boolean;
 		notation?: boolean;
 		startFen?: string;
+		startPieces?: Piece[];
 		scale?: number;
 		resizible?: boolean;
 	};

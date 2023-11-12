@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import type { ChessBoard, ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
-import { State, type Square, defaultFEN } from './state/index.js';
+import { State, type Square } from './state/index.js';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils.js';
 import type { ChessboardConfig } from './boardConfig.js';
 import type { SquareType } from './enums.js';
@@ -24,7 +24,9 @@ export default class Chessboard {
 
 	constructor(cfg?: ChessboardConfig | undefined) {
 		this.state = new State(cfg);
-		this.state.pieces.initPieces(this.state.board.startFen ?? defaultFEN);
+		if (this.state.board.startPieces.length !== 0)
+			this.state.pieces.initPieces(this.state.board.startPieces);
+		else this.state.pieces.initPieces(this.state.board.startFen);
 	}
 
 	private changeLegalHoverIfNeeded = (newSquare: Square) => {
