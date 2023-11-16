@@ -40,11 +40,11 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^2.0.3",
-		"@sveltejs/kit": "1.27.3",
+		"@sveltejs/kit": "1.27.6",
 		"@sveltejs/package": "^2.2.2",
 		"@types/chess.js": "^0.13.7",
-		"@typescript-eslint/eslint-plugin": "^6.10.0",
-		"@typescript-eslint/parser": "^6.10.0",
+		"@typescript-eslint/eslint-plugin": "^6.11.0",
+		"@typescript-eslint/parser": "^6.11.0",
 		"autoprefixer": "^10.4.16",
 		"chess.js": "^1.0.0-beta.6",
 		"cooltipz-css": "^2.3.0",
@@ -55,12 +55,12 @@
 		"eslint-plugin-prettier": "^5.0.1",
 		"eslint-plugin-svelte": "^2.35.0",
 		"postcss": "^8.4.31",
-		"prettier": "^3.0.3",
-		"prettier-plugin-svelte": "^3.0.3",
+		"prettier": "^3.1.0",
+		"prettier-plugin-svelte": "^3.1.0",
 		"prism-svelte": "^0.5.0",
 		"prismjs": "^1.29.0",
 		"publint": "^0.2.5",
-		"svelte-check": "^3.5.2",
+		"svelte-check": "^3.6.0",
 		"tailwindcss": "^3.3.5",
 		"typescript": "^5.2.2",
 		"vite": "4.5.0"
@@ -76,7 +76,7 @@
 		}
 	},
 	"peerDependencies": {
-		"svelte": "^4.2.2"
+		"svelte": "^4.2.3"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",
