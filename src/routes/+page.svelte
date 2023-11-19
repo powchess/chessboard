@@ -222,7 +222,7 @@
 						</button>
 						<CopyButton copyText={code} />
 					</div>
-					<pre>
+					<pre class="bg-gray-800 rounded pr-6 overflow-auto">
                         <code>
                             <!-- eslint-disable-next-line svelte/no-at-html-tags -->
                             {@html Prism.highlight(code, Prism.languages.svelte, 'svelte')}
