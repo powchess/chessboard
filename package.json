@@ -37,7 +37,7 @@
 		"preview": "vite preview --port 4000",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "eslint . --cache",
+		"lint": "svelte-kit sync && eslint . --cache",
 		"lint:fix": "eslint . --fix --cache",
 		"format": "prettier --ignore-path .gitignore --write .",
 		"format:check": "prettier --ignore-path .gitignore --check .",
