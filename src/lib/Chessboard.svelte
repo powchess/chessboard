@@ -684,7 +684,6 @@
 					on:dragenter={(e) => {
 						highlightSquare(e.detail.square, 'LEGALHOVER');
 					}}
-					boardSize={chessboard.state.board.size}
 					theme={chessboard.state.board.boardTheme}
 					square={square.square}
 					color={square.color}

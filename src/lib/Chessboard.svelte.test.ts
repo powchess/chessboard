@@ -61,6 +61,24 @@ describe('Chessboard component API', () => {
 		expect(component.getState().markedSquares.size).toBe(0);
 	});
 
+	it('keeps highlights aligned with board-relative square positions', async () => {
+		const { component, container } = render(Chessboard, { props: { config: {} } });
+
+		component.highlightSquare('h1', 'CHECK');
+		await tick();
+
+		const highlight = container.querySelector<HTMLElement>('.check');
+		expect(highlight?.style.left).toBe('87.5%');
+		expect(highlight?.style.top).toBe('87.5%');
+		expect(highlight?.style.translate).toBe('');
+
+		component.flipBoard(true);
+		await tick();
+
+		expect(highlight?.style.left).toBe('0%');
+		expect(highlight?.style.top).toBe('0%');
+	});
+
 	it('preserves the public custom event contract', () => {
 		const onPieceClick = vi.fn();
 		const { container } = render(ChessboardEventHarness, { props: { onpiececlick: onPieceClick } });
