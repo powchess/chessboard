@@ -113,8 +113,8 @@
 	});
 
 	$: if (curPieceIsNotSelectedPiece(selectedPiece)) selected = false;
-	$: flipped, reRenderPieces(false);
-	$: square, reRenderPieces(true);
+	$: (flipped, reRenderPieces(false));
+	$: (square, reRenderPieces(true));
 	$: changePosition(boardSize);
 </script>
 
@@ -145,7 +145,7 @@
 	class="{name}{name[0] === 'w' ? ' white' : ' black'}{isGhost
 		? ' ghost'
 		: ''}{!movableState?.enabled && !isGhost ? ' static' : ''}{!mounted ? ' opacity-0' : ''}"
-/>
+></div>
 
 <style>
 	div {

@@ -1,55 +1,133 @@
 <script lang="ts">
-	import { fly } from 'svelte/transition';
+	import { createEventDispatcher, tick } from 'svelte';
+	import { fade } from 'svelte/transition';
+	import type { ChessSquare } from './chessTypes.js';
 	import PromotionPiece from './PromotionPiece.svelte';
 
 	let showModal = false;
-	let isWhite: boolean;
+	let isWhite = true;
+	let left = 0;
+	let top = 0;
+	let opensDown = true;
+	let menu: HTMLDivElement;
+	let promotionSquare: ChessSquare | undefined;
 	export let className = '';
+	export let flipped = false;
 
-	export function openPromotionModal(whiteToMove: boolean) {
+	const dispatch = createEventDispatcher();
+
+	const positionMenu = (square: ChessSquare, boardFlipped: boolean) => {
+		const file = square.charCodeAt(0) - 97;
+		const rank = Number(square[1]);
+		const screenFile = boardFlipped ? 7 - file : file;
+		const screenRow = boardFlipped ? rank - 1 : 8 - rank;
+
+		left = screenFile * 12.5;
+		top = screenRow === 0 ? 0 : 50;
+		opensDown = screenRow === 0;
+	};
+
+	$: if (showModal && promotionSquare) positionMenu(promotionSquare, flipped);
+
+	export async function openPromotionModal(whiteToMove: boolean, square: ChessSquare) {
+		isWhite = whiteToMove;
+		promotionSquare = square;
+		positionMenu(square, flipped);
 		showModal = true;
-		if (whiteToMove) isWhite = true;
-		else isWhite = false;
+		await tick();
+		menu?.querySelector<HTMLButtonElement>('button')?.focus();
 	}
+
+	const cancel = () => {
+		if (!showModal) return;
+		showModal = false;
+		dispatch('cancelPromotion');
+	};
+
+	const selectPromotion = (event: CustomEvent<string>) => {
+		choosePromotion(event.detail);
+	};
+
+	const choosePromotion = (piece: string) => {
+		showModal = false;
+		dispatch('newPromotion', piece);
+	};
+
+	const handleKeydown = (event: KeyboardEvent) => {
+		if (!showModal) return;
+		if (event.key === 'Escape') {
+			event.preventDefault();
+			cancel();
+			return;
+		}
+		if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+		const piece = event.key.toLowerCase();
+		if (['q', 'n', 'r', 'b'].includes(piece)) {
+			event.preventDefault();
+			choosePromotion(piece);
+		}
+	};
+
+	const reveal = (_node: Element, { duration = 150 }: { duration?: number }) => ({
+		duration,
+		css: (progress: number) => `
+			opacity: ${progress};
+			transform: scaleY(${progress});
+		`
+	});
 </script>
 
+<svelte:window on:keydown={handleKeydown} />
+
 {#if showModal}
-	<div class="modal {className}">
+	<div
+		class="promotion-layer {className}"
+		role="presentation"
+		transition:fade={{ duration: 150 }}
+		on:pointerdown|stopPropagation={cancel}
+	>
 		<div
-			in:fly={{ x: 100, duration: 300 }}
-			out:fly={{ x: -200, duration: 100 }}
-			class="modal-content"
+			bind:this={menu}
+			class:opens-up={!opensDown}
+			class="promotion-menu"
+			role="menu"
+			tabindex="-1"
+			aria-label="Choose promotion piece"
+			style="left: {left}%; top: {top}%;"
+			transition:reveal={{ duration: 150 }}
+			on:pointerdown|stopPropagation
 		>
-			{#each ['q', 'r', 'b', 'n'] as piece}
-				<PromotionPiece {piece} bind:isWhite bind:showModal on:newPromotion />
+			{#each ['q', 'n', 'r', 'b'] as piece}
+				<PromotionPiece {piece} {isWhite} on:newPromotion={selectPromotion} />
 			{/each}
 		</div>
 	</div>
 {/if}
 
 <style>
-	.modal {
-		display: flex;
-		z-index: 10000;
+	.promotion-layer {
 		position: absolute;
-		justify-content: center;
-		align-items: center;
 		inset: 0;
-		background: rgba(0, 0, 0, 0.4);
+		z-index: 10000;
 		direction: ltr;
 		border-radius: inherit;
+		background: rgba(15, 23, 42, 0.62);
 	}
 
-	.modal-content {
-		padding: 0.75rem;
-		gap: 0.75rem;
-		z-index: 9999999;
+	.promotion-menu {
+		position: absolute;
 		display: flex;
-		justify-content: space-evenly;
-		align-items: center;
-		width: 70%;
-		height: 19%;
-		background: rgb(51, 65, 85);
-		border-radius: 1vmin;
+		flex-direction: column;
+		width: 12.5%;
+		height: 50%;
+		overflow: visible;
+		background: transparent;
+		transform-origin: top center;
+	}
+
+	.promotion-menu.opens-up {
+		flex-direction: column-reverse;
+		transform-origin: bottom center;
 	}
 </style>

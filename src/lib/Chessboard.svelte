@@ -9,8 +9,8 @@
 	import Arrows from './Arrows.svelte';
 	import PromotionModal from './PromotionModal.svelte';
 	import Sounds from './Sounds.svelte';
-	import standardBoard from './assets/boards/standard.svg';
-	import darkBlueBoard from './assets/boards/darkBlue.svg';
+	import standardBoard from './assets/boards/standard.svg?no-inline';
+	import darkBlueBoard from './assets/boards/darkBlue.svg?no-inline';
 	import Resizing from './Resizing.svelte';
 	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
 	import type { State } from './state/index.js';
@@ -31,7 +31,6 @@
 
 	let promotionModal: PromotionModal;
 	let promotionLastMove = '';
-	let promotionIsCapture = false;
 
 	let mounted = false;
 
@@ -256,10 +255,9 @@
 		const piece = chessboard.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
 		if (!piece) return;
 		const color = piece.name[0] === 'w' ? 'WHITE' : 'BLACK';
-		promotionModal.openPromotionModal?.(color === 'WHITE');
 		promotionLastMove = move;
-		promotionIsCapture = chessboard.isCapture(move);
-		chessboard.makeMove(move);
+		promotionModal.openPromotionModal?.(color === 'WHITE', <ChessSquare>move.substring(2, 4));
+		removeGhostPiece();
 		clearAllSquares('LEGAL');
 		clearAllSquares('SELECT');
 		highlightMove(move);
@@ -309,6 +307,7 @@
 
 	const boardClick = (e: PointerEvent): void => {
 		if (!chessboard.state.board.mouseEvents) return;
+		if (promotionLastMove) return;
 		if (e.button === 2) {
 			deselect();
 			return;
@@ -353,9 +352,10 @@
 			(piece === undefined || piece.name[0] !== chessboard.selectedPiece.name[0]) &&
 			canMove(chessboard.selectedPiece.name)
 		) {
-			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(move))
+			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(`${move}q`)) {
 				makeMovePromotion(move);
-			else if (chessboard.legalMoves.includes(move)) makeMove(move);
+				e.stopPropagation();
+			} else if (chessboard.legalMoves.includes(move)) makeMove(move);
 			deselect();
 		}
 	};
@@ -537,20 +537,21 @@
 	};
 
 	const handlePromotion = (e: CustomEvent) => {
-		const piece = chessboard.getPieceFromSquare(<ChessSquare>promotionLastMove.substring(2, 4));
+		const move = promotionLastMove;
+		promotionLastMove = '';
+		const piece = chessboard.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
 		if (!piece) return;
 
-		const newPiece = (piece.name[0] + e.detail.toUpperCase()) as ChessPiece;
-		const newMove = promotionLastMove + e.detail;
+		const newMove = move + e.detail;
+		makeMove(newMove);
+	};
 
-		chessboard.state.callbacks.beforeMove?.(newMove);
-
-		chessboard.setPiece(piece.square, newPiece);
-		chessboard.state.pieces = chessboard.state.pieces;
-		playMoveSound(promotionIsCapture ? 'CAPTURE' : 'MOVE');
-
-		chessboard.state.callbacks.afterMove?.(newMove);
-		updateLegalState();
+	const cancelPromotion = () => {
+		promotionLastMove = '';
+		removeGhostPiece();
+		deselect();
+		clearAllSquares('MOVE');
+		highlightMove(chessboard.lastMove);
 	};
 
 	const handleSelect = (piece: StatePiece) => {
@@ -715,7 +716,12 @@
 			/>
 		{/if}
 		{#if chessboard.legalEnabled}
-			<PromotionModal bind:this={promotionModal} on:newPromotion={handlePromotion} />
+			<PromotionModal
+				bind:this={promotionModal}
+				flipped={chessboard.flipped}
+				on:newPromotion={handlePromotion}
+				on:cancelPromotion={cancelPromotion}
+			/>
 		{/if}
 		<div class="layer-1">
 			<slot name="layer-1" />

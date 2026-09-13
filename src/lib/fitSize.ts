@@ -3,25 +3,27 @@ const calcNewSize = (size: number) =>
 
 export function fitSize(node: HTMLDivElement) {
 	const parent = node.parentElement as HTMLDivElement;
+	let lastSize: number | undefined;
 
 	if (typeof window.ResizeObserver === 'undefined') {
 		throw new Error('window.ResizeObserver is missing.');
 	}
 
 	const observer = new ResizeObserver((entries) => {
-		const boundingRect = parent.getBoundingClientRect();
-		entries.forEach(() => {
-			const newSize = calcNewSize(boundingRect.width);
+		const entry = entries[0];
+		if (!entry) return;
+		const newSize = calcNewSize(entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width);
+		if (newSize === lastSize) return;
+		lastSize = newSize;
 
-			node.dispatchEvent(
-				new CustomEvent('newsize', {
-					detail: newSize
-				})
-			);
+		node.dispatchEvent(
+			new CustomEvent('newsize', {
+				detail: newSize
+			})
+		);
 
-			node.style.setProperty('width', `${newSize}px`);
-			node.style.setProperty('height', `${newSize}px`);
-		});
+		node.style.setProperty('width', `${newSize}px`);
+		node.style.setProperty('height', `${newSize}px`);
 	});
 
 	observer.observe(parent);

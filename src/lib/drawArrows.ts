@@ -170,7 +170,7 @@ function createArrow(
 	changeExistArrow(drawingSVG, startSquare, endSquare, knightLShape, color, opacity);
 
 	drawingSVG.setAttribute('fill', 'none');
-	drawingSVG.setAttribute('stroke-width', '0.25');
+	drawingSVG.setAttribute('stroke-width', '0.15');
 	drawingSVG.setAttribute('stroke-linejoin', 'round');
 	drawingSVG.setAttribute('opacity', opacity !== undefined ? `${opacity}` : '0.4');
 	drawingSVG.setAttribute('marker-start', color ? `url(#start-${color[0]})` : 'url(#start-g)');

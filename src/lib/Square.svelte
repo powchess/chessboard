@@ -23,7 +23,7 @@
 		y = newCoords.y;
 	};
 
-	$: flipped, reRenderSquares();
+	$: (flipped, reRenderSquares());
 </script>
 
 <div
@@ -31,7 +31,7 @@
 		? ` border-${corner}-radius: inherit;`
 		: ''}"
 	class="{boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}"
-/>
+></div>
 
 <style>
 	div {

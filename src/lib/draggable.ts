@@ -76,7 +76,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 	let scrollX: number;
 	let scrollY: number;
 	let nodeCentered = false;
-	let timeout: number;
 	const boardDiv = <HTMLDivElement>node.parentNode;
 	let currentSquare: ChessSquare | undefined;
 	let circleAdded = false;
@@ -346,7 +345,6 @@ export default function drag(node: HTMLDivElement, params: DragParams) {
 			node.removeEventListener('pointerdown', pointerdown);
 			node.removeEventListener('contextmenu', contextmenu);
 			node.removeEventListener('dragstart', dragstart);
-			window.clearTimeout(timeout);
 		},
 		update(newParams: DragParams) {
 			startSquare = newParams.startSquare;

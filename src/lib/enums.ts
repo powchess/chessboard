@@ -3,14 +3,7 @@ import type HighlightState from './state/highlight.js';
 export type Color = 'WHITE' | 'BLACK' | 'BOTH';
 
 export type SquareType =
-	| 'LEGAL'
-	| 'LEGALHOVER'
-	| 'CHECK'
-	| 'MOVE'
-	| 'NEXTMOVE'
-	| 'PREMOVE'
-	| 'PREMOVEHOVER'
-	| 'SELECT';
+	'LEGAL' | 'LEGALHOVER' | 'CHECK' | 'MOVE' | 'NEXTMOVE' | 'PREMOVE' | 'PREMOVEHOVER' | 'SELECT';
 
 export const squareColorToString = (
 	color: SquareType | keyof HighlightState['settings']

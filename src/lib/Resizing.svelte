@@ -11,6 +11,7 @@
 </script>
 
 <div
+	role="presentation"
 	on:pointerdown|stopPropagation
 	use:resizing={{
 		mouseEvents,

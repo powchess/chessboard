@@ -38,7 +38,7 @@
 	on:mousedown={handleMouseDown}
 	style={url ? `background: url(${url});` : ''}
 	class={name}
-/>
+></div>
 
 <style>
 	div {

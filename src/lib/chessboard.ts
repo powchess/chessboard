@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import type { ChessBoard, ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
 import { State, type Square } from './state/index.js';
 import { fileToIndex, getShortFenFromBoard, rankToIndex } from './utils.js';

@@ -14,8 +14,10 @@ This is the Chessboard UI Package which is used on [PowChess](https://powchess.c
 
 ## Installation
 
+Version 2 requires Svelte 5. Repository development and package builds use Node.js 24.
+
 ```sh
-npm install --save-dev @powchess/chessboard
+npm install @powchess/chessboard
 ```
 
 ### Usage
