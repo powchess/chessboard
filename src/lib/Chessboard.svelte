@@ -251,12 +251,16 @@
 		dispatch('nextMove', { move });
 	};
 
-	export const makeMovePromotion = (move: string): void => {
+	export const makeMovePromotion = (move: string, openedByTouch = false): void => {
 		const piece = chessboard.getPieceFromSquare(<ChessSquare>move.substring(0, 2));
 		if (!piece) return;
 		const color = piece.name[0] === 'w' ? 'WHITE' : 'BLACK';
 		promotionLastMove = move;
-		promotionModal.openPromotionModal?.(color === 'WHITE', <ChessSquare>move.substring(2, 4));
+		promotionModal.openPromotionModal?.(
+			color === 'WHITE',
+			<ChessSquare>move.substring(2, 4),
+			openedByTouch
+		);
 		removeGhostPiece();
 		clearAllSquares('LEGAL');
 		clearAllSquares('SELECT');
@@ -353,7 +357,7 @@
 			canMove(chessboard.selectedPiece.name)
 		) {
 			if (chessboard.isPromotion(move) && chessboard.legalMoves.includes(`${move}q`)) {
-				makeMovePromotion(move);
+				makeMovePromotion(move, e.pointerType === 'touch');
 				e.stopPropagation();
 			} else if (chessboard.legalMoves.includes(move)) makeMove(move);
 			deselect();

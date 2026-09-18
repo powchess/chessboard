@@ -22,11 +22,16 @@ const promotionConfig = {
 	}
 } as const;
 
-const pointerEvent = (type: 'pointerdown' | 'pointermove' | 'pointerup', x: number, y: number) => {
+const pointerEvent = (
+	type: 'pointerdown' | 'pointermove' | 'pointerup',
+	x: number,
+	y: number,
+	pointerType: 'mouse' | 'touch' = 'mouse'
+) => {
 	const event = new MouseEvent(type, { bubbles: true, button: 0, clientX: x, clientY: y });
 	Object.defineProperties(event, {
 		isPrimary: { value: true },
-		pointerType: { value: 'mouse' },
+		pointerType: { value: pointerType },
 		offsetX: { value: 0 },
 		offsetY: { value: 0 }
 	});
@@ -130,6 +135,36 @@ describe('Chessboard component API', () => {
 		expect(container.querySelector<HTMLElement>('.promotion-menu')?.style.top).toBe('0%');
 		expect(component.getPieceNameFromSquare('g7')).toBe('wP');
 		expect(component.getPieceNameFromSquare('h8')).toBe('bR');
+	});
+
+	it('does not select a promotion piece from the touch gesture that opened the chooser', async () => {
+		const { component, container } = render(Chessboard, { props: { config: promotionConfig } });
+		component.setSize(800);
+		const board = container.querySelector<HTMLElement>('.board');
+		const pawn = container.querySelector<HTMLElement>('#wP0');
+		expect(board).not.toBeNull();
+		expect(pawn).not.toBeNull();
+		if (!board || !pawn) return;
+		board.getBoundingClientRect = () => ({ left: 0, top: 0, width: 800, height: 800 }) as DOMRect;
+
+		pawn.dispatchEvent(pointerEvent('pointerdown', 650, 150, 'touch'));
+		await tick();
+		board.dispatchEvent(pointerEvent('pointerdown', 750, 50, 'touch'));
+		await tick();
+
+		const queen = container.querySelector<HTMLButtonElement>('[aria-label="Promote to queen"]');
+		expect(queen).not.toBeNull();
+		queen?.dispatchEvent(pointerEvent('pointerup', 750, 50, 'touch'));
+		queen?.dispatchEvent(new MouseEvent('click', { bubbles: true, button: 0 }));
+		await tick();
+
+		expect(container.querySelector('.promotion-menu')).not.toBeNull();
+		expect(component.getPieceNameFromSquare('g7')).toBe('wP');
+		expect(component.getPieceNameFromSquare('h8')).toBe('bR');
+
+		queen?.click();
+		await tick();
+		expect(component.getPieceNameFromSquare('h8')).toBe('wQ');
 	});
 
 	it('cancels promotion by clicking outside the chooser', async () => {

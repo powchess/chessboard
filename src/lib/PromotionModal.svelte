@@ -11,6 +11,8 @@
 	let opensDown = true;
 	let menu: HTMLDivElement;
 	let promotionSquare: ChessSquare | undefined;
+	let suppressOpeningTouchEnd = false;
+	let suppressOpeningClick = false;
 	export let className = '';
 	export let flipped = false;
 
@@ -29,10 +31,16 @@
 
 	$: if (showModal && promotionSquare) positionMenu(promotionSquare, flipped);
 
-	export async function openPromotionModal(whiteToMove: boolean, square: ChessSquare) {
+	export async function openPromotionModal(
+		whiteToMove: boolean,
+		square: ChessSquare,
+		openedByTouch = false
+	) {
 		isWhite = whiteToMove;
 		promotionSquare = square;
 		positionMenu(square, flipped);
+		suppressOpeningTouchEnd = openedByTouch;
+		suppressOpeningClick = openedByTouch;
 		showModal = true;
 		await tick();
 		menu?.querySelector<HTMLButtonElement>('button')?.focus();
@@ -51,6 +59,28 @@
 	const choosePromotion = (piece: string) => {
 		showModal = false;
 		dispatch('newPromotion', piece);
+	};
+
+	const suppressTouchThatOpenedMenu = (event: PointerEvent) => {
+		if (!suppressOpeningTouchEnd || event.pointerType !== 'touch') return;
+
+		event.preventDefault();
+		event.stopPropagation();
+		suppressOpeningTouchEnd = false;
+
+		// The compatibility click follows pointerup on touch devices. Keep the
+		// guard through that click, then allow the next deliberate tap to choose.
+		window.setTimeout(() => {
+			suppressOpeningClick = false;
+		}, 0);
+	};
+
+	const suppressClickThatOpenedMenu = (event: MouseEvent) => {
+		if (!suppressOpeningClick) return;
+
+		event.preventDefault();
+		event.stopPropagation();
+		suppressOpeningClick = false;
 	};
 
 	const handleKeydown = (event: KeyboardEvent) => {
@@ -85,6 +115,8 @@
 		class="promotion-layer {className}"
 		role="presentation"
 		transition:fade={{ duration: 150 }}
+		on:pointerup|capture={suppressTouchThatOpenedMenu}
+		on:click|capture={suppressClickThatOpenedMenu}
 		on:pointerdown|stopPropagation={cancel}
 	>
 		<div
