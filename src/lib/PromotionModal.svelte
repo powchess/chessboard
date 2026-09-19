@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createEventDispatcher, tick } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import type { ChessSquare } from './chessTypes.js';
 	import PromotionPiece from './PromotionPiece.svelte';
@@ -9,7 +9,6 @@
 	let left = 0;
 	let top = 0;
 	let opensDown = true;
-	let menu: HTMLDivElement;
 	let promotionSquare: ChessSquare | undefined;
 	let suppressOpeningTouchEnd = false;
 	let suppressOpeningClick = false;
@@ -31,7 +30,7 @@
 
 	$: if (showModal && promotionSquare) positionMenu(promotionSquare, flipped);
 
-	export async function openPromotionModal(
+	export function openPromotionModal(
 		whiteToMove: boolean,
 		square: ChessSquare,
 		openedByTouch = false
@@ -42,8 +41,6 @@
 		suppressOpeningTouchEnd = openedByTouch;
 		suppressOpeningClick = openedByTouch;
 		showModal = true;
-		await tick();
-		menu?.querySelector<HTMLButtonElement>('button')?.focus();
 	}
 
 	const cancel = () => {
@@ -67,12 +64,6 @@
 		event.preventDefault();
 		event.stopPropagation();
 		suppressOpeningTouchEnd = false;
-
-		// The compatibility click follows pointerup on touch devices. Keep the
-		// guard through that click, then allow the next deliberate tap to choose.
-		window.setTimeout(() => {
-			suppressOpeningClick = false;
-		}, 0);
 	};
 
 	const suppressClickThatOpenedMenu = (event: MouseEvent) => {
@@ -80,6 +71,12 @@
 
 		event.preventDefault();
 		event.stopPropagation();
+		suppressOpeningClick = false;
+	};
+
+	const enableExplicitSelection = () => {
+		// The opening gesture starts on the board, never on the menu. A press
+		// starting here is therefore an explicit choice.
 		suppressOpeningClick = false;
 	};
 
@@ -120,7 +117,6 @@
 		on:pointerdown|stopPropagation={cancel}
 	>
 		<div
-			bind:this={menu}
 			class:opens-up={!opensDown}
 			class="promotion-menu"
 			role="menu"
@@ -128,6 +124,7 @@
 			aria-label="Choose promotion piece"
 			style="left: {left}%; top: {top}%;"
 			transition:reveal={{ duration: 150 }}
+			on:pointerdown|capture={enableExplicitSelection}
 			on:pointerdown|stopPropagation
 		>
 			{#each ['q', 'n', 'r', 'b'] as piece}

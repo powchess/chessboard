@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Prism from 'prismjs';
 	import 'prism-svelte';
+	import packageJson from '../../package.json' with { type: 'json' };
 	import { onMount } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { Chess, type Move } from 'chess.js';
@@ -19,6 +20,7 @@
 	import Legal from '$lib/components/Legal.svelte';
 
 	const chess = new Chess();
+	const packageVersion = packageJson.version;
 
 	const config: ChessboardConfig = {
 		movable: 'BOTH',
@@ -180,6 +182,7 @@
 <main class="showcase-shell">
 	<header class="topbar">
 		<p class="library-description">A universal chessboard library for Svelte</p>
+		<span class="package-version" aria-label="Chessboard package version">v{packageVersion}</span>
 
 		<nav class="toolbar" aria-label="Chessboard tools">
 			<button
@@ -361,6 +364,19 @@
 		font-size: 0.8rem;
 		font-weight: 550;
 		letter-spacing: 0.015em;
+	}
+
+	.package-version {
+		margin-left: auto;
+		margin-right: 0.8rem;
+		padding: 0.22rem 0.48rem;
+		border: 1px solid rgba(148, 163, 184, 0.16);
+		border-radius: 999px;
+		color: #aab5c4;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+		font-size: 0.7rem;
+		font-weight: 650;
+		line-height: 1;
 	}
 
 	.toolbar {

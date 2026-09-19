@@ -26,18 +26,16 @@
 </script>
 
 <div
-	style="left: {x * 12.5}%; top: {(7 - y) * 12.5}%;{corner
-		? ` border-${corner}-radius: inherit;`
-		: ''}"
+	style="grid-column: {x + 1}; grid-row: {8 - y}; pointer-events: {mouseEvents
+		? 'auto'
+		: 'none'};{corner ? ` border-${corner}-radius: inherit;` : ''}"
 	class="{boardThemesStyles.squareStyles[theme][color]}{!mouseEvents ? ' pointer-events-none' : ''}"
 ></div>
 
 <style>
 	div {
-		position: absolute;
+		position: relative;
 		overflow: hidden;
-		width: 12.5%;
-		height: 12.5%;
 	}
 
 	.move {

@@ -9,8 +9,7 @@
 	import Arrows from './Arrows.svelte';
 	import PromotionModal from './PromotionModal.svelte';
 	import Sounds from './Sounds.svelte';
-	import standardBoard from './assets/boards/standard.svg?no-inline';
-	import darkBlueBoard from './assets/boards/darkBlue.svg?no-inline';
+	import boardThemesStyles from './boardThemes/boardThemes.js';
 	import Resizing from './Resizing.svelte';
 	import type { ChessFile, ChessPiece, ChessRank, ChessSquare } from './chessTypes.js';
 	import type { State } from './state/index.js';
@@ -33,6 +32,7 @@
 	let promotionLastMove = '';
 
 	let mounted = false;
+	const boardSquares = Array.from({ length: 64 });
 
 	export const clearAllSquares = (mode?: SquareType) => {
 		chessboard.clearAllSquares(mode);
@@ -636,12 +636,15 @@
 		class="board text-sm{!chessboard.legalEnabled && chessboard.selectedPiece
 			? ' pointer'
 			: ''} {className}"
-		style="
-		--boardTheme: url({chessboard.state.board.boardTheme === 'standard'
-			? standardBoard
-			: darkBlueBoard});"
+		style="--light-square: {boardThemesStyles.colors[chessboard.state.board.boardTheme]
+			.white}; --dark-square: {boardThemesStyles.colors[chessboard.state.board.boardTheme].black};"
 	>
-		<div style="width: 100%; height: 100%" class={whoCanMove(chessboard.whiteToMove)}>
+		<div class="board-squares" aria-hidden="true">
+			{#each boardSquares as _, index}
+				<span class:dark-square={(Math.floor(index / 8) + (index % 8)) % 2 === 1}></span>
+			{/each}
+		</div>
+		<div class="piece-layer {whoCanMove(chessboard.whiteToMove)}">
 			{#if chessboard.state.board.startFen}
 				{#each chessboard.state.pieces.idMap.values() as piece (piece.id)}
 					<Piece
@@ -683,20 +686,22 @@
 			/>
 		{/if}
 		{#if chessboard.highlightEnabled}
-			{#each [...chessboard.state.markedSquares] as square (square)}
-				<Square
-					on:dragenter={(e) => {
-						highlightSquare(e.detail.square, 'LEGALHOVER');
-					}}
-					theme={chessboard.state.board.boardTheme}
-					square={square.square}
-					color={square.color}
-					getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
-					flipped={chessboard.flipped}
-					mouseEvents={chessboard.state.board.mouseEvents}
-					corner={getRoundedSquareCorner(square.square)}
-				/>
-			{/each}
+			<div class="highlight-grid">
+				{#each [...chessboard.state.markedSquares] as square (square)}
+					<Square
+						on:dragenter={(e) => {
+							highlightSquare(e.detail.square, 'LEGALHOVER');
+						}}
+						theme={chessboard.state.board.boardTheme}
+						square={square.square}
+						color={square.color}
+						getGridCoordsFromSquare={chessboard.getGridCoordsFromSquare}
+						flipped={chessboard.flipped}
+						mouseEvents={chessboard.state.board.mouseEvents}
+						corner={getRoundedSquareCorner(square.square)}
+					/>
+				{/each}
+			</div>
 		{/if}
 		{#if chessboard.state.board.notation && mounted}
 			<Notation theme={chessboard.state.board.boardTheme} flipped={chessboard.flipped} />
@@ -772,10 +777,41 @@
 		width: 100%;
 		max-width: 100%;
 		max-height: 100%;
-		background-image: var(--boardTheme);
 		font-size: 0.75rem;
 		line-height: 1rem;
 		cursor: default;
+	}
+
+	.board-squares,
+	.highlight-grid {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		grid-template-columns: repeat(8, minmax(0, 1fr));
+		grid-template-rows: repeat(8, minmax(0, 1fr));
+	}
+
+	.board-squares {
+		overflow: hidden;
+		border-radius: inherit;
+		pointer-events: none;
+	}
+
+	.board-squares span {
+		background: var(--light-square);
+	}
+
+	.board-squares .dark-square {
+		background: var(--dark-square);
+	}
+
+	.piece-layer {
+		position: absolute;
+		inset: 0;
+	}
+
+	.highlight-grid {
+		pointer-events: none;
 	}
 
 	.pointer {

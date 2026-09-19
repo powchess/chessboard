@@ -73,15 +73,24 @@ describe('Chessboard component API', () => {
 		await tick();
 
 		const highlight = container.querySelector<HTMLElement>('.check');
-		expect(highlight?.style.left).toBe('87.5%');
-		expect(highlight?.style.top).toBe('87.5%');
+		// Board squares and highlights share the same 8x8 CSS grid, so the browser
+		// distributes fractional mobile pixels identically for both layers.
+		expect(highlight?.style.gridColumn).toBe('8');
+		expect(highlight?.style.gridRow).toBe('8');
 		expect(highlight?.style.translate).toBe('');
+
+		component.highlightSquare('g3', 'MOVE');
+		await tick();
+
+		const gFileHighlight = container.querySelector<HTMLElement>('.move');
+		expect(gFileHighlight?.style.gridColumn).toBe('7');
+		expect(gFileHighlight?.style.gridRow).toBe('6');
 
 		component.flipBoard(true);
 		await tick();
 
-		expect(highlight?.style.left).toBe('0%');
-		expect(highlight?.style.top).toBe('0%');
+		expect(highlight?.style.gridColumn).toBe('1');
+		expect(highlight?.style.gridRow).toBe('1');
 	});
 
 	it('preserves the public custom event contract', () => {
@@ -133,6 +142,7 @@ describe('Chessboard component API', () => {
 		]);
 		expect(container.querySelector<HTMLElement>('.promotion-menu')?.style.left).toBe('87.5%');
 		expect(container.querySelector<HTMLElement>('.promotion-menu')?.style.top).toBe('0%');
+		expect(document.activeElement).not.toBe(promotionOptions[0]);
 		expect(component.getPieceNameFromSquare('g7')).toBe('wP');
 		expect(component.getPieceNameFromSquare('h8')).toBe('bR');
 	});
@@ -162,7 +172,9 @@ describe('Chessboard component API', () => {
 		expect(component.getPieceNameFromSquare('g7')).toBe('wP');
 		expect(component.getPieceNameFromSquare('h8')).toBe('bR');
 
-		queen?.click();
+		queen?.dispatchEvent(pointerEvent('pointerdown', 750, 50, 'touch'));
+		queen?.dispatchEvent(pointerEvent('pointerup', 750, 50, 'touch'));
+		queen?.dispatchEvent(new MouseEvent('click', { bubbles: true, button: 0 }));
 		await tick();
 		expect(component.getPieceNameFromSquare('h8')).toBe('wQ');
 	});
@@ -267,7 +279,7 @@ describe('Chessboard component API', () => {
 		const { component, container } = render(Chessboard, { props: { config: promotionConfig } });
 		component.setSize(800);
 		const board = container.querySelector<HTMLElement>('.board');
-		const pieceLayer = container.querySelector<HTMLElement>('.board > div');
+		const pieceLayer = container.querySelector<HTMLElement>('.piece-layer');
 		const pawn = container.querySelector<HTMLElement>('#wP0');
 		expect(board).not.toBeNull();
 		expect(pieceLayer).not.toBeNull();
